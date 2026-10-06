@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
 export default function AdminLoginPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,11 +35,7 @@ export default function AdminLoginPage() {
       return;
     }
 
-    setLoading(false);
-
-    setMessage(
-      `로그인 성공\n\n이메일: ${data.user.email}\nUID: ${data.user.id}`
-    );
+    router.replace("/admin");
   };
 
   return (
@@ -100,9 +99,9 @@ export default function AdminLoginPage() {
             </button>
 
             {message && (
-              <pre className="whitespace-pre-wrap rounded-lg bg-gray-100 p-4 text-sm text-gray-700">
+              <div className="rounded-lg bg-red-50 p-4 text-sm text-red-600">
                 {message}
-              </pre>
+              </div>
             )}
           </div>
         </form>
