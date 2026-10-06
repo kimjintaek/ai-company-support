@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -20,6 +20,7 @@ export default function AdminPage() {
   const router = useRouter();
 
   const [members, setMembers] = useState<Member[]>([]);
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -77,6 +78,10 @@ export default function AdminPage() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.replace("/admin/login");
+  };
+
+  const handleSelectMember = (member: Member) => {
+    setSelectedMember(member);
   };
 
   return (
@@ -169,11 +174,19 @@ export default function AdminPage() {
 
                 <tbody>
                   {members.map((member) => (
-                    <tr key={member.id} className="border-b last:border-0">
+                    <tr
+                      key={member.id}
+                      className="border-b last:border-0 hover:bg-gray-50"
+                    >
                       <td className="px-4 py-4">{member.name}</td>
 
                       <td className="px-4 py-4 font-medium">
-                        {member.business_name}
+                        <button
+                          onClick={() => handleSelectMember(member)}
+                          className="text-blue-600 hover:underline"
+                        >
+                          {member.business_name}
+                        </button>
                       </td>
 
                       <td className="px-4 py-4">{member.phone}</td>
@@ -202,6 +215,89 @@ export default function AdminPage() {
             </div>
           )}
         </div>
+
+        {selectedMember && (
+          <section className="mt-8 rounded-2xl bg-white p-6 shadow-sm">
+            <div className="mb-5 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-blue-600">
+                  신청자 상세정보
+                </p>
+
+                <h3 className="mt-1 text-xl font-bold text-gray-900">
+                  {selectedMember.business_name}
+                </h3>
+              </div>
+
+              <button
+                onClick={() => setSelectedMember(null)}
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                닫기
+              </button>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-xs text-gray-500">대표자명</p>
+                <p className="mt-1 font-medium text-gray-900">
+                  {selectedMember.name}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-xs text-gray-500">사업자명</p>
+                <p className="mt-1 font-medium text-gray-900">
+                  {selectedMember.business_name}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-xs text-gray-500">연락처</p>
+                <p className="mt-1 font-medium text-gray-900">
+                  {selectedMember.phone}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-xs text-gray-500">이메일</p>
+                <p className="mt-1 font-medium text-gray-900">
+                  {selectedMember.email ?? "-"}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-xs text-gray-500">업종</p>
+                <p className="mt-1 font-medium text-gray-900">
+                  {selectedMember.industry}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-xs text-gray-500">지역</p>
+                <p className="mt-1 font-medium text-gray-900">
+                  {selectedMember.region}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-xs text-gray-500">사업 형태</p>
+                <p className="mt-1 font-medium text-gray-900">
+                  {selectedMember.business_type}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-xs text-gray-500">신청일</p>
+                <p className="mt-1 font-medium text-gray-900">
+                  {new Date(selectedMember.created_at).toLocaleString(
+                    "ko-KR"
+                  )}
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
       </div>
     </main>
   );
