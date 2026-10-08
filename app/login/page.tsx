@@ -16,15 +16,59 @@ export default function LoginPage() {
     const email = String(formData.get("email") || "").trim();
     const password = String(formData.get("password") || "");
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data: loginData, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-    setLoading(false);
-
-    if (error) {
-      alert("로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.");
+    if (error || !loginData.user) {
+      setLoading(false);
+      alert("로그인에 실패했습니다. 이메일 인증 여부와 이메일·비밀번호를 확인해주세요.");
       return;
     }
 
+    const { data: existingMember, error: memberLookupError } = await supabase
+      .from("members")
+      .select("id")
+      .eq("auth_user_id", loginData.user.id)
+      .maybeSingle();
+
+    if (memberLookupError) {
+      setLoading(false);
+      alert(`회원정보 확인 중 오류가 발생했습니다.\\n\\n${memberLookupError.message}`);
+      return;
+    }
+
+    if (!existingMember) {
+      const pending = localStorage.getItem("pending_member_registration");
+
+      if (pending) {
+        try {
+          const memberData = JSON.parse(pending);
+
+          const { error: memberInsertError } = await supabase
+            .from("members")
+            .insert({
+              ...memberData,
+              auth_user_id: loginData.user.id,
+            });
+
+          if (memberInsertError) {
+            setLoading(false);
+            alert(`기업정보 저장 중 오류가 발생했습니다.\\n\\n${memberInsertError.message}`);
+            return;
+          }
+
+          localStorage.removeItem("pending_member_registration");
+        } catch {
+          setLoading(false);
+          alert("임시 기업정보를 읽는 중 오류가 발생했습니다. 진단 신청을 다시 진행해주세요.");
+          return;
+        }
+      }
+    }
+
+    setLoading(false);
     router.push("/documents");
   };
 
