@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 export default function DiagnosisPage() {
   const [businessType, setBusinessType] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,13 +33,75 @@ export default function DiagnosisPage() {
     setLoading(false);
 
     if (error) {
-  console.error("Supabase error:", error);
-  alert(`저장 중 오류가 발생했습니다.\n\n${error.message}`);
-  return;
-}
+      console.error("Supabase error:", error);
+      alert(`저장 중 오류가 발생했습니다.\n\n${error.message}`);
+      return;
+    }
 
-    alert("진단 신청이 정상적으로 접수되었습니다.");
+    setSubmitted(true);
   };
+
+  if (submitted) {
+    return (
+      <main className="min-h-screen bg-gray-50 px-6 py-12">
+        <div className="mx-auto max-w-2xl">
+          <div className="rounded-2xl bg-white p-8 shadow-sm">
+            <p className="text-sm font-semibold text-blue-600">
+              진단 신청 접수완료
+            </p>
+
+            <h1 className="mt-2 text-3xl font-bold text-gray-900">
+              기본정보 접수가 완료되었습니다.
+            </h1>
+
+            <p className="mt-4 leading-7 text-gray-600">
+              유료 진단 서비스를 이용하시려면 아래 계좌로 결제해주세요.
+            </p>
+
+            <div className="mt-8 rounded-xl bg-blue-50 p-6">
+              <p className="text-sm font-medium text-gray-600">
+                기업지원 AI 진단 서비스
+              </p>
+
+              <p className="mt-2 text-2xl font-bold text-gray-900">
+                49,000원 + 부가세
+              </p>
+
+              <p className="mt-1 text-sm text-gray-600">
+                실제 입금금액: 53,900원
+              </p>
+            </div>
+
+            <div className="mt-6 rounded-xl border border-gray-200 p-6">
+              <p className="text-sm font-medium text-gray-500">
+                입금계좌
+              </p>
+
+              <p className="mt-2 text-xl font-bold text-gray-900">
+                신한은행 100-037-330541
+              </p>
+
+              <p className="mt-2 text-gray-700">
+                예금주: (주)다온지원센터
+              </p>
+            </div>
+
+            <div className="mt-6 rounded-xl bg-gray-50 p-5 text-sm leading-6 text-gray-600">
+              <p>
+                입금 확인 후 유료 진단 이용권이 활성화됩니다.
+              </p>
+              <p>
+                이용권 활성화 후 재무제표 및 4대보험 관련 자료를 제출할 수 있습니다.
+              </p>
+              <p>
+                결제 확인은 영업일 기준으로 순차 처리됩니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gray-50 px-6 py-12">
