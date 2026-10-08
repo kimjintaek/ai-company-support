@@ -19,25 +19,59 @@ export default function DiagnosisPage() {
     setLoading(true);
 
     const formData = new FormData(e.currentTarget);
+    const email = String(formData.get("email") || "").trim();
+    const password = String(formData.get("password") || "");
 
-    const { error } = await supabase.from("members").insert({
-      name: formData.get("name"),
-      business_name: formData.get("business_name"),
-      phone: formData.get("phone"),
-      email: formData.get("email") || null,
-      industry: formData.get("industry"),
-      region: formData.get("region"),
-      business_type: businessType,
-    });
-
-    setLoading(false);
-
-    if (error) {
-      console.error("Supabase error:", error);
-      alert(`저장 중 오류가 발생했습니다.\n\n${error.message}`);
+    if (!email || !password) {
+      setLoading(false);
+      alert("이메일과 비밀번호를 입력해주세요.");
       return;
     }
 
+    if (password.length < 6) {
+      setLoading(false);
+      alert("비밀번호는 6자 이상 입력해주세요.");
+      return;
+    }
+
+    const { data: signUpData, error: signUpError } =
+      await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+    if (signUpError) {
+      setLoading(false);
+      console.error("Supabase Auth error:", signUpError);
+      alert(`회원가입 중 오류가 발생했습니다.\\n\\n${signUpError.message}`);
+      return;
+    }
+
+    if (!signUpData.user) {
+      setLoading(false);
+      alert("회원가입은 완료되었지만 사용자 정보를 확인할 수 없습니다.");
+      return;
+    }
+
+    const { error: memberError } = await supabase.from("members").insert({
+      name: formData.get("name"),
+      business_name: formData.get("business_name"),
+      phone: formData.get("phone"),
+      email,
+      industry: formData.get("industry"),
+      region: formData.get("region"),
+      business_type: businessType,
+      auth_user_id: signUpData.user.id,
+    });
+
+    if (memberError) {
+      console.error("Supabase member error:", memberError);
+      alert(`기업정보 저장 중 오류가 발생했습니다.\\n\\n${memberError.message}`);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(false);
     setSubmitted(true);
   };
 
@@ -87,15 +121,12 @@ export default function DiagnosisPage() {
             </div>
 
             <div className="mt-6 rounded-xl bg-gray-50 p-5 text-sm leading-6 text-gray-600">
+              <p>입금 확인 후 유료 진단 이용권이 활성화됩니다.</p>
               <p>
-                입금 확인 후 유료 진단 이용권이 활성화됩니다.
+                이용권 활성화 후 로그인하여 재무제표 및 4대보험 관련 자료를
+                제출할 수 있습니다.
               </p>
-              <p>
-                이용권 활성화 후 재무제표 및 4대보험 관련 자료를 제출할 수 있습니다.
-              </p>
-              <p>
-                결제 확인은 영업일 기준으로 순차 처리됩니다.
-              </p>
+              <p>결제 확인은 영업일 기준으로 순차 처리됩니다.</p>
             </div>
           </div>
         </div>
@@ -161,7 +192,8 @@ export default function DiagnosisPage() {
                 required
                 placeholder="010-0000-0000"
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
-              />
+                />
+
             </div>
 
             <div>
@@ -171,9 +203,27 @@ export default function DiagnosisPage() {
               <input
                 name="email"
                 type="email"
+                required
                 placeholder="example@email.com"
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
               />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                비밀번호
+              </label>
+              <input
+                name="password"
+                type="password"
+                required
+                minLength={6}
+                placeholder="6자 이상 입력하세요"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+              />
+              <p className="mt-2 text-xs text-gray-500">
+                서류 제출 시 로그인할 때 사용하는 비밀번호입니다.
+              </p>
             </div>
 
             <div>
