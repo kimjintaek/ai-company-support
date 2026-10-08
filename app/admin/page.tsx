@@ -16,16 +16,29 @@ type Member = {
   created_at: string;
 };
 
+type License = {
+  id: string;
+  member_id: string;
+  payment_date: string | null;
+  start_date: string | null;
+  expiry_date: string | null;
+  amount: number;
+  payment_method: string | null;
+  status: string;
+};
+
 export default function AdminPage() {
   const router = useRouter();
 
   const [members, setMembers] = useState<Member[]>([]);
+  const [licenses, setLicenses] = useState<License[]>([]);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [loading, setLoading] = useState(true);
+  const [processingId, setProcessingId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    const loadMembers = async () => {
+    const loadData = async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -54,25 +67,39 @@ export default function AdminPage() {
         return;
       }
 
-      const { data, error } = await supabase
+      const { data: memberData, error: memberError } = await supabase
         .from("members")
         .select(
           "id, name, business_name, phone, email, industry, region, business_type, created_at"
         )
         .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("members 오류:", error);
-        setErrorMessage(error.message);
+      if (memberError) {
+        console.error("members 오류:", memberError);
+        setErrorMessage(memberError.message);
         setLoading(false);
         return;
       }
 
-      setMembers(data ?? []);
+      const { data: licenseData, error: licenseError } = await supabase
+        .from("licenses")
+        .select(
+          "id, member_id, payment_date, start_date, expiry_date, amount, payment_method, status"
+        );
+
+      if (licenseError) {
+        console.error("licenses 오류:", licenseError);
+        setErrorMessage(licenseError.message);
+        setLoading(false);
+        return;
+      }
+
+      setMembers(memberData ?? []);
+      setLicenses(licenseData ?? []);
       setLoading(false);
     };
 
-    loadMembers();
+    loadData();
   }, [router]);
 
   const handleLogout = async () => {
@@ -82,6 +109,85 @@ export default function AdminPage() {
 
   const handleSelectMember = (member: Member) => {
     setSelectedMember(member);
+  };
+
+  const getLicense = (memberId: string) => {
+    return licenses.find((license) => license.member_id === memberId);
+  };
+
+  const handleConfirmPayment = async (member: Member) => {
+    const confirmed = window.confirm(
+      `${member.business_name}의 입금 53,900원을 확인하고 이용권을 활성화하시겠습니까?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setProcessingId(member.id);
+    setErrorMessage("");
+
+    const today = new Date();
+    const expiryDate = new Date(today);
+    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
+    const existingLicense = getLicense(member.id);
+
+    if (existingLicense) {
+      const { data, error } = await supabase
+        .from("licenses")
+        .update({
+          payment_date: today.toISOString(),
+          start_date: today.toISOString(),
+          expiry_date: expiryDate.toISOString(),
+          amount: 53900,
+          payment_method: "계좌이체",
+          status: "활성",
+        })
+        .eq("id", existingLicense.id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("license 업데이트 오류:", error);
+        setErrorMessage(error.message);
+        setProcessingId("");
+        return;
+      }
+
+      setLicenses((current) =>
+        current.map((license) =>
+          license.id === existingLicense.id ? data : license
+        )
+      );
+    } else {
+      const { data, error } = await supabase
+        .from("licenses")
+        .insert({
+          member_id: member.id,
+          payment_date: today.toISOString(),
+          start_date: today.toISOString(),
+          expiry_date: expiryDate.toISOString(),
+          period_months: 12,
+          amount: 53900,
+          payment_method: "계좌이체",
+          status: "활성",
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error("license 생성 오류:", error);
+        setErrorMessage(error.message);
+        setProcessingId("");
+        return;
+      }
+
+      setLicenses((current) => [...current, data]);
+    }
+
+    setProcessingId("");
+    alert("입금 확인 및 이용권 활성화가 완료되었습니다.");
   };
 
   return (
@@ -135,7 +241,7 @@ export default function AdminPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[1000px] text-sm">
+              <table className="w-full min-w-[1200px] text-sm">
                 <thead className="border-b bg-gray-50">
                   <tr>
                     <th className="px-4 py-4 text-left font-semibold text-gray-700">
@@ -167,49 +273,93 @@ export default function AdminPage() {
                     </th>
 
                     <th className="px-4 py-4 text-left font-semibold text-gray-700">
+                      결제상태
+                    </th>
+
+                    <th className="px-4 py-4 text-left font-semibold text-gray-700">
                       신청일
+                    </th>
+
+                    <th className="px-4 py-4 text-left font-semibold text-gray-700">
+                      처리
                     </th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {members.map((member) => (
-                    <tr
-                      key={member.id}
-                      className="border-b last:border-0 hover:bg-gray-50"
-                    >
-                      <td className="px-4 py-4">{member.name}</td>
+                  {members.map((member) => {
+                    const license = getLicense(member.id);
 
-                      <td className="px-4 py-4 font-medium">
-                        <button
-                          onClick={() => handleSelectMember(member)}
-                          className="text-blue-600 hover:underline"
-                        >
-                          {member.business_name}
-                        </button>
-                      </td>
+                    return (
+                      <tr
+                        key={member.id}
+                        className="border-b last:border-0 hover:bg-gray-50"
+                      >
+                        <td className="px-4 py-4">{member.name}</td>
 
-                      <td className="px-4 py-4">{member.phone}</td>
+                        <td className="px-4 py-4 font-medium">
+                          <button
+                            onClick={() => handleSelectMember(member)}
+                            className="text-blue-600 hover:underline"
+                          >
+                            {member.business_name}
+                          </button>
+                        </td>
 
-                      <td className="px-4 py-4">
-                        {member.email ?? "-"}
-                      </td>
+                        <td className="px-4 py-4">{member.phone}</td>
 
-                      <td className="px-4 py-4">{member.industry}</td>
+                        <td className="px-4 py-4">
+                          {member.email ?? "-"}
+                        </td>
 
-                      <td className="px-4 py-4">{member.region}</td>
+                        <td className="px-4 py-4">{member.industry}</td>
 
-                      <td className="px-4 py-4">
-                        {member.business_type}
-                      </td>
+                        <td className="px-4 py-4">{member.region}</td>
 
-                      <td className="px-4 py-4">
-                        {new Date(member.created_at).toLocaleString(
-                          "ko-KR"
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                        <td className="px-4 py-4">
+                          {member.business_type}
+                        </td>
+
+                        <td className="px-4 py-4">
+                          {license?.status === "활성" ? (
+                            <span className="font-semibold text-green-600">
+                              결제완료
+                            </span>
+                          ) : (
+                            <span className="text-orange-600">
+                              입금대기
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="px-4 py-4">
+                          {new Date(member.created_at).toLocaleString(
+                            "ko-KR"
+                          )}
+                        </td>
+
+                        <td className="px-4 py-4">
+                          {license?.status === "활성" ? (
+                            <span className="text-sm text-green-600">
+                              이용권 활성
+                            </span>
+                          ) : (
+                            <button
+                              onClick={() =>
+                                handleConfirmPayment(member)
+                              }
+                              disabled={processingId === member.id}
+                              className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:bg-gray-300"
+                            >
+                              {processingId === member.id
+                                ? "처리 중..."
+                                : "입금확인"}
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -296,6 +446,58 @@ export default function AdminPage() {
                 </p>
               </div>
             </div>
+
+            {(() => {
+              const license = getLicense(selectedMember.id);
+
+              return (
+                <div className="mt-6 rounded-xl border border-gray-200 p-5">
+                  <p className="text-sm font-semibold text-gray-700">
+                    이용권 정보
+                  </p>
+
+                  {license ? (
+                    <div className="mt-4 grid gap-4 md:grid-cols-4">
+                      <div>
+                        <p className="text-xs text-gray-500">상태</p>
+                        <p className="mt-1 font-semibold text-green-600">
+                          {license.status}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-gray-500">결제금액</p>
+                        <p className="mt-1 font-semibold text-gray-900">
+                          {license.amount.toLocaleString()}원
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-gray-500">결제방법</p>
+                        <p className="mt-1 font-semibold text-gray-900">
+                          {license.payment_method ?? "-"}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-gray-500">만료일</p>
+                        <p className="mt-1 font-semibold text-gray-900">
+                          {license.expiry_date
+                            ? new Date(
+                                license.expiry_date
+                              ).toLocaleDateString("ko-KR")
+                            : "-"}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="mt-3 text-sm text-orange-600">
+                      아직 입금확인 및 이용권 활성화가 되지 않았습니다.
+                    </p>
+                  )}
+                </div>
+              );
+            })()}
           </section>
         )}
       </div>
