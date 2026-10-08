@@ -93,9 +93,25 @@ export default function DocumentsPage() {
 
       const uploaded: { financial?: string; insurance?: string } = {};
 
+      // Storage object keys should use a safe filename. Remove spaces and
+      // special characters from the original filename while preserving the extension.
+      const safeFileName = (file: File) => {
+        const dotIndex = file.name.lastIndexOf(".");
+        const extension = dotIndex >= 0 ? file.name.slice(dotIndex).toLowerCase() : "";
+        const baseName = dotIndex >= 0 ? file.name.slice(0, dotIndex) : file.name;
+        const safeBaseName =
+          baseName
+            .normalize("NFKC")
+            .replace(/[^a-zA-Z0-9_-]+/g, "-")
+            .replace(/^-+|-+$/g, "")
+            .slice(0, 80) || "document";
+
+        return safeBaseName + extension;
+      };
+
       if (financialFile) {
         const financialPath =
-          user.id + "/financial-" + Date.now() + "-" + financialFile.name;
+          user.id + "/financial-" + Date.now() + "-" + safeFileName(financialFile);
 
         const { error } = await supabase.storage
           .from("diagnosis-files")
@@ -107,7 +123,7 @@ export default function DocumentsPage() {
 
       if (insuranceFile) {
         const insurancePath =
-          user.id + "/insurance-" + Date.now() + "-" + insuranceFile.name;
+          user.id + "/insurance-" + Date.now() + "-" + safeFileName(insuranceFile);
 
         const { error } = await supabase.storage
           .from("diagnosis-files")
