@@ -713,8 +713,8 @@ export default function AdminPage() {
                     <textarea
                       value={aiDraft}
                       onChange={(e) => setAiDraft(e.target.value)}
-                      rows={14}
-                      placeholder="기업 기본정보와 제출자료를 분석한 1차 진단 내용을 입력하세요."
+                      rows={18}
+                      placeholder={"[종합판단 - 결론 3줄]\n1. 정책자금:\n2. 핵심 위험요인:\n3. 향후 우선과제:\n\n[1. 기업 기본현황]\n\n[2. 정책자금 진단]\n- 검토 결과:\n- 판단 근거:\n- 위험요인:\n- 준비사항:\n\n[3. 재무상태 분석]\n\n[4. 세무·법인관리 체크포인트]\n\n[5. 고용·지원사업 검토]\n\n[6. 추가 발견사항]\n\n[7. 최종 권고]"}
                       className="mt-2 w-full rounded-lg border border-gray-300 bg-white p-4 text-sm leading-6 outline-none focus:border-blue-500"
                     />
                   </div>
