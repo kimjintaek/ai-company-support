@@ -163,9 +163,7 @@ export default function AdminPage() {
 
     if (error || !data?.signedUrl) {
       alert(
-        label + " 파일을 열 수 없습니다.
-
-" +
+        label + " 파일을 열 수 없습니다.\n\n" +
           (error?.message ?? "파일 주소를 생성하지 못했습니다.")
       );
       return;
