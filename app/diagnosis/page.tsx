@@ -71,20 +71,16 @@ export default function DiagnosisPage() {
     let authenticatedUser = signUpData.user;
     let authenticatedSession = signUpData.session;
 
-    if (!authenticatedSession && signUpData.user.email_confirmed_at) {
-      const { data: signInData, error: signInError } =
-        await supabase.auth.signInWithPassword({ email, password });
+    if (!authenticatedSession) {
+      const { data: signInData } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-      if (signInError || !signInData.user || !signInData.session) {
-        setLoading(false);
-        alert(
-          "이미 이메일 인증이 완료된 계정입니다. 기존 비밀번호로 로그인해주세요."
-        );
-        return;
+      if (signInData.user && signInData.session) {
+        authenticatedUser = signInData.user;
+        authenticatedSession = signInData.session;
       }
-
-      authenticatedUser = signInData.user;
-      authenticatedSession = signInData.session;
     }
 
     if (!authenticatedSession) {
