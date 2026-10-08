@@ -27,12 +27,25 @@ type License = {
   status: string;
 };
 
+type Diagnosis = {
+  id: string;
+  member_id: string;
+  financial_file_path: string | null;
+  insurance_file_path: string | null;
+  ai_draft: string | null;
+  expert_memo: string | null;
+  sent_at: string | null;
+  created_at: string;
+};
+
 export default function AdminPage() {
   const router = useRouter();
 
   const [members, setMembers] = useState<Member[]>([]);
   const [licenses, setLicenses] = useState<License[]>([]);
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+  const [openingFile, setOpeningFile] = useState("");
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -94,8 +107,23 @@ export default function AdminPage() {
         return;
       }
 
+      const { data: diagnosisData, error: diagnosisError } = await supabase
+        .from("diagnoses")
+        .select(
+          "id, member_id, financial_file_path, insurance_file_path, ai_draft, expert_memo, sent_at, created_at"
+        )
+        .order("created_at", { ascending: false });
+
+      if (diagnosisError) {
+        console.error("diagnoses 오류:", diagnosisError);
+        setErrorMessage("진단자료 조회 오류: " + diagnosisError.message);
+        setLoading(false);
+        return;
+      }
+
       setMembers(memberData ?? []);
       setLicenses(licenseData ?? []);
+      setDiagnoses(diagnosisData ?? []);
       setLoading(false);
     };
 
@@ -113,6 +141,37 @@ export default function AdminPage() {
 
   const getLicense = (memberId: string) => {
     return licenses.find((license) => license.member_id === memberId);
+  };
+
+  const getDiagnosis = (memberId: string) => {
+    return diagnoses.find((diagnosis) => diagnosis.member_id === memberId);
+  };
+
+  const openDiagnosisFile = async (path: string | null, label: string) => {
+    if (!path) {
+      alert(label + " 파일이 아직 제출되지 않았습니다.");
+      return;
+    }
+
+    setOpeningFile(label);
+
+    const { data, error } = await supabase.storage
+      .from("diagnosis-files")
+      .createSignedUrl(path, 300);
+
+    setOpeningFile("");
+
+    if (error || !data?.signedUrl) {
+      alert(
+        label + " 파일을 열 수 없습니다.
+
+" +
+          (error?.message ?? "파일 주소를 생성하지 못했습니다.")
+      );
+      return;
+    }
+
+    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
   };
 
   const handleConfirmPayment = async (member: Member) => {
@@ -281,6 +340,10 @@ export default function AdminPage() {
                     </th>
 
                     <th className="px-4 py-4 text-left font-semibold text-gray-700">
+                      진단자료
+                    </th>
+
+                    <th className="px-4 py-4 text-left font-semibold text-gray-700">
                       처리
                     </th>
                   </tr>
@@ -289,6 +352,7 @@ export default function AdminPage() {
                 <tbody>
                   {members.map((member) => {
                     const license = getLicense(member.id);
+                    const diagnosis = getDiagnosis(member.id);
 
                     return (
                       <tr
@@ -335,6 +399,21 @@ export default function AdminPage() {
                         <td className="px-4 py-4">
                           {new Date(member.created_at).toLocaleString(
                             "ko-KR"
+                          )}
+                        </td>
+
+                        <td className="px-4 py-4">
+                          {diagnosis ? (
+                            <button
+                              onClick={() => handleSelectMember(member)}
+                              className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100"
+                            >
+                              제출자료 확인
+                            </button>
+                          ) : (
+                            <span className="text-sm text-gray-400">
+                              미제출
+                            </span>
                           )}
                         </td>
 
@@ -494,6 +573,72 @@ export default function AdminPage() {
                     <p className="mt-3 text-sm text-orange-600">
                       아직 입금확인 및 이용권 활성화가 되지 않았습니다.
                     </p>
+                  )}
+                </div>
+              );
+            })()}
+
+            {(() => {
+              const diagnosis = getDiagnosis(selectedMember.id);
+
+              return (
+                <div className="mt-6 rounded-xl border border-gray-200 p-5">
+                  <p className="text-sm font-semibold text-gray-700">
+                    진단자료
+                  </p>
+
+                  {!diagnosis ? (
+                    <p className="mt-3 text-sm text-gray-500">
+                      아직 제출된 진단자료가 없습니다.
+                    </p>
+                  ) : (
+                    <div className="mt-4 grid gap-4 md:grid-cols-2">
+                      <div className="rounded-lg bg-gray-50 p-4">
+                        <p className="text-xs text-gray-500">재무제표</p>
+                        <p className="mt-1 font-medium text-gray-900">
+                          {diagnosis.financial_file_path ? "제출완료" : "미제출"}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            openDiagnosisFile(
+                              diagnosis.financial_file_path,
+                              "재무제표"
+                            )
+                          }
+                          disabled={
+                            !diagnosis.financial_file_path ||
+                            openingFile === "재무제표"
+                          }
+                          className="mt-3 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:bg-gray-300"
+                        >
+                          {openingFile === "재무제표" ? "여는 중..." : "파일 보기"}
+                        </button>
+                      </div>
+
+                      <div className="rounded-lg bg-gray-50 p-4">
+                        <p className="text-xs text-gray-500">4대보험 자료</p>
+                        <p className="mt-1 font-medium text-gray-900">
+                          {diagnosis.insurance_file_path ? "제출완료" : "미제출"}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            openDiagnosisFile(
+                              diagnosis.insurance_file_path,
+                              "4대보험 자료"
+                            )
+                          }
+                          disabled={
+                            !diagnosis.insurance_file_path ||
+                            openingFile === "4대보험 자료"
+                          }
+                          className="mt-3 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:bg-gray-300"
+                        >
+                          {openingFile === "4대보험 자료" ? "여는 중..." : "파일 보기"}
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
               );
