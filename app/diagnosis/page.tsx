@@ -7,6 +7,8 @@ export default function DiagnosisPage() {
   const [businessType, setBusinessType] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordHasKorean, setPasswordHasKorean] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,6 +27,12 @@ export default function DiagnosisPage() {
     if (!email || !password) {
       setLoading(false);
       alert("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    if (/[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(password)) {
+      setLoading(false);
+      alert("비밀번호에는 한글을 사용할 수 없습니다. 영문과 숫자로 입력해주세요.");
       return;
     }
 
@@ -168,8 +176,33 @@ export default function DiagnosisPage() {
 
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">비밀번호</label>
-              <input name="password" type="password" required minLength={6} placeholder="6자 이상 입력하세요" className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500" />
-              <p className="mt-2 text-xs text-gray-500">서류 제출 시 로그인할 때 사용하는 비밀번호입니다.</p>
+              <div className="relative">
+                <input
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  minLength={6}
+                  placeholder="영문/숫자 6자 이상"
+                  onChange={(e) => setPasswordHasKorean(/[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(e.target.value))}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 pr-20 outline-none focus:border-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((value) => !value)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-medium text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? "숨기기" : "보기"}
+                </button>
+              </div>
+              {passwordHasKorean ? (
+                <p className="mt-2 text-xs font-medium text-red-600">
+                  한글은 사용할 수 없습니다. 영문과 숫자로 입력해주세요.
+                </p>
+              ) : (
+                <p className="mt-2 text-xs text-gray-500">
+                  영문과 숫자를 사용해 6자 이상 입력하세요. 서류 제출 시 로그인에 사용합니다.
+                </p>
+              )}
             </div>
 
             <div>
