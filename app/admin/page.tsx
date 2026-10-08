@@ -49,6 +49,9 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [aiDraft, setAiDraft] = useState("");
+  const [expertMemo, setExpertMemo] = useState("");
+  const [savingDiagnosis, setSavingDiagnosis] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -137,6 +140,49 @@ export default function AdminPage() {
 
   const handleSelectMember = (member: Member) => {
     setSelectedMember(member);
+    const diagnosis = diagnoses.find((item) => item.member_id === member.id);
+    setAiDraft(diagnosis?.ai_draft ?? "");
+    setExpertMemo(diagnosis?.expert_memo ?? "");
+  };
+
+  const handleSaveDiagnosisDraft = async () => {
+    if (!selectedMember) {
+      return;
+    }
+
+    const diagnosis = getDiagnosis(selectedMember.id);
+
+    if (!diagnosis) {
+      alert("먼저 고객이 재무제표 및 4대보험 자료를 제출해야 합니다.");
+      return;
+    }
+
+    setSavingDiagnosis(true);
+    setErrorMessage("");
+
+    const { data, error } = await supabase
+      .from("diagnoses")
+      .update({
+        ai_draft: aiDraft || null,
+        expert_memo: expertMemo || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", diagnosis.id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("진단 초안 저장 오류:", error);
+      setErrorMessage("진단 초안 저장 오류: " + error.message);
+      setSavingDiagnosis(false);
+      return;
+    }
+
+    setDiagnoses((current) =>
+      current.map((item) => (item.id === diagnosis.id ? data : item))
+    );
+    setSavingDiagnosis(false);
+    alert("진단 초안과 전문가 메모가 저장되었습니다.");
   };
 
   const getLicense = (memberId: string) => {
@@ -638,6 +684,64 @@ export default function AdminPage() {
                       </div>
                     </div>
                   )}
+                </div>
+              );
+            })()}
+
+            {(() => {
+              const diagnosis = getDiagnosis(selectedMember.id);
+
+              if (!diagnosis) {
+                return null;
+              }
+
+              return (
+                <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50/40 p-5">
+                  <div>
+                    <p className="text-sm font-semibold text-blue-700">
+                      AI 1차 진단 / 전문가 검토
+                    </p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      현재는 API 자동화 전 단계입니다. AI 분석 결과를 여기에 입력하고 대표님 검토 내용을 함께 저장합니다.
+                    </p>
+                  </div>
+
+                  <div className="mt-4">
+                    <label className="text-sm font-semibold text-gray-700">
+                      AI 1차 진단
+                    </label>
+                    <textarea
+                      value={aiDraft}
+                      onChange={(e) => setAiDraft(e.target.value)}
+                      rows={14}
+                      placeholder="기업 기본정보와 제출자료를 분석한 1차 진단 내용을 입력하세요."
+                      className="mt-2 w-full rounded-lg border border-gray-300 bg-white p-4 text-sm leading-6 outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div className="mt-4">
+                    <label className="text-sm font-semibold text-gray-700">
+                      전문가 검토 메모
+                    </label>
+                    <textarea
+                      value={expertMemo}
+                      onChange={(e) => setExpertMemo(e.target.value)}
+                      rows={8}
+                      placeholder="정책자금 외 세무·재무·법인관리·고용·보험 등 추가 검토사항을 입력하세요."
+                      className="mt-2 w-full rounded-lg border border-gray-300 bg-white p-4 text-sm leading-6 outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div className="mt-4 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={handleSaveDiagnosisDraft}
+                      disabled={savingDiagnosis}
+                      className="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:bg-gray-300"
+                    >
+                      {savingDiagnosis ? "저장 중..." : "진단 초안 저장"}
+                    </button>
+                  </div>
                 </div>
               );
             })()}
