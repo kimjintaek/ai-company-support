@@ -68,7 +68,26 @@ export default function DiagnosisPage() {
       business_type: businessType,
     };
 
-    if (!signUpData.session) {
+    let authenticatedUser = signUpData.user;
+    let authenticatedSession = signUpData.session;
+
+    if (!authenticatedSession && signUpData.user.email_confirmed_at) {
+      const { data: signInData, error: signInError } =
+        await supabase.auth.signInWithPassword({ email, password });
+
+      if (signInError || !signInData.user || !signInData.session) {
+        setLoading(false);
+        alert(
+          "이미 이메일 인증이 완료된 계정입니다. 기존 비밀번호로 로그인해주세요."
+        );
+        return;
+      }
+
+      authenticatedUser = signInData.user;
+      authenticatedSession = signInData.session;
+    }
+
+    if (!authenticatedSession) {
       const { error: resendError } = await supabase.auth.resend({
         type: "signup",
         email,
@@ -108,7 +127,7 @@ export default function DiagnosisPage() {
     const { data: existingMember, error: existingMemberError } = await supabase
       .from("members")
       .select("id")
-      .eq("auth_user_id", signUpData.user.id)
+      .eq("auth_user_id", authenticatedUser.id)
       .maybeSingle();
 
     if (existingMemberError) {
@@ -126,7 +145,7 @@ export default function DiagnosisPage() {
 
     const { error: memberError } = await supabase.from("members").insert({
       ...memberData,
-      auth_user_id: signUpData.user.id,
+      auth_user_id: authenticatedUser.id,
     });
 
     if (memberError) {
