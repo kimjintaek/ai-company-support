@@ -38,10 +38,11 @@ export default function DocumentsPage() {
         return;
       }
 
-      const { data: license, error: licenseError } = await supabase
+      const { data: activeLicense, error: licenseError } = await supabase
         .from("licenses")
         .select("status, expiry_date")
         .eq("member_id", member.id)
+        .eq("status", "활성")
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
@@ -55,9 +56,9 @@ export default function DocumentsPage() {
       setMemberId(member.id);
 
       const active =
-        license?.status === "활성" &&
-        (!license.expiry_date ||
-          new Date(license.expiry_date).getTime() >= Date.now());
+        activeLicense?.status === "활성" &&
+        (!activeLicense.expiry_date ||
+          new Date(activeLicense.expiry_date).getTime() >= Date.now());
 
       setLicenseStatus(active ? "활성" : "대기");
       setLoading(false);
