@@ -9,6 +9,7 @@ export default function ResultPage() {
   const [loading, setLoading] = useState(true);
   const [draft, setDraft] = useState("");
   const [hasResult, setHasResult] = useState(false);
+  const [publishedAt, setPublishedAt] = useState<string | null>(null);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function ResultPage() {
 
       const { data: diagnosis, error: diagnosisError } = await supabase
         .from("diagnoses")
-        .select("ai_draft")
+        .select("ai_draft, sent_at")
         .eq("member_id", member.id)
         .order("created_at", { ascending: false })
         .limit(1)
@@ -47,8 +48,10 @@ export default function ResultPage() {
       }
 
       const result = diagnosis?.ai_draft?.trim() ?? "";
+      const isPublished = Boolean(diagnosis?.sent_at);
       setDraft(result);
-      setHasResult(Boolean(result));
+      setPublishedAt(diagnosis?.sent_at ?? null);
+      setHasResult(Boolean(result) && isPublished);
       setLoading(false);
     };
 
@@ -72,12 +75,13 @@ export default function ResultPage() {
           <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p>
           <h1 className="mt-2 text-3xl font-bold text-gray-900">진단결과</h1>
           <p className="mt-3 text-gray-600">
-            제출자료를 바탕으로 작성된 1차 진단 결과입니다.
+            관리자가 최종 확정한 진단결과를 확인하는 화면입니다.
           </p>
         </div>
 
         {hasResult ? (
           <section className="rounded-2xl bg-white p-8 shadow-sm">
+            <p className="mb-5 text-sm text-gray-500">공개일: {publishedAt ? new Date(publishedAt).toLocaleString("ko-KR") : "-"}</p>
             <div className="whitespace-pre-wrap leading-8 text-gray-800">
               {draft}
             </div>
