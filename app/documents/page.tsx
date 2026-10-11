@@ -270,15 +270,24 @@ export default function DocumentsPage() {
           </div>
         )}
 
-        <button
-          onClick={async () => {
-            await supabase.auth.signOut();
-            router.replace("/login");
-          }}
-          className="mt-6 w-full rounded-xl border border-gray-300 py-3 font-medium text-gray-700 hover:bg-gray-50"
-        >
-          로그아웃
-        </button>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => router.push("/result")}
+            className="w-full rounded-xl border border-blue-200 bg-blue-50 py-3 font-semibold text-blue-700 hover:bg-blue-100"
+          >
+            진단결과 확인
+          </button>
+          <button
+            onClick={async () => {
+              await supabase.auth.signOut();
+              router.replace("/login");
+            }}
+            className="w-full rounded-xl border border-gray-300 py-3 font-medium text-gray-700 hover:bg-gray-50"
+          >
+            로그아웃
+          </button>
+        </div>
       </div>
     </main>
   );
