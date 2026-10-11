@@ -145,6 +145,50 @@ export default function AdminPage() {
     setExpertMemo(diagnosis?.expert_memo ?? "");
   };
 
+  const handlePublishDiagnosis = async () => {
+    if (!selectedMember) return;
+    const diagnosis = getDiagnosis(selectedMember.id);
+    if (!diagnosis) {
+      alert("진단자료가 없습니다.");
+      return;
+    }
+    if (!aiDraft.trim()) {
+      alert("최종 진단서 내용을 먼저 작성해주세요.");
+      return;
+    }
+    const confirmed = window.confirm(
+      "최종 진단서를 고객에게 공개하시겠습니까? 공개 후 고객의 진단결과 화면에 표시됩니다."
+    );
+    if (!confirmed) return;
+
+    setSavingDiagnosis(true);
+    setErrorMessage("");
+    const publishedAt = new Date().toISOString();
+    const { data, error } = await supabase
+      .from("diagnoses")
+      .update({
+        ai_draft: aiDraft,
+        expert_memo: expertMemo || null,
+        sent_at: publishedAt,
+        updated_at: publishedAt,
+      })
+      .eq("id", diagnosis.id)
+      .select()
+      .single();
+
+    if (error) {
+      setErrorMessage("최종 진단서 공개 오류: " + error.message);
+      setSavingDiagnosis(false);
+      return;
+    }
+
+    setDiagnoses((current) =>
+      current.map((item) => (item.id === diagnosis.id ? data : item))
+    );
+    setSavingDiagnosis(false);
+    alert("최종 진단서가 고객에게 공개되었습니다.");
+  };
+
   const handleSaveDiagnosisDraft = async () => {
     if (!selectedMember) {
       return;
@@ -732,16 +776,27 @@ export default function AdminPage() {
                     />
                   </div>
 
-                  <div className="mt-4 flex justify-end">
+                  <div className="mt-4 flex flex-wrap justify-end gap-3">
                     <button
                       type="button"
                       onClick={handleSaveDiagnosisDraft}
                       disabled={savingDiagnosis}
-                      className="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:bg-gray-300"
+                      className="rounded-lg border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:bg-gray-300"
                     >
-                      {savingDiagnosis ? "저장 중..." : "진단 초안 저장"}
+                      {savingDiagnosis ? "처리 중..." : "진단 초안 저장"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handlePublishDiagnosis}
+                      disabled={savingDiagnosis || !aiDraft.trim()}
+                      className="rounded-lg bg-green-600 px-5 py-3 text-sm font-semibold text-white hover:bg-green-700 disabled:bg-gray-300"
+                    >
+                      {diagnosis.sent_at ? "최종 진단서 다시 공개" : "최종 진단서 확정 및 고객 공개"}
                     </button>
                   </div>
+                  <p className="mt-3 text-right text-xs text-gray-500">
+                    공개 상태: {diagnosis.sent_at ? "고객 공개 중" : "비공개 초안"}
+                  </p>
                 </div>
               );
             })()}
