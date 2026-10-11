@@ -35,7 +35,7 @@ export default function ResultPage() {
 
       const { data: diagnosis, error: diagnosisError } = await supabase
         .from("diagnoses")
-        .select("ai_draft, sent_at")
+        .select("published_draft, sent_at")
         .eq("member_id", member.id)
         .order("created_at", { ascending: false })
         .limit(1)
@@ -47,7 +47,7 @@ export default function ResultPage() {
         return;
       }
 
-      const result = diagnosis?.ai_draft?.trim() ?? "";
+      const result = diagnosis?.published_draft?.trim() ?? "";
       const isPublished = Boolean(diagnosis?.sent_at);
       setDraft(result);
       setPublishedAt(diagnosis?.sent_at ?? null);

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -110,12 +110,7 @@ export default function AdminPage() {
         return;
       }
 
-      const { data: diagnosisData, error: diagnosisError } = await supabase
-        .from("diagnoses")
-        .select(
-          "id, member_id, financial_file_path, insurance_file_path, ai_draft, expert_memo, sent_at, created_at"
-        )
-        .order("created_at", { ascending: false });
+      const { data: diagnosisData, error: diagnosisError } = await supabase.rpc("admin_list_diagnoses");
 
       if (diagnosisError) {
         console.error("diagnoses 오류:", diagnosisError);
@@ -163,17 +158,12 @@ export default function AdminPage() {
 
     setSavingDiagnosis(true);
     setErrorMessage("");
-    const publishedAt = new Date().toISOString();
     const { data, error } = await supabase
-      .from("diagnoses")
-      .update({
-        ai_draft: aiDraft,
-        expert_memo: expertMemo || null,
-        sent_at: publishedAt,
-        updated_at: publishedAt,
+      .rpc("admin_publish_diagnosis", {
+        p_diagnosis_id: diagnosis.id,
+        p_ai_draft: aiDraft,
+        p_expert_memo: expertMemo || null,
       })
-      .eq("id", diagnosis.id)
-      .select()
       .single();
 
     if (error) {
@@ -183,7 +173,7 @@ export default function AdminPage() {
     }
 
     setDiagnoses((current) =>
-      current.map((item) => (item.id === diagnosis.id ? data : item))
+      current.map((item) => (item.id === diagnosis.id ? (data as Diagnosis) : item))
     );
     setSavingDiagnosis(false);
     alert("최종 진단서가 고객에게 공개되었습니다.");
@@ -205,14 +195,11 @@ export default function AdminPage() {
     setErrorMessage("");
 
     const { data, error } = await supabase
-      .from("diagnoses")
-      .update({
-        ai_draft: aiDraft || null,
-        expert_memo: expertMemo || null,
-        updated_at: new Date().toISOString(),
+      .rpc("admin_save_diagnosis_draft", {
+        p_diagnosis_id: diagnosis.id,
+        p_ai_draft: aiDraft || null,
+        p_expert_memo: expertMemo || null,
       })
-      .eq("id", diagnosis.id)
-      .select()
       .single();
 
     if (error) {
@@ -223,7 +210,7 @@ export default function AdminPage() {
     }
 
     setDiagnoses((current) =>
-      current.map((item) => (item.id === diagnosis.id ? data : item))
+      current.map((item) => (item.id === diagnosis.id ? (data as Diagnosis) : item))
     );
     setSavingDiagnosis(false);
     alert("진단 초안과 전문가 메모가 저장되었습니다.");
