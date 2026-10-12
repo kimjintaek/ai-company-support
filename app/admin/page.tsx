@@ -186,17 +186,12 @@ export default function AdminPage() {
 
     const diagnosis = getDiagnosis(selectedMember.id);
 
-    if (!diagnosis) {
-      alert("먼저 고객이 재무제표 및 4대보험 자료를 제출해야 합니다.");
-      return;
-    }
-
     setSavingDiagnosis(true);
     setErrorMessage("");
 
     const { data, error } = await supabase
-      .rpc("admin_save_diagnosis_draft", {
-        p_diagnosis_id: diagnosis.id,
+      .rpc("admin_save_member_diagnosis_draft", {
+        p_member_id: selectedMember.id,
         p_ai_draft: aiDraft || null,
         p_expert_memo: expertMemo || null,
       })
@@ -209,9 +204,13 @@ export default function AdminPage() {
       return;
     }
 
-    setDiagnoses((current) =>
-      current.map((item) => (item.id === diagnosis.id ? (data as Diagnosis) : item))
-    );
+    const savedDiagnosis = data as Diagnosis;
+    setDiagnoses((current) => {
+      const exists = current.some((item) => item.id === savedDiagnosis.id);
+      return exists
+        ? current.map((item) => (item.id === savedDiagnosis.id ? savedDiagnosis : item))
+        : [savedDiagnosis, ...current];
+    });
     setSavingDiagnosis(false);
     alert("진단 초안과 전문가 메모가 저장되었습니다.");
   };
@@ -478,18 +477,19 @@ export default function AdminPage() {
                         </td>
 
                         <td className="px-4 py-4">
-                          {diagnosis ? (
+                          <div className="flex flex-col items-start gap-1">
                             <button
                               onClick={() => handleSelectMember(member)}
                               className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100"
                             >
-                              제출자료 확인
+                              상세·진단 작성
                             </button>
-                          ) : (
-                            <span className="text-sm text-gray-400">
-                              미제출
+                            <span className="text-xs text-gray-500">
+                              {diagnosis?.financial_file_path || diagnosis?.insurance_file_path
+                                ? "자료 제출"
+                                : "자료 미제출"}
                             </span>
-                          )}
+                          </div>
                         </td>
 
                         <td className="px-4 py-4">
@@ -722,10 +722,6 @@ export default function AdminPage() {
             {(() => {
               const diagnosis = getDiagnosis(selectedMember.id);
 
-              if (!diagnosis) {
-                return null;
-              }
-
               return (
                 <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50/40 p-5">
                   <div>
@@ -775,7 +771,7 @@ export default function AdminPage() {
                     <button
                       type="button"
                       onClick={handlePublishDiagnosis}
-                      disabled={savingDiagnosis || !aiDraft.trim()}
+                      disabled={savingDiagnosis || !diagnosis || !aiDraft.trim()}
                       className="rounded-lg bg-green-600 px-5 py-3 text-sm font-semibold text-white hover:bg-green-700 disabled:bg-gray-300"
                     >
                       {diagnosis.sent_at ? "최종 진단서 다시 공개" : "최종 진단서 확정 및 고객 공개"}
