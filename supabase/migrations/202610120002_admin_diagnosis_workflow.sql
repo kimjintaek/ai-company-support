@@ -1,5 +1,8 @@
 -- Keep the admin diagnosis RPCs versioned in the repository.
--- Safe to re-apply in the preview database: these functions are replaced in place.
+-- Remove prior definitions first so differing return types cannot block migration.
+-- These RPCs are consumed only by the application; they are not referenced by other schema objects.
+DROP FUNCTION IF EXISTS public.admin_list_diagnoses();
+DROP FUNCTION IF EXISTS public.admin_publish_diagnosis(uuid, text, text);
 
 CREATE OR REPLACE FUNCTION public.admin_list_diagnoses()
 RETURNS SETOF public.diagnoses
