@@ -774,11 +774,11 @@ export default function AdminPage() {
                       disabled={savingDiagnosis || !diagnosis || !aiDraft.trim()}
                       className="rounded-lg bg-green-600 px-5 py-3 text-sm font-semibold text-white hover:bg-green-700 disabled:bg-gray-300"
                     >
-                      {diagnosis.sent_at ? "최종 진단서 다시 공개" : "최종 진단서 확정 및 고객 공개"}
+                      {diagnosis?.sent_at ? "최종 진단서 다시 공개" : "최종 진단서 확정 및 고객 공개"}
                     </button>
                   </div>
                   <p className="mt-3 text-right text-xs text-gray-500">
-                    공개 상태: {diagnosis.sent_at ? "고객 공개 중" : "비공개 초안"}
+                    공개 상태: {diagnosis?.sent_at ? "고객 공개 중" : "비공개 초안"}
                   </p>
                 </div>
               );
