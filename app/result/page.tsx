@@ -4,6 +4,53 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
+function renderInline(text: string) {
+  return text.split(/(\*\*.*?\*\*)/g).map((part, index) =>
+    part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={index}>{part.slice(2, -2)}</strong>
+    ) : (
+      part
+    )
+  );
+}
+
+function renderDraftContent(content: string) {
+  return content.split(/\r?\n/).map((line, index) => {
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      return <div key={index} className="h-3" />;
+    }
+
+    const heading = trimmed.match(/^(?:#{1,3}\s+(.+)|\[([^\]]+)\])$/);
+    if (heading) {
+      return (
+        <h3
+          key={index}
+          className="mb-3 mt-7 border-b border-gray-200 pb-2 text-lg font-bold text-blue-900"
+        >
+          {renderInline(heading[1] || heading[2])}
+        </h3>
+      );
+    }
+
+    const bullet = trimmed.match(/^[-*]\s+(.+)$/);
+    if (bullet) {
+      return (
+        <div key={index} className="ml-5 flex gap-2">
+          <span>•</span>
+          <span>{renderInline(bullet[1])}</span>
+        </div>
+      );
+    }
+
+    return (
+      <p key={index} className="mb-2">
+        {renderInline(trimmed)}
+      </p>
+    );
+  });
+}
 export default function ResultPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -83,7 +130,7 @@ export default function ResultPage() {
           <section className="rounded-2xl bg-white p-8 shadow-sm">
             <p className="mb-5 text-sm text-gray-500">공개일: {publishedAt ? new Date(publishedAt).toLocaleString("ko-KR") : "-"}</p>
             <div className="whitespace-pre-wrap leading-8 text-gray-800">
-              {draft}
+              {renderDraftContent(draft)}
             </div>
             <div className="mt-8 rounded-xl bg-gray-50 p-4 text-sm leading-6 text-gray-600">
               본 결과는 제출자료를 바탕으로 한 1차 검토 내용이며, 최종 지원 가능 여부는
