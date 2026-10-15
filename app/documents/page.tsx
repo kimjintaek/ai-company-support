@@ -216,6 +216,19 @@ export default function DocumentsPage() {
             <p className="mt-3 leading-7 text-gray-600">
               입금 확인 후 관리자에서 이용권을 활성화하면 이 화면에서 자료를 제출할 수 있습니다.
             </p>
+            <div className="mt-6 rounded-xl bg-blue-50 p-6">
+              <p className="text-sm font-medium text-gray-600">진단 서비스 이용료</p>
+              <p className="mt-2 text-2xl font-bold text-gray-900">49,000원 + 부가세</p>
+              <p className="mt-1 text-sm text-gray-600">실제 입금금액: 53,900원</p>
+            </div>
+            <div className="mt-4 rounded-xl border border-gray-200 p-6">
+              <p className="text-sm font-medium text-gray-500">입금계좌</p>
+              <p className="mt-2 text-xl font-bold text-gray-900">신한은행 100-037-330541</p>
+              <p className="mt-2 text-gray-700">예금주: (주)다온지원센터</p>
+            </div>
+            <p className="mt-4 text-sm leading-6 text-gray-600">
+              입금 시 신청자명 또는 기업명을 기재해주세요. 입금 확인 후 이용권이 활성화되며, 자료 제출이 가능합니다.
+            </p>
           </div>
         ) : (
           <form
