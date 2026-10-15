@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "정책자금 진단 | (주)다온지원센터",
+  description: "기업 기본정보와 제출자료를 바탕으로 정책자금 검토 방향과 신청 전 확인사항을 전문가가 검토해 진단보고서로 제공합니다.",
+};
+
 const steps = [
   { number: "01", title: "신청 및 결제", description: "기업 기본정보를 등록하고 진단료를 결제합니다." },
   { number: "02", title: "기업자료 제출", description: "사업자등록증과 보유 중인 재무·고용 관련 자료를 제출합니다." },
