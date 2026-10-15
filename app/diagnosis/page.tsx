@@ -58,6 +58,17 @@ export default function DiagnosisPage() {
       return;
     }
 
+    // Supabase may return a user-shaped response for an existing email.
+    // An empty identities array indicates that no new identity was created.
+    if (
+      signUpData.user.identities &&
+      signUpData.user.identities.length === 0
+    ) {
+      setLoading(false);
+      alert("이미 가입된 이메일입니다. 기존 계정으로 로그인해주세요.");
+      return;
+    }
+
     const memberData = {
       name: String(formData.get("name") || ""),
       business_name: String(formData.get("business_name") || ""),
