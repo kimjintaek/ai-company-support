@@ -157,7 +157,7 @@ export default function ResultPage() {
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <button
             onClick={() => router.push("/documents")}
-            className="rounded-xl border border-gray-300 bg-white py-3 font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-xl bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700"
           >
             자료 제출 화면
           </button>
@@ -166,7 +166,7 @@ export default function ResultPage() {
               await supabase.auth.signOut();
               router.replace("/login");
             }}
-            className="rounded-xl border border-gray-300 bg-white py-3 font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-xl bg-gray-700 py-3 font-semibold text-white hover:bg-gray-800"
           >
             로그아웃
           </button>
