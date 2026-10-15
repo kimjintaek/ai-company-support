@@ -32,6 +32,7 @@ type Diagnosis = {
   member_id: string;
   financial_file_path: string | null;
   insurance_file_path: string | null;
+  business_registration_file_path: string | null;
   ai_draft: string | null;
   expert_memo: string | null;
   sent_at: string | null;
@@ -113,7 +114,7 @@ export default function AdminPage() {
       const { data: diagnosisData, error: diagnosisError } = await supabase
         .from("diagnoses")
         .select(
-          "id, member_id, financial_file_path, insurance_file_path, ai_draft, expert_memo, sent_at, created_at"
+          "id, member_id, business_registration_file_path, financial_file_path, insurance_file_path, ai_draft, expert_memo, sent_at, created_at"
         )
         .order("created_at", { ascending: false });
 
@@ -681,6 +682,28 @@ export default function AdminPage() {
                     </p>
                   ) : (
                     <div className="mt-4 grid gap-4 md:grid-cols-2">
+                      <div className="rounded-lg bg-gray-50 p-4">
+                        <p className="text-xs text-gray-500">사업자등록증</p>
+                        <p className="mt-1 font-medium text-gray-900">
+                          {diagnosis.business_registration_file_path ? "제출완료" : "미제출"}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            openDiagnosisFile(
+                              diagnosis.business_registration_file_path,
+                              "사업자등록증"
+                            )
+                          }
+                          disabled={
+                            !diagnosis.business_registration_file_path ||
+                            openingFile === "사업자등록증"
+                          }
+                          className="mt-3 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:bg-gray-300"
+                        >
+                          {openingFile === "사업자등록증" ? "여는 중..." : "파일 보기"}
+                        </button>
+                      </div>
                       <div className="rounded-lg bg-gray-50 p-4">
                         <p className="text-xs text-gray-500">재무제표</p>
                         <p className="mt-1 font-medium text-gray-900">
