@@ -10,6 +10,7 @@ export default function DocumentsPage() {
   const [uploading, setUploading] = useState(false);
   const [memberId, setMemberId] = useState("");
   const [licenseStatus, setLicenseStatus] = useState("");
+  const [businessRegistrationFile, setBusinessRegistrationFile] = useState<File | null>(null);
   const [financialFile, setFinancialFile] = useState<File | null>(null);
   const [insuranceFile, setInsuranceFile] = useState<File | null>(null);
   const [message, setMessage] = useState("");
@@ -70,8 +71,8 @@ export default function DocumentsPage() {
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!financialFile && !insuranceFile) {
-      setMessage("재무제표 또는 4대보험 자료 중 하나 이상을 선택해주세요.");
+    if (!businessRegistrationFile && !financialFile && !insuranceFile) {
+      setMessage("사업자등록증, 재무제표, 4대보험 자료 중 하나 이상을 선택해주세요.");
       return;
     }
 
@@ -91,7 +92,7 @@ export default function DocumentsPage() {
         return;
       }
 
-      const uploaded: { financial?: string; insurance?: string } = {};
+      const uploaded: { businessRegistration?: string; financial?: string; insurance?: string } = {};
 
       // Storage object keys should use a safe filename. Remove spaces and
       // special characters from the original filename while preserving the extension.
@@ -108,6 +109,18 @@ export default function DocumentsPage() {
 
         return safeBaseName + extension;
       };
+
+      if (businessRegistrationFile) {
+        const businessRegistrationPath =
+          user.id + "/business-registration-" + Date.now() + "-" + safeFileName(businessRegistrationFile);
+
+        const { error } = await supabase.storage
+          .from("diagnosis-files")
+          .upload(businessRegistrationPath, businessRegistrationFile, { upsert: false });
+
+        if (error) throw new Error("사업자등록증 업로드 실패: " + error.message);
+        uploaded.businessRegistration = businessRegistrationPath;
+      }
 
       if (financialFile) {
         const financialPath =
@@ -135,7 +148,7 @@ export default function DocumentsPage() {
 
       const { data: existingDiagnosis } = await supabase
         .from("diagnoses")
-        .select("id, financial_file_path, insurance_file_path")
+        .select("id, business_registration_file_path, financial_file_path, insurance_file_path")
         .eq("member_id", memberId)
         .order("created_at", { ascending: false })
         .limit(1)
@@ -143,6 +156,8 @@ export default function DocumentsPage() {
 
       const diagnosisData = {
         member_id: memberId,
+        business_registration_file_path:
+          uploaded.businessRegistration ?? existingDiagnosis?.business_registration_file_path ?? null,
         financial_file_path:
           uploaded.financial ?? existingDiagnosis?.financial_file_path ?? null,
         insurance_file_path:
@@ -164,6 +179,7 @@ export default function DocumentsPage() {
         if (error) throw new Error("진단자료 저장 실패: " + error.message);
       }
 
+      setBusinessRegistrationFile(null);
       setFinancialFile(null);
       setInsuranceFile(null);
       setMessage("자료 제출이 완료되었습니다. 관리자 검토 후 AI 진단을 진행합니다.");
@@ -223,6 +239,21 @@ export default function DocumentsPage() {
             className="rounded-2xl bg-white p-8 shadow-sm"
           >
             <div className="space-y-6">
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
+                  사업자등록증
+                </label>
+                <input
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={(e) => setBusinessRegistrationFile(e.target.files?.[0] ?? null)}
+                  className="w-full rounded-lg border border-gray-300 p-3"
+                />
+                <p className="mt-2 text-xs text-gray-500">
+                  사업자등록증 사본을 제출해주세요. (PDF 또는 이미지)
+                </p>
+              </div>
+
               <div>
                 <label className="mb-2 block text-sm font-semibold text-gray-700">
                   재무제표
