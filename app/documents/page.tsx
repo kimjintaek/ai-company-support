@@ -12,8 +12,8 @@ export default function DocumentsPage() {
   const [licenseStatus, setLicenseStatus] = useState("");
   const [financialFile, setFinancialFile] = useState<File | null>(null);
   const [insuranceFile, setInsuranceFile] = useState<File | null>(null);
-  const [message, setMessage] = useState("");
-
+const [businessRegistrationFile, setBusinessRegistrationFile] = useState<File | null>(null);
+const [message, setMessage] = useState("");
   useEffect(() => {
     const loadMember = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -70,7 +70,7 @@ export default function DocumentsPage() {
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!financialFile && !insuranceFile) {
+    if (!financialFile && !insuranceFile && !businessRegistrationFile) {
       setMessage("재무제표 또는 4대보험 자료 중 하나 이상을 선택해주세요.");
       return;
     }
@@ -91,7 +91,7 @@ export default function DocumentsPage() {
         return;
       }
 
-      const uploaded: { financial?: string; insurance?: string } = {};
+      const uploaded: { financial?: string; insurance?: string; businessRegistration?: string } = {};
 
       // Storage object keys should use a safe filename. Remove spaces and
       // special characters from the original filename while preserving the extension.
@@ -133,9 +133,29 @@ export default function DocumentsPage() {
         uploaded.insurance = insurancePath;
       }
 
+            if (businessRegistrationFile) {
+        const businessRegistrationPath =
+          user.id +
+          "/business-registration-" +
+          Date.now() +
+          "-" +
+          safeFileName(businessRegistrationFile);
+
+        const { error } = await supabase.storage
+          .from("diagnosis-files")
+          .upload(businessRegistrationPath, businessRegistrationFile, {
+            upsert: false,
+          });
+
+        if (error) {
+          throw new Error("사업자등록증 업로드 실패: " + error.message);
+        }
+
+        uploaded.businessRegistration = businessRegistrationPath;
+      }
       const { data: existingDiagnosis } = await supabase
         .from("diagnoses")
-        .select("id, financial_file_path, insurance_file_path")
+        .select("id, financial_file_path, insurance_file_path, business_registration_file_path")
         .eq("member_id", memberId)
         .order("created_at", { ascending: false })
         .limit(1)
@@ -147,6 +167,10 @@ export default function DocumentsPage() {
           uploaded.financial ?? existingDiagnosis?.financial_file_path ?? null,
         insurance_file_path:
           uploaded.insurance ?? existingDiagnosis?.insurance_file_path ?? null,
+          business_registration_file_path:
+  uploaded.businessRegistration ??
+  existingDiagnosis?.business_registration_file_path ??
+  null,
       };
 
       if (existingDiagnosis?.id) {
@@ -166,6 +190,7 @@ export default function DocumentsPage() {
 
       setFinancialFile(null);
       setInsuranceFile(null);
+      setBusinessRegistrationFile(null);
       setMessage("자료 제출이 완료되었습니다. 관리자 검토 후 AI 진단을 진행합니다.");
     } catch (error) {
       setMessage(
@@ -239,8 +264,8 @@ export default function DocumentsPage() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold text-gray-700">
-                  4대보험 관련 자료
+                                <label className="mb-2 block text-sm font-semibold text-gray-700">
+                  4대 사회보험 사업장 가입자 명부
                 </label>
                 <input
                   type="file"
@@ -249,7 +274,24 @@ export default function DocumentsPage() {
                   className="w-full rounded-lg border border-gray-300 p-3"
                 />
                 <p className="mt-2 text-xs text-gray-500">
-                  가입현황 및 상실자 확인에 필요한 자료를 제출해주세요.
+                  현재 가입 인원 확인을 위한 4대 사회보험 사업장 가입자 명부를 제출해 주세요.
+                </p>
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
+                  사업자등록증
+                </label>
+                <input
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={(e) =>
+                    setBusinessRegistrationFile(e.target.files?.[0] ?? null)
+                  }
+                  className="w-full rounded-lg border border-gray-300 p-3"
+                />
+                <p className="mt-2 text-xs text-gray-500">
+                  사업자등록증 사본(PDF, JPG, PNG)을 제출해주세요.
                 </p>
               </div>
 

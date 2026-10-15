@@ -9,13 +9,13 @@ export default function Home() {
         <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
           내 회사 지원사업
           <br />
-          <span className="text-blue-600">3분 진단</span>
+          <span className="mt-4 inline-block text-blue-600">AI 1차 분석 + 전문가 검토</span>
         </h1>
 
         <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-600">
-          우리 회사가 어떤 정책자금·지원사업을 검토할 수 있는지
+          기업정보와 제출자료를 바탕으로 지원사업 검토 방향을 분석하고
           <br />
-          기업 상황을 기준으로 빠르게 확인해보세요.
+          전문가가 직접 검토한 진단결과를 확인하세요.
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm font-medium text-gray-700">
@@ -38,7 +38,7 @@ export default function Home() {
 </a>
 
         <p className="mt-4 text-sm text-gray-500">
-          사업자 기본정보만 입력하면 시작할 수 있습니다.
+          자료 제출 → 전문가 검토 → 진단결과 확인
         </p>
       </section>
     </main>
