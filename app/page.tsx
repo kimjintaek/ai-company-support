@@ -8,8 +8,7 @@ export default function Home() {
 
         <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
           내 회사 지원사업
-          <br />
-          <span className="text-blue-600">AI 1차 분석 + 전문가 검토</span>
+          <span className="mt-4 block text-blue-600 sm:mt-6">AI 1차 분석 + 전문가 검토</span>
         </h1>
 
         <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-600">
@@ -31,11 +30,11 @@ export default function Home() {
         </div>
 
         <a
-  href="/diagnosis"
-  className="mt-10 rounded-xl bg-blue-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:bg-blue-700"
->
-  무료 진단 시작하기
-</a>
+          href="/diagnosis"
+          className="mt-10 rounded-xl bg-blue-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:bg-blue-700"
+        >
+          무료 진단 시작하기
+        </a>
 
         <p className="mt-4 text-sm text-gray-500">
           자료 제출 → 전문가 검토 → 진단결과 확인
