@@ -48,13 +48,29 @@ export default function DiagnosisPage() {
     if (signUpError) {
       setLoading(false);
       console.error("Supabase Auth error:", signUpError);
-      alert(`회원가입 중 오류가 발생했습니다.\\n\\n${signUpError.message}`);
+      const errorMessage = signUpError.message.toLowerCase();
+      if (errorMessage.includes("rate limit") || errorMessage.includes("email rate limit")) {
+        alert("이메일 인증 요청이 일시적으로 제한되었습니다. 반복해서 가입을 시도하지 마시고, 제한이 풀린 뒤 다시 시도해주세요. 이미 인증 메일을 받았다면 메일함에서 기존 인증 메일을 확인해주세요.");
+      } else {
+        alert(`회원가입 중 오류가 발생했습니다.\\n\\n${signUpError.message}`);
+      }
       return;
     }
 
     if (!signUpData.user) {
       setLoading(false);
       alert("회원가입은 완료되었지만 사용자 정보를 확인할 수 없습니다.");
+      return;
+    }
+
+    // Supabase may return a user-shaped response for an existing email.
+    // An empty identities array indicates that no new identity was created.
+    if (
+      signUpData.user.identities &&
+      signUpData.user.identities.length === 0
+    ) {
+      setLoading(false);
+      alert("이미 가입된 이메일입니다. 기존 계정으로 로그인해주세요.");
       return;
     }
 
@@ -69,43 +85,15 @@ export default function DiagnosisPage() {
     };
 
     let authenticatedUser = signUpData.user;
-    let authenticatedSession = signUpData.session;
+    const authenticatedSession = signUpData.session;
 
+    // When email confirmation is enabled, a new signup normally has no session.
+    // Do not sign in or resend confirmation immediately: that can trigger Supabase's
+    // resend rate limit and incorrectly report a signup failure.
     if (!authenticatedSession) {
-      const { data: signInData } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (signInData.user && signInData.session) {
-        authenticatedUser = signInData.user;
-        authenticatedSession = signInData.session;
-      }
-    }
-
-    if (!authenticatedSession) {
-      const { error: resendError } = await supabase.auth.resend({
-        type: "signup",
-        email,
-      });
-
-      setLoading(false);
-
-      if (resendError) {
-        console.error("Supabase resend confirmation error:", resendError);
-
-        if (
-          resendError.message.toLowerCase().includes("already confirmed") ||
-          resendError.message.toLowerCase().includes("confirmed")
-        ) {
-          alert(
-            "이미 이메일 인증이 완료된 계정입니다. 기존 비밀번호로 로그인해주세요."
-          );
-        } else {
-          alert(
-            `이메일 인증 메일을 다시 보내는 중 오류가 발생했습니다.\\n\\n${resendError.message}`
-          );
-        }
+      if (!signUpData.user.identities || signUpData.user.identities.length === 0) {
+        setLoading(false);
+        alert("가입 요청을 확인할 수 없습니다. 기존 계정이면 로그인하고, 신규 계정이면 잠시 후 다시 시도해주세요.");
         return;
       }
 
@@ -114,8 +102,9 @@ export default function DiagnosisPage() {
         JSON.stringify(memberData)
       );
 
+      setLoading(false);
       alert(
-        "회원가입이 완료되었습니다. 이메일 인증 메일을 확인해주세요.\\n\\n메일의 인증 링크를 클릭한 후 로그인하면 입력하신 기업정보가 자동으로 저장됩니다."
+        "회원가입 요청이 접수되었습니다. 이메일 인증 메일함에서 인증 링크를 확인해주세요. 인증 후 로그인하면 입력하신 기업정보가 저장됩니다."
       );
       return;
     }
@@ -194,7 +183,7 @@ export default function DiagnosisPage() {
         <div className="mb-8">
           <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p>
           <h1 className="mt-2 text-3xl font-bold text-gray-900">우리 회사 정보를 입력해주세요</h1>
-          <p className="mt-3 text-gray-600">기본정보를 바탕으로 검토 가능한 지원사업을 분석합니다.</p>
+          <p className="mt-3 text-gray-600">회사 기본정보를 등록하고 진단 서비스를 신청하세요. 자료 제출 후 전문가가 검토하여 진단 결과를 제공합니다.</p>
         </div>
         <form onSubmit={handleSubmit} className="rounded-2xl bg-white p-8 shadow-sm">
           <div className="space-y-6">
