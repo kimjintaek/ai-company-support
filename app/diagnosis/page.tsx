@@ -183,7 +183,7 @@ export default function DiagnosisPage() {
         <div className="mb-8">
           <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p>
           <h1 className="mt-2 text-3xl font-bold text-gray-900">우리 회사 정보를 입력해주세요</h1>
-          <p className="mt-3 text-gray-600">기본정보를 바탕으로 검토 가능한 지원사업을 분석합니다.</p>
+          <p className="mt-3 text-gray-600">회사 기본정보를 등록하고 진단 서비스를 신청하세요. 자료 제출 후 전문가가 검토하여 진단 결과를 제공합니다.</p>
         </div>
         <form onSubmit={handleSubmit} className="rounded-2xl bg-white p-8 shadow-sm">
           <div className="space-y-6">
