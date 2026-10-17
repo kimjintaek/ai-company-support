@@ -290,8 +290,46 @@ export default function DocumentsPage() {
               이용권 활성화가 필요합니다.
             </h2>
             <p className="mt-3 leading-7 text-gray-600">
-              입금 확인 후 관리자에서 이용권을 활성화하면 이 화면에서 자료를 제출할 수 있습니다.
+              아래 계좌로 이용권 금액을 입금한 뒤, 입금자명을 확인해 주세요. 관리자가 입금을 확인하고 이용권을 활성화하면 자료를 제출할 수 있습니다.
             </p>
+            <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50 p-5">
+              <p className="text-sm font-semibold text-blue-800">이용권 결제 안내</p>
+              <div className="mt-3 flex items-center justify-between gap-4">
+                <span className="text-gray-600">이용기간</span>
+                <span className="font-semibold text-gray-900">12개월</span>
+              </div>
+              <div className="mt-2 flex items-center justify-between gap-4">
+                <span className="text-gray-600">입금 금액</span>
+                <span className="text-xl font-bold text-gray-900">53,900원</span>
+              </div>
+              <div className="mt-4 border-t border-blue-200 pt-4">
+                <p className="text-sm text-gray-600">은행</p>
+                <p className="font-semibold text-gray-900">신한은행</p>
+                <p className="mt-3 text-sm text-gray-600">계좌번호</p>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-lg font-bold tracking-wide text-gray-900">100-037-330541</p>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText("100-037-330541");
+                        setMessage("계좌번호를 복사했습니다.");
+                      } catch {
+                        setMessage("계좌번호를 직접 복사해 주세요: 100-037-330541");
+                      }
+                    }}
+                    className="rounded-lg border border-blue-300 bg-white px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100"
+                  >
+                    계좌번호 복사
+                  </button>
+                </div>
+                <p className="mt-3 text-sm text-gray-600">예금주</p>
+                <p className="font-semibold text-gray-900">(주)다온지원센터</p>
+              </div>
+              <p className="mt-4 text-sm leading-6 text-gray-700">
+                입금 후 관리자 확인이 완료되면 이용권이 활성화됩니다. 입금자명은 실제 송금자명과 동일하게 입력해 주세요.
+              </p>
+            </div>
           </div>
         ) : (
           <>
