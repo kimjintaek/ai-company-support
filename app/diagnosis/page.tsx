@@ -48,7 +48,12 @@ export default function DiagnosisPage() {
     if (signUpError) {
       setLoading(false);
       console.error("Supabase Auth error:", signUpError);
-      alert(`회원가입 중 오류가 발생했습니다.\\n\\n${signUpError.message}`);
+      const errorMessage = signUpError.message.toLowerCase();
+      if (errorMessage.includes("rate limit") || errorMessage.includes("email rate limit")) {
+        alert("이메일 인증 요청이 일시적으로 제한되었습니다. 반복해서 가입을 시도하지 마시고, 제한이 풀린 뒤 다시 시도해주세요. 이미 인증 메일을 받았다면 메일함에서 기존 인증 메일을 확인해주세요.");
+      } else {
+        alert(`회원가입 중 오류가 발생했습니다.\\n\\n${signUpError.message}`);
+      }
       return;
     }
 
