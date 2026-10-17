@@ -80,43 +80,15 @@ export default function DiagnosisPage() {
     };
 
     let authenticatedUser = signUpData.user;
-    let authenticatedSession = signUpData.session;
+    const authenticatedSession = signUpData.session;
 
+    // When email confirmation is enabled, a new signup normally has no session.
+    // Do not sign in or resend confirmation immediately: that can trigger Supabase's
+    // resend rate limit and incorrectly report a signup failure.
     if (!authenticatedSession) {
-      const { data: signInData } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (signInData.user && signInData.session) {
-        authenticatedUser = signInData.user;
-        authenticatedSession = signInData.session;
-      }
-    }
-
-    if (!authenticatedSession) {
-      const { error: resendError } = await supabase.auth.resend({
-        type: "signup",
-        email,
-      });
-
-      setLoading(false);
-
-      if (resendError) {
-        console.error("Supabase resend confirmation error:", resendError);
-
-        if (
-          resendError.message.toLowerCase().includes("already confirmed") ||
-          resendError.message.toLowerCase().includes("confirmed")
-        ) {
-          alert(
-            "이미 이메일 인증이 완료된 계정입니다. 기존 비밀번호로 로그인해주세요."
-          );
-        } else {
-          alert(
-            `이메일 인증 메일을 다시 보내는 중 오류가 발생했습니다.\\n\\n${resendError.message}`
-          );
-        }
+      if (!signUpData.user.identities || signUpData.user.identities.length === 0) {
+        setLoading(false);
+        alert("가입 요청을 확인할 수 없습니다. 기존 계정이면 로그인하고, 신규 계정이면 잠시 후 다시 시도해주세요.");
         return;
       }
 
@@ -125,8 +97,9 @@ export default function DiagnosisPage() {
         JSON.stringify(memberData)
       );
 
+      setLoading(false);
       alert(
-        "회원가입이 완료되었습니다. 이메일 인증 메일을 확인해주세요.\\n\\n메일의 인증 링크를 클릭한 후 로그인하면 입력하신 기업정보가 자동으로 저장됩니다."
+        "회원가입 요청이 접수되었습니다. 이메일 인증 메일함에서 인증 링크를 확인해주세요. 인증 후 로그인하면 입력하신 기업정보가 저장됩니다."
       );
       return;
     }
