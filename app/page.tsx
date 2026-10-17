@@ -29,12 +29,20 @@ export default function Home() {
           </span>
         </div>
 
-        <a
-          href="/diagnosis"
-          className="mt-10 rounded-xl bg-blue-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:bg-blue-700"
-        >
-          무료 진단 시작하기
-        </a>
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <a
+            href="/diagnosis"
+            className="rounded-xl bg-blue-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:bg-blue-700"
+          >
+            무료 진단 시작하기
+          </a>
+          <a
+            href="/login"
+            className="rounded-xl border border-gray-300 bg-white px-8 py-4 text-lg font-semibold text-gray-800 transition hover:bg-gray-50"
+          >
+            고객 로그인
+          </a>
+        </div>
 
         <p className="mt-4 text-sm text-gray-500">
           자료 제출 → 전문가 검토 → 진단결과 확인
