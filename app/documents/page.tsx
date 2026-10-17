@@ -298,9 +298,20 @@ export default function DocumentsPage() {
                 <span className="text-gray-600">이용기간</span>
                 <span className="font-semibold text-gray-900">12개월</span>
               </div>
-              <div className="mt-2 flex items-center justify-between gap-4">
-                <span className="text-gray-600">입금 금액</span>
-                <span className="text-xl font-bold text-gray-900">53,900원</span>
+              <div className="mt-3 space-y-2 rounded-lg border border-blue-100 bg-white p-4">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-gray-600">공급가액</span>
+                  <span className="font-medium text-gray-900">49,000원</span>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-gray-600">부가가치세 (10%)</span>
+                  <span className="font-medium text-gray-900">4,900원</span>
+                </div>
+                <div className="flex items-center justify-between gap-4 border-t border-gray-200 pt-3">
+                  <span className="font-semibold text-gray-800">총 입금 금액</span>
+                  <span className="text-xl font-bold text-gray-900">53,900원</span>
+                </div>
+                <p className="text-xs text-gray-500">부가가치세 포함 금액입니다.</p>
               </div>
               <div className="mt-4 border-t border-blue-200 pt-4">
                 <p className="text-sm text-gray-600">은행</p>
