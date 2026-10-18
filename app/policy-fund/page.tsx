@@ -172,8 +172,43 @@ export default function PolicyFundLandingPage() {
             ))}
           </ul>
           <p className="mt-5 text-sm leading-6 text-slate-500">
-            세무 최적화, 기업인증, R&D, 고용지원금 등 다른 분야의 필요성이 확인되면 진단 서비스와 별도로 안내할 수 있습니다.
-            별도 서비스는 범위와 비용을 안내한 후 진행 여부를 결정합니다.
+            본 이용권은 정책자금 검토 방향과 신청 전 확인사항을 안내하는 진단 서비스입니다.
+            별도 컨설팅은 업무 범위와 비용을 안내한 후 진행 여부를 결정합니다.
+          </p>
+        </div>
+      </section>
+
+      <section className="border-t border-slate-100 bg-white">
+        <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-14">
+          <div className="max-w-3xl">
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-700">Additional support</p>
+            <h2 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">
+              정책자금 진단 후, 기업에 필요한 지원도 함께 검토합니다.
+            </h2>
+            <p className="mt-4 leading-7 text-slate-600">
+              진단 과정에서 추가적인 경영 개선이나 정부지원사업 검토 필요성이 확인되면,
+              기업 상황에 맞는 별도 컨설팅을 안내할 수 있습니다. 모든 서비스가 모든 기업에 해당하는 것은 아니며,
+              필요성과 제공 가능 범위를 확인한 뒤 안내합니다.
+            </p>
+          </div>
+          <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { title: "세무·법인전환", body: "세무 검토, 절세 방안 검토, 법인전환 및 재무구조 개선" },
+              { title: "기업인증", body: "여성·장애인기업, 벤처기업, 기업부설연구소, 이노비즈·메인비즈" },
+              { title: "R&D·정부지원사업", body: "연구개발 과제, 사업화 지원 및 관련 지원사업 검토" },
+              { title: "고용지원", body: "고용지원금 및 인력 운영 관련 제도 검토" },
+              { title: "시설자금·투자", body: "시설투자 계획과 시설자금 검토 — 별도 컨설팅" },
+              { title: "기업 운영 서비스", body: "기업보험, 통신·인터넷 등 기업 운영에 필요한 서비스 안내" },
+            ].map((item) => (
+              <article key={item.title} className="rounded-xl border border-slate-200 p-5">
+                <h3 className="font-bold text-slate-900">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{item.body}</p>
+              </article>
+            ))}
+          </div>
+          <p className="mt-5 text-xs leading-6 text-slate-500">
+            ※ 위 분야는 별도 컨설팅 또는 서비스 안내 항목이며 연간 이용권에 포함되지 않습니다.
+            업무 범위와 비용을 먼저 안내하며, 정책자금 승인이나 지원사업 선정 결과를 보장하지 않습니다.
           </p>
         </div>
       </section>
