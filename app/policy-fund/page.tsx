@@ -72,6 +72,24 @@ export default function PolicyFundLandingPage() {
             <p className="mt-3 text-xs leading-6 text-slate-400">
               진단 결과는 기업 상황과 제출자료를 기준으로 한 검토 의견이며, 정책자금 승인 여부를 보장하지 않습니다.
             </p>
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="https://pf.kakao.com/_QxnGmX"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-xl bg-[#FEE500] px-5 py-3.5 text-sm font-bold text-slate-900 transition hover:bg-yellow-300"
+              >
+                카카오톡 채널 방문하기
+              </a>
+              <a
+                href="https://pf.kakao.com/_QxnGmX/chat"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-xl border border-white/25 px-5 py-3.5 text-sm font-bold text-white transition hover:bg-white/10"
+              >
+                카카오톡으로 상담하기
+              </a>
+            </div>
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-2xl backdrop-blur sm:p-8">
