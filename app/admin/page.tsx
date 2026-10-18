@@ -38,6 +38,8 @@ type Diagnosis = {
   created_at: string;
 };
 
+type DiagnosisFileField = "financial_file_path" | "insurance_file_path";
+
 export default function AdminPage() {
   const router = useRouter();
 
@@ -46,6 +48,7 @@ export default function AdminPage() {
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [openingFile, setOpeningFile] = useState("");
+  const [deletingFile, setDeletingFile] = useState("");
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -246,6 +249,62 @@ export default function AdminPage() {
     }
 
     window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleDeleteDiagnosisFile = async (
+    diagnosis: Diagnosis,
+    field: DiagnosisFileField,
+    label: string
+  ) => {
+    if (!diagnosis[field]) {
+      alert(label + " 파일이 없습니다.");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `${selectedMember?.business_name ?? "해당 기업"}의 ${label} 파일을 저장소에서 영구 삭제하시겠습니까? 삭제 후 복구할 수 없습니다.`
+    );
+    if (!confirmed) return;
+
+    setDeletingFile(field);
+    setErrorMessage("");
+
+    try {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !session?.access_token) {
+        throw new Error("관리자 로그인 상태를 확인할 수 없습니다. 다시 로그인해주세요.");
+      }
+
+      const response = await fetch("/api/admin/delete-diagnosis-file", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          diagnosisId: diagnosis.id,
+          fileField: field,
+        }),
+      });
+
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(result.error || "파일 삭제에 실패했습니다.");
+      }
+
+      setDiagnoses((current) =>
+        current.map((item) =>
+          item.id === diagnosis.id ? { ...item, [field]: null } : item
+        )
+      );
+      alert(label + " 파일이 삭제되었습니다.");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "파일 삭제 중 오류가 발생했습니다.";
+      setErrorMessage(message);
+      alert(message);
+    } finally {
+      setDeletingFile("");
+    }
   };
 
   const handleConfirmPayment = async (member: Member) => {
@@ -673,22 +732,35 @@ export default function AdminPage() {
                         <p className="mt-1 font-medium text-gray-900">
                           {diagnosis.financial_file_path ? "제출완료" : "미제출"}
                         </p>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            openDiagnosisFile(
-                              diagnosis.financial_file_path,
-                              "재무제표"
-                            )
-                          }
-                          disabled={
-                            !diagnosis.financial_file_path ||
-                            openingFile === "재무제표"
-                          }
-                          className="mt-3 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:bg-gray-300"
-                        >
-                          {openingFile === "재무제표" ? "여는 중..." : "파일 보기"}
-                        </button>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              openDiagnosisFile(
+                                diagnosis.financial_file_path,
+                                "재무제표"
+                              )
+                            }
+                            disabled={
+                              !diagnosis.financial_file_path ||
+                              openingFile === "재무제표" ||
+                              deletingFile === "financial_file_path"
+                            }
+                            className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:bg-gray-300"
+                          >
+                            {openingFile === "재무제표" ? "여는 중..." : "파일 보기"}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleDeleteDiagnosisFile(diagnosis, "financial_file_path", "재무제표")
+                            }
+                            disabled={!diagnosis.financial_file_path || deletingFile === "financial_file_path"}
+                            className="rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:bg-gray-300"
+                          >
+                            {deletingFile === "financial_file_path" ? "삭제 중..." : "자료 삭제"}
+                          </button>
+                        </div>
                       </div>
 
                       <div className="rounded-lg bg-gray-50 p-4">
@@ -696,22 +768,35 @@ export default function AdminPage() {
                         <p className="mt-1 font-medium text-gray-900">
                           {diagnosis.insurance_file_path ? "제출완료" : "미제출"}
                         </p>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            openDiagnosisFile(
-                              diagnosis.insurance_file_path,
-                              "4대보험 자료"
-                            )
-                          }
-                          disabled={
-                            !diagnosis.insurance_file_path ||
-                            openingFile === "4대보험 자료"
-                          }
-                          className="mt-3 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:bg-gray-300"
-                        >
-                          {openingFile === "4대보험 자료" ? "여는 중..." : "파일 보기"}
-                        </button>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              openDiagnosisFile(
+                                diagnosis.insurance_file_path,
+                                "4대보험 자료"
+                              )
+                            }
+                            disabled={
+                              !diagnosis.insurance_file_path ||
+                              openingFile === "4대보험 자료" ||
+                              deletingFile === "insurance_file_path"
+                            }
+                            className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:bg-gray-300"
+                          >
+                            {openingFile === "4대보험 자료" ? "여는 중..." : "파일 보기"}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleDeleteDiagnosisFile(diagnosis, "insurance_file_path", "4대보험 자료")
+                            }
+                            disabled={!diagnosis.insurance_file_path || deletingFile === "insurance_file_path"}
+                            className="rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:bg-gray-300"
+                          >
+                            {deletingFile === "insurance_file_path" ? "삭제 중..." : "자료 삭제"}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
