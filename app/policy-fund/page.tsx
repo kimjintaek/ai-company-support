@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "정책자금 진단 | (주)다온지원센터",
-  description: "기업 기본정보와 제출자료를 바탕으로 정책자금 검토 방향과 신청 전 확인사항을 전문가가 검토해 진단보고서로 제공합니다.",
+  title: "기업지원사업 진단 연간 이용권 | (주)다온지원센터",
+  description: "기업 기본정보와 제출자료를 바탕으로 기업지원사업을 1차 분석하고 전문가가 검토하는 12개월 이용 서비스입니다.",
 };
 
 const steps = [
-  { number: "01", title: "신청 및 결제", description: "기업 기본정보를 등록하고 진단료를 결제합니다." },
+  { number: "01", title: "신청 및 결제", description: "기업 기본정보를 등록하고 연간 이용료를 결제합니다." },
   { number: "02", title: "기업자료 제출", description: "사업자등록증과 보유 중인 재무·고용 관련 자료를 제출합니다." },
   { number: "03", title: "전문가 검토", description: "AI로 1차 정리한 내용을 전문가가 검토하고 보완합니다." },
   { number: "04", title: "진단보고서 제공", description: "정책자금 검토 방향과 신청 전 확인할 사항을 보고서로 안내합니다." },
@@ -75,12 +75,12 @@ export default function PolicyFundLandingPage() {
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-2xl backdrop-blur sm:p-8">
-            <p className="text-sm font-semibold text-blue-200">정책자금 진단 서비스</p>
+            <p className="text-sm font-semibold text-blue-200">기업지원사업 진단 연간 이용권</p>
             <div className="mt-4 flex items-end gap-2">
               <span className="text-5xl font-black tracking-tight">49,000원</span>
-              <span className="pb-1 text-sm text-slate-300">/ 1회</span>
+              <span className="pb-1 text-sm text-slate-300">/ 연간 이용료</span>
             </div>
-            <p className="mt-2 text-sm text-slate-300">부가세 별도 · 결제금액 53,900원</p>
+            <p className="mt-2 text-sm text-slate-300">부가세 별도 · 이용기간 12개월 · 결제금액 53,900원</p>
             <div className="my-6 h-px bg-white/10" />
             <ul className="space-y-4">
               {included.map((item) => (
@@ -152,7 +152,7 @@ export default function PolicyFundLandingPage() {
       <section className="mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-2">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-700">Included</p>
-          <h2 className="mt-3 text-2xl font-extrabold">49,000원 진단에 포함되는 범위</h2>
+          <h2 className="mt-3 text-2xl font-extrabold">연간 이용료에 포함되는 서비스</h2>
           <ul className="mt-6 space-y-3">
             {included.map((item) => (
               <li key={item} className="flex gap-3 leading-7 text-slate-700">
@@ -190,7 +190,7 @@ export default function PolicyFundLandingPage() {
           <a href="/diagnosis" className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-white px-7 py-4 font-bold text-blue-800 transition hover:bg-blue-50 sm:w-auto">
             정책자금 진단 신청하기 →
           </a>
-          <p className="mt-4 text-xs text-blue-100">49,000원 + 부가세 · 정책자금 승인 보장 상품이 아닙니다.</p>
+          <p className="mt-4 text-xs text-blue-100">연간 이용료 49,000원 + 부가세 · 이용기간 12개월 · 승인 보장 상품이 아닙니다.</p>
         </div>
       </section>
 
