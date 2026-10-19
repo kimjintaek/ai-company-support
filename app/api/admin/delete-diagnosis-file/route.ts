@@ -62,11 +62,21 @@ export async function POST(request: Request) {
 
   const { data: adminUser, error: adminError } = await adminClient
     .from("admin_users")
-    .select("id")
+    .select("auth_user_id")
     .eq("auth_user_id", user.id)
     .maybeSingle();
 
   if (adminError || !adminUser) {
+    if (adminError) {
+      console.error("Admin delete API: admin_users lookup failed", {
+        code: adminError.code,
+        message: adminError.message,
+        details: adminError.details,
+        hint: adminError.hint,
+      });
+    } else {
+      console.warn("Admin delete API: authenticated user has no admin_users row");
+    }
     return NextResponse.json({ error: "관리자 권한이 확인되지 않습니다." }, { status: 403 });
   }
 
