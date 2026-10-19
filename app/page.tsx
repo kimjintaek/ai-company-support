@@ -47,6 +47,15 @@ export default function Home() {
         <p className="mt-4 text-sm text-gray-500">
           자료 제출 → 전문가 검토 → 진단결과 확인
         </p>
+
+        <footer className="mt-16 w-full text-center">
+          <a
+            href="/admin/login"
+            className="text-xs text-gray-400 transition hover:text-gray-600"
+          >
+            관리자 로그인
+          </a>
+        </footer>
       </section>
     </main>
   );
