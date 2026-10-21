@@ -36,6 +36,23 @@ export default function AdminLoginPage() {
       return;
     }
 
+    const { data: adminUser, error: adminError } = await supabase
+      .from("admin_users")
+      .select("id")
+      .eq("auth_user_id", data.user.id)
+      .maybeSingle();
+
+    if (adminError || !adminUser) {
+      await supabase.auth.signOut();
+      setLoading(false);
+      setMessage(
+        adminError
+          ? "관리자 권한 확인 중 오류가 발생했습니다. 다시 시도해주세요."
+          : "관리자 권한이 없는 계정입니다. 고객은 고객 로그인 화면을 이용해주세요."
+      );
+      return;
+    }
+
     router.replace("/admin");
   };
 
