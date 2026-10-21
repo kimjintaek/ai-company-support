@@ -97,6 +97,16 @@ export default function LoginPage() {
               {loading ? "로그인 중..." : "로그인"}
             </button>
 
+            <div className="text-right">
+              <button
+                type="button"
+                onClick={() => router.push("/forgot-password")}
+                className="text-sm text-blue-600 hover:text-blue-700 hover:underline"
+              >
+                비밀번호를 잊으셨나요?
+              </button>
+            </div>
+
             <button type="button" onClick={() => router.push("/diagnosis")} className="w-full rounded-xl border border-gray-300 py-3 font-medium text-gray-700 hover:bg-gray-50">
               아직 신청하지 않았다면 진단 신청하기
             </button>
