@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
-export default function AuthConfirmPage() {
+function AuthConfirmContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [message, setMessage] = useState("인증 링크를 확인하고 있습니다.");
@@ -60,5 +60,23 @@ export default function AuthConfirmPage() {
         ) : null}
       </div>
     </main>
+  );
+}
+
+export default function AuthConfirmPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-gray-50 px-6 py-12">
+          <div className="mx-auto max-w-md rounded-2xl bg-white p-8 shadow-sm">
+            <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p>
+            <h1 className="mt-2 text-2xl font-bold text-gray-900">비밀번호 재설정 인증</h1>
+            <p className="mt-4 leading-7 text-gray-600">인증 링크를 확인하고 있습니다.</p>
+          </div>
+        </main>
+      }
+    >
+      <AuthConfirmContent />
+    </Suspense>
   );
 }
