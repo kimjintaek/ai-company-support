@@ -64,7 +64,7 @@ export default function PolicyFundLandingPage() {
               <span className="rounded-full border border-white/15 px-3 py-2">보고서 관련 후속 상담 포함</span>
             </div>
             <a
-              href="/"
+              href="/diagnosis"
               className="mt-9 inline-flex w-full items-center justify-center rounded-xl bg-blue-500 px-7 py-4 text-base font-bold text-white shadow-lg shadow-blue-950/30 transition hover:bg-blue-400 sm:w-auto"
             >
               정책자금 진단 신청하기 <span className="ml-3" aria-hidden="true">→</span>
@@ -108,7 +108,7 @@ export default function PolicyFundLandingPage() {
                 </li>
               ))}
             </ul>
-            <a href="/" className="mt-8 block rounded-xl bg-white px-5 py-3.5 text-center font-bold text-slate-900 transition hover:bg-blue-50">
+            <a href="/diagnosis" className="mt-8 block rounded-xl bg-white px-5 py-3.5 text-center font-bold text-slate-900 transition hover:bg-blue-50">
               신청 절차 시작하기
             </a>
           </div>
@@ -240,7 +240,7 @@ export default function PolicyFundLandingPage() {
           <p className="mx-auto mt-4 max-w-2xl leading-7 text-blue-100">
             진단보고서와 보고서 내용에 관한 후속 상담까지 한 번의 진단 서비스에 포함됩니다.
           </p>
-          <a href="/" className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-white px-7 py-4 font-bold text-blue-800 transition hover:bg-blue-50 sm:w-auto">
+          <a href="/diagnosis" className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-white px-7 py-4 font-bold text-blue-800 transition hover:bg-blue-50 sm:w-auto">
             정책자금 진단 신청하기 →
           </a>
           <p className="mt-4 text-xs text-blue-100">연간 이용료 49,000원 + 부가세 · 이용기간 12개월 · 승인 보장 상품이 아닙니다.</p>
