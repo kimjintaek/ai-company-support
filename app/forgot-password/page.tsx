@@ -17,7 +17,7 @@ export default function ForgotPasswordPage() {
     const email = String(formData.get("email") || "").trim();
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "https://ai-company-support-git-feature-customer-password-reset-daon2.vercel.app/reset-password",
+      redirectTo: "https://ai-company-support.vercel.app/reset-password",
     });
 
     setLoading(false);
