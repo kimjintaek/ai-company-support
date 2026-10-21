@@ -66,6 +66,11 @@ export default function LoginPage() {
           alert("임시 기업정보를 읽는 중 오류가 발생했습니다. 진단 신청을 다시 진행해주세요.");
           return;
         }
+      } else {
+        await supabase.auth.signOut();
+        setLoading(false);
+        alert("고객 회원정보가 없습니다. 먼저 무료 진단 신청을 진행해주세요.");
+        return;
       }
     }
 
