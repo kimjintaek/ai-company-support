@@ -9,12 +9,21 @@ export default function DiagnosisPage() {
   const [submitted, setSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [passwordHasKorean, setPasswordHasKorean] = useState(false);
+  const [termsAgreed, setTermsAgreed] = useState(false);
+  const [privacyAgreed, setPrivacyAgreed] = useState(false);
+  const [marketingAgreed, setMarketingAgreed] = useState(false);
+  const [adsAgreed, setAdsAgreed] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!businessType) {
       alert("사업 형태를 선택해주세요.");
+      return;
+    }
+
+    if (!termsAgreed || !privacyAgreed) {
+      alert("필수 약관과 개인정보 수집·이용에 동의해주세요.");
       return;
     }
 
@@ -84,41 +93,10 @@ export default function DiagnosisPage() {
     }
 
     if (!authenticatedSession) {
-      const { error: resendError } = await supabase.auth.resend({
-        type: "signup",
-        email,
-      });
-
-      setLoading(false);
-
-      if (resendError) {
-        console.error("Supabase resend confirmation error:", resendError);
-
-        if (
-          resendError.message.toLowerCase().includes("already confirmed") ||
-          resendError.message.toLowerCase().includes("confirmed")
-        ) {
-          alert(
-            "이미 이메일 인증이 완료된 계정입니다. 기존 비밀번호로 로그인해주세요."
-          );
-        } else {
-          alert(
-            `이메일 인증 메일을 다시 보내는 중 오류가 발생했습니다.\\n\\n${resendError.message}`
-          );
-        }
-        return;
-      }
-
-      localStorage.setItem(
-        "pending_member_registration",
-        JSON.stringify(memberData)
-      );
-
-      alert(
-        "회원가입이 완료되었습니다. 이메일 인증 메일을 확인해주세요.\\n\\n메일의 인증 링크를 클릭한 후 로그인하면 입력하신 기업정보가 자동으로 저장됩니다."
-      );
-      return;
-    }
+  setLoading(false);
+  alert("회원가입 세션이 생성되지 않았습니다. 다시 시도해주세요.");
+  return;
+}
 
     const { data: existingMember, error: existingMemberError } = await supabase
       .from("members")
@@ -139,14 +117,38 @@ export default function DiagnosisPage() {
       return;
     }
 
-    const { error: memberError } = await supabase.from("members").insert({
-      ...memberData,
-      auth_user_id: authenticatedUser.id,
-    });
+    const { data: insertedMember, error: memberError } = await supabase
+      .from("members")
+      .insert({
+        ...memberData,
+        auth_user_id: authenticatedUser.id,
+      })
+      .select("id")
+      .single();
 
-    if (memberError) {
+    if (memberError || !insertedMember) {
       console.error("Supabase member error:", memberError);
-      alert(`기업정보 저장 중 오류가 발생했습니다.\\n\\n${memberError.message}`);
+      alert("기업정보 저장에 실패했습니다.\n\n" + (memberError?.message ?? "회원 ID를 확인할 수 없습니다."));
+      setLoading(false);
+      return;
+    }
+
+    const consentVersion = "2026-10-22-v1";
+    const consentedAt = new Date().toISOString();
+    const consentRows = [
+      { member_id: insertedMember.id, consent_type: "terms_of_service", consent_value: termsAgreed, consent_text: "[필수] 서비스 이용약관 동의", consent_version: consentVersion, consented_at: consentedAt },
+      { member_id: insertedMember.id, consent_type: "privacy_collection", consent_value: privacyAgreed, consent_text: "[필수] 개인정보 수집·이용 동의", consent_version: consentVersion, consented_at: consentedAt },
+      { member_id: insertedMember.id, consent_type: "marketing_use", consent_value: marketingAgreed, consent_text: "[선택] 개인정보 마케팅 활용 동의", consent_version: consentVersion, consented_at: consentedAt },
+      { member_id: insertedMember.id, consent_type: "advertising_messages", consent_value: adsAgreed, consent_text: "[선택] 광고성 정보 수신 동의", consent_version: consentVersion, consented_at: consentedAt },
+    ];
+
+    const { error: consentError } = await supabase
+      .from("consent_logs")
+      .insert(consentRows);
+
+    if (consentError) {
+      console.error("Consent log save error:", consentError);
+      alert("기업정보는 저장됐지만 동의 이력 저장에 실패했습니다.\n\n" + consentError.message);
       setLoading(false);
       return;
     }
@@ -242,6 +244,45 @@ export default function DiagnosisPage() {
                 <button type="button" onClick={() => setBusinessType("개인사업자")} className={`rounded-lg border px-4 py-3 ${businessType === "개인사업자" ? "border-blue-600 bg-blue-50 text-blue-700" : "border-gray-300 hover:border-blue-500 hover:bg-blue-50"}`}>개인사업자</button>
                 <button type="button" onClick={() => setBusinessType("법인사업자")} className={`rounded-lg border px-4 py-3 ${businessType === "법인사업자" ? "border-blue-600 bg-blue-50 text-blue-700" : "border-gray-300 hover:border-blue-500 hover:bg-blue-50"}`}>법인사업자</button>
               </div>
+            </div>
+            <div className="rounded-xl border border-gray-200 p-5">
+              <p className="mb-4 text-base font-semibold text-gray-900">약관 동의</p>
+              <label className="mb-4 flex items-start gap-3 text-sm text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={termsAgreed && privacyAgreed && marketingAgreed && adsAgreed}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    setTermsAgreed(checked);
+                    setPrivacyAgreed(checked);
+                    setMarketingAgreed(checked);
+                    setAdsAgreed(checked);
+                  }}
+                  className="mt-1 h-4 w-4"
+                />
+                <span className="font-semibold">전체 동의</span>
+              </label>
+              <div className="space-y-4 border-t border-gray-200 pt-4">
+                <label className="flex items-start gap-3 text-sm text-gray-700">
+                  <input type="checkbox" checked={termsAgreed} onChange={(e) => setTermsAgreed(e.target.checked)} className="mt-1 h-4 w-4" />
+                  <span><strong className="text-gray-900">[필수]</strong> 서비스 이용약관 동의</span>
+                </label>
+                <label className="flex items-start gap-3 text-sm text-gray-700">
+                  <input type="checkbox" checked={privacyAgreed} onChange={(e) => setPrivacyAgreed(e.target.checked)} className="mt-1 h-4 w-4" />
+                  <span><strong className="text-gray-900">[필수]</strong> 개인정보 수집·이용 동의</span>
+                </label>
+                <label className="flex items-start gap-3 text-sm text-gray-700">
+                  <input type="checkbox" checked={marketingAgreed} onChange={(e) => setMarketingAgreed(e.target.checked)} className="mt-1 h-4 w-4" />
+                  <span><strong className="text-gray-900">[선택]</strong> 개인정보 마케팅 활용 동의</span>
+                </label>
+                <label className="flex items-start gap-3 text-sm text-gray-700">
+                  <input type="checkbox" checked={adsAgreed} onChange={(e) => setAdsAgreed(e.target.checked)} className="mt-1 h-4 w-4" />
+                  <span><strong className="text-gray-900">[선택]</strong> 광고성 정보 수신 동의</span>
+                </label>
+              </div>
+              <p className="mt-4 text-xs leading-5 text-gray-500">
+                선택 항목에 동의하지 않아도 회원가입할 수 있습니다. 약관 전문과 개인정보 처리 내용은 별도 문서로 제공되어야 합니다.
+              </p>
             </div>
             <button type="submit" disabled={!businessType || loading} className="w-full rounded-xl bg-blue-600 py-4 text-lg font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300">
               {loading ? "접수 중..." : "진단 신청하기"}
