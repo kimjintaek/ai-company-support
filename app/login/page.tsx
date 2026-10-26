@@ -74,7 +74,9 @@ export default function LoginPage() {
 
           memberId = inserted.id;
         }
-      } else {
+      }
+
+      if (!memberId) {
         await supabase.auth.signOut();
         setLoading(false);
         alert("고객 회원정보가 없습니다. 먼저 무료 진단 신청을 진행해주세요.");
