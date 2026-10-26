@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 export default function DiagnosisPage() {
@@ -107,6 +108,19 @@ export default function DiagnosisPage() {
         return;
       }
 
+      const pendingConsentVersion = "2026-10-26-v1";
+      const pendingConsentedAt = new Date().toISOString();
+      localStorage.setItem(
+        "pending_member_consents",
+        JSON.stringify({
+          terms: termsAgreed,
+          privacy: privacyAgreed,
+          marketing: marketingAgreed,
+          ads: adsAgreed,
+          consent_version: pendingConsentVersion,
+          consented_at: pendingConsentedAt,
+        })
+      );
       localStorage.setItem(
         "pending_member_registration",
         JSON.stringify(memberData)
@@ -155,7 +169,7 @@ export default function DiagnosisPage() {
       return;
     }
 
-    const consentVersion = "2026-10-22-v1";
+    const consentVersion = "2026-10-26-v1";
     const consentedAt = new Date().toISOString();
     const consentRows = [
       { member_id: insertedMember.id, consent_type: "terms_of_service", consent_value: termsAgreed, consent_text: "[필수] 서비스 이용약관 동의", consent_version: consentVersion, consented_at: consentedAt },
@@ -287,23 +301,23 @@ export default function DiagnosisPage() {
               <div className="space-y-4 border-t border-gray-200 pt-4">
                 <label className="flex items-start gap-3 text-sm text-gray-700">
                   <input type="checkbox" checked={termsAgreed} onChange={(e) => setTermsAgreed(e.target.checked)} className="mt-1 h-4 w-4" />
-                  <span><strong className="text-gray-900">[필수]</strong> 서비스 이용약관 동의</span>
+                  <span><strong className="text-gray-900">[필수]</strong> 서비스 이용약관 동의 · <Link href="/terms" target="_blank" className="text-blue-700 underline">전문 보기</Link></span>
                 </label>
                 <label className="flex items-start gap-3 text-sm text-gray-700">
                   <input type="checkbox" checked={privacyAgreed} onChange={(e) => setPrivacyAgreed(e.target.checked)} className="mt-1 h-4 w-4" />
-                  <span><strong className="text-gray-900">[필수]</strong> 개인정보 수집·이용 동의</span>
+                  <span><strong className="text-gray-900">[필수]</strong> 개인정보 수집·이용 동의 · <Link href="/privacy#collection" target="_blank" className="text-blue-700 underline">전문 보기</Link></span>
                 </label>
                 <label className="flex items-start gap-3 text-sm text-gray-700">
                   <input type="checkbox" checked={marketingAgreed} onChange={(e) => setMarketingAgreed(e.target.checked)} className="mt-1 h-4 w-4" />
-                  <span><strong className="text-gray-900">[선택]</strong> 개인정보 마케팅 활용 동의</span>
+                  <span><strong className="text-gray-900">[선택]</strong> 개인정보 마케팅 활용 동의 · <Link href="/privacy#marketing" target="_blank" className="text-blue-700 underline">전문 보기</Link></span>
                 </label>
                 <label className="flex items-start gap-3 text-sm text-gray-700">
                   <input type="checkbox" checked={adsAgreed} onChange={(e) => setAdsAgreed(e.target.checked)} className="mt-1 h-4 w-4" />
-                  <span><strong className="text-gray-900">[선택]</strong> 광고성 정보 수신 동의</span>
+                  <span><strong className="text-gray-900">[선택]</strong> 광고성 정보 수신 동의 · <Link href="/privacy#advertising" target="_blank" className="text-blue-700 underline">전문 보기</Link></span>
                 </label>
               </div>
               <p className="mt-4 text-xs leading-5 text-gray-500">
-                선택 항목에 동의하지 않아도 회원가입할 수 있습니다. 약관 전문과 개인정보 처리 내용은 별도 문서로 제공되어야 합니다.
+                선택 항목에 동의하지 않아도 회원가입할 수 있습니다. 각 항목의 전문 보기를 눌러 내용을 확인한 뒤 동의해 주세요.
               </p>
             </div>
             <button type="submit" disabled={!businessType || loading} className="w-full rounded-xl bg-blue-600 py-4 text-lg font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300">
