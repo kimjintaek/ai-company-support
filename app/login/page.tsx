@@ -101,7 +101,7 @@ export default function LoginPage() {
         }
 
         const version = String(
-          pendingConsents.consent_version ?? pendingConsents.version ?? "2026-10-22-v1"
+          pendingConsents.consent_version ?? pendingConsents.version ?? "2026-10-26-v1"
         );
         const consentedAt = String(
           pendingConsents.consented_at ?? new Date().toISOString()
