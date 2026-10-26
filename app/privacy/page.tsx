@@ -1,36 +1,152 @@
 "use client";
+
 import Link from "next/link";
 import type { ReactNode } from "react";
-function Section({id,title,children}:{id?:string;title:string;children:ReactNode}){return <section id={id} className="scroll-mt-6"><h2 className="text-xl font-semibold text-gray-900">{title}</h2><div className="mt-3 space-y-3 leading-7 text-gray-700">{children}</div></section>}
-export default function PrivacyPage(){
-return <main className="min-h-screen bg-gray-50 px-6 py-12"><article className="mx-auto max-w-3xl rounded-2xl bg-white p-6 shadow-sm sm:p-10">
-<p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p><h1 className="mt-2 text-3xl font-bold text-gray-900">개인정보 처리 및 동의 안내</h1><p className="mt-3 text-sm leading-6 text-gray-500">운영자: 주식회사 다온지원센터 · 적용 버전: 2026-10-26-v1</p>
-<p className="mt-6 leading-7 text-gray-700">회사는 기업지원사업 진단 및 매칭 서비스를 제공하기 위해 아래와 같이 개인정보를 처리합니다. 필수 항목에 동의하지 않으면 회원가입 및 서비스 제공이 제한될 수 있습니다. 선택 항목은 동의하지 않아도 기본 서비스를 이용할 수 있습니다.</p>
-<div className="mt-8 space-y-8">
-<Section id="collection" title="1. [필수] 개인정보 수집·이용 동의">
-<p><strong>이용 목적:</strong> 회원 식별 및 계정 관리, 기업지원사업 진단·매칭, 진단보고서 및 사업계획서 초안 작성, 전문가 검토, 고객 문의 대응, 서비스 및 결제·이용권 관리, 중요 안내 전달.</p>
-<p><strong>수집 항목:</strong> 대표자명, 사업자명, 연락처, 이메일, 비밀번호(인증 서비스에서 관리), 업종, 지역, 사업 형태, 사업자등록증, 재무제표, 4대 사회보험 관련 자료 및 이용자가 서비스 이용 중 제출하는 기업정보·자료.</p>
-<p><strong>보유 및 이용 기간:</strong> 회원 및 서비스 이용 기간 동안 목적에 필요한 범위에서 보유합니다. 회원 탈퇴 또는 처리 목적 달성 시 지체 없이 파기하되, 관련 법령에 따라 보존해야 하는 정보는 해당 법정 기간 동안 별도 보관합니다. 제출자료는 진단·매칭 및 고객 지원에 필요한 기간 동안 접근을 제한해 관리합니다.</p>
-<p><strong>동의 거부 권리:</strong> 이용자는 동의를 거부할 수 있으나, 필수 항목에 동의하지 않으면 회원가입 또는 진단 서비스 이용이 제한됩니다.</p></Section>
-<Section id="marketing" title="2. [선택] 개인정보 마케팅 활용 동의">
-<p><strong>이용 목적:</strong> 다온지원센터가 제공하거나 안내하는 기업지원사업·정책자금 정보, 경영컨설팅, 세무·절세 관련 서비스, 기업 인증·연구개발 지원, 기업보험 및 기타 기업 대상 서비스의 안내와 맞춤형 서비스 제안.</p>
-<p><strong>이용 항목:</strong> 대표자명, 연락처, 이메일, 사업자명, 업종, 지역 및 서비스 이용 과정에서 제공한 기업 기본정보 중 마케팅 목적에 필요한 항목.</p>
-<p><strong>보유 및 이용 기간:</strong> 동의 철회 또는 회원 탈퇴 시까지. 법령상 별도 보존 의무가 있는 경우에는 해당 기간을 따릅니다.</p>
-<p><strong>동의 거부 권리:</strong> 동의를 거부해도 회원가입 및 기본 진단 서비스 이용에는 제한이 없습니다. 동의 후에도 언제든지 철회할 수 있습니다.</p></Section>
-<Section id="advertising" title="3. [선택] 광고성 정보 수신 동의">
-<p><strong>발송 목적 및 내용:</strong> 기업지원사업·정책자금·컨설팅 등 서비스 관련 프로모션, 이벤트 및 광고성 안내.</p>
-<p><strong>수신 항목 및 방법:</strong> 연락처 및 이메일을 이용한 문자메시지(SMS), 이메일, 카카오톡 등 전자적 전송매체. 실제 발송은 이용자가 제공한 연락처와 사용 가능한 채널에 한합니다.</p>
-<p><strong>보유 및 이용 기간:</strong> 광고성 정보 수신 동의 철회 또는 회원 탈퇴 시까지.</p>
-<p><strong>동의 거부 및 철회:</strong> 동의를 거부하거나 철회해도 기본 서비스 이용에는 제한이 없습니다. 수신한 광고성 안내의 수신거부 방법 또는 회사에 대한 요청으로 철회할 수 있습니다.</p></Section>
-<Section title="4. 개인정보 처리 업무 및 보안">
-<p>서비스는 웹사이트 호스팅, 계정 인증, 데이터베이스 및 파일 저장을 위해 클라우드 기반 기술 서비스를 이용합니다. 외부 처리업체의 정확한 법인명, 처리 위치, 국외 이전 여부 및 세부 위탁 내용은 실제 배포·계정 설정을 확인하여 확정하고 별도로 안내해야 합니다.</p>
-<p>회사는 업무상 필요한 권한만 부여하고 개인정보 보호를 위한 기술적·관리적 조치를 적용하기 위해 노력합니다. 이용자는 다른 사람의 개인정보가 포함된 자료를 제출할 때 적법한 제출 권한을 확보해야 합니다.</p></Section>
-<Section title="5. 이용자의 권리 및 문의">
-<p>이용자는 자신의 개인정보 열람·정정·삭제 및 처리정지를 요청하거나 선택 동의를 철회할 수 있습니다. 요청은 <a className="font-semibold text-blue-700 underline" href="http://pf.kakao.com/_QxnX/chat" target="_blank" rel="noreferrer">다온지원센터 카카오톡 채널 상담</a>을 통해 접수할 수 있습니다.</p>
-<p>개인정보 처리 관련 문의는 회사에 요청해 주세요. 개인정보 보호 담당자의 성명·직책과 별도 연락처는 운영자가 지정한 뒤 이 문서에 추가해야 합니다.</p></Section>
-<Section title="6. 동의 기록"><p>회사는 동의 항목별 동의 여부, 동의 시각 및 문서 버전을 기록하여 동의 이력을 관리합니다. 선택 동의 여부는 필수 동의와 구분해 기록합니다.</p></Section>
-</div>
-<div className="mt-10 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900"><strong>운영자 확인 필요:</strong> 이 문서는 플랫폼에 적용하기 위한 초안입니다. 공개 운영 전 개인정보 처리 담당자 연락처, 클라우드 업체의 정확한 위탁·국외 이전 정보, 자료 보유기간 및 법정 보존기간을 실제 운영 설정과 대조해 확정해야 합니다.</div>
-<div className="mt-6 flex flex-wrap gap-3"><Link href="/terms" className="rounded-lg border border-gray-300 px-5 py-3 font-semibold text-gray-700 hover:bg-gray-50">서비스 이용약관</Link><Link href="/diagnosis" className="rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700">진단 신청으로 돌아가기</Link></div>
-</article></main>;
+
+function Section({ id, title, children }: { id?: string; title: string; children: ReactNode }) {
+  return (
+    <section id={id} className="scroll-mt-6">
+      <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+      <div className="mt-3 space-y-3 leading-7 text-gray-700">{children}</div>
+    </section>
+  );
+}
+
+function DataTable({ rows }: { rows: [string, string][] }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse text-left text-sm">
+        <tbody>
+          {rows.map(([label, value]) => (
+            <tr key={label} className="border-b border-gray-200 align-top">
+              <th className="w-1/3 px-3 py-3 font-semibold text-gray-800">{label}</th>
+              <td className="px-3 py-3 leading-6 text-gray-700">{value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default function PrivacyPage() {
+  return (
+    <main className="min-h-screen bg-gray-50 px-6 py-12">
+      <article className="mx-auto max-w-3xl rounded-2xl bg-white p-6 shadow-sm sm:p-10">
+        <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p>
+        <h1 className="mt-2 text-3xl font-bold text-gray-900">개인정보 처리방침</h1>
+        <p className="mt-3 text-sm leading-6 text-gray-500">운영자: 주식회사 다온지원센터 · 적용 버전: 2026-10-26-v2</p>
+        <p className="mt-6 leading-7 text-gray-700">
+          주식회사 다온지원센터(이하 “회사”)는 개인정보 보호법 등 관계 법령을 준수하며, 기업지원사업 AI 진단 서비스 이용자의 개인정보를 다음과 같이 처리합니다.
+          본 방침은 회원가입, 기업정보 등록, 서류 제출, 진단·매칭, 고객 문의 및 선택 동의에 따른 안내에 적용됩니다.
+        </p>
+
+        <div className="mt-8 space-y-8">
+          <Section title="1. 처리 목적 및 항목">
+            <DataTable rows={[
+              ["회원가입 및 계정 관리", "대표자명, 사업자명, 연락처, 이메일, 인증 서비스가 관리하는 비밀번호 및 계정 식별정보. 회원 식별, 로그인, 계정 보호 및 고객 지원을 위해 처리합니다."],
+              ["진단·매칭 서비스 제공", "사업 형태, 업종, 지역, 사업자등록증, 표준재무제표, 4대 사회보험 사업장 가입자 명부 및 이용자가 제출한 기업정보·자료. 기업별 지원사업 적합성 검토, 지원사업 진단·매칭, 진단보고서 및 사업계획서 초안 작성, 전문가 검토를 위해 처리합니다."],
+              ["서비스 운영 및 결제 관리", "이용권 상태, 결제 확인 정보, 서비스 이용·문의 기록. 이용기간 관리, 서비스 제공, 분쟁 대응 및 관련 법령상 의무 이행을 위해 처리합니다."],
+              ["선택적 마케팅 활용", "별도 동의한 경우 대표자명, 연락처, 이메일, 사업자명, 업종, 지역 및 서비스 이용 중 제공한 기업 기본정보 중 제안에 필요한 항목. 기업지원사업·정책자금, 경영컨설팅, 세무·절세, 인증·연구개발 지원, 기업보험 및 기타 기업 대상 서비스 안내에 이용합니다."],
+              ["광고성 정보 수신", "별도 동의한 연락처 및 이메일. 문자메시지, 이메일, 카카오톡 등 이용 가능한 전자적 전송매체로 광고성 정보를 발송하는 데 이용합니다."]
+            ]} />
+            <p>회사는 서비스 제공에 필요한 최소한의 정보를 처리하며, 비밀번호 원문을 별도로 열람하거나 마케팅 정보로 이용하지 않습니다.</p>
+          </Section>
+
+          <Section id="collection" title="2. [필수] 개인정보 수집·이용 동의">
+            <p><strong>목적:</strong> 회원 식별·계정 관리, 기업지원사업 진단·매칭, 보고서 및 사업계획서 초안 작성, 전문가 검토, 고객 문의 대응, 서비스·이용권 관리 및 중요 안내 전달.</p>
+            <p><strong>항목:</strong> 대표자명, 사업자명, 연락처, 이메일, 인증 서비스가 관리하는 비밀번호 및 계정 정보, 업종, 지역, 사업 형태, 사업자등록증, 표준재무제표, 4대 사회보험 사업장 가입자 명부, 이용자가 제출하는 기업정보·자료, 서비스 이용 및 문의 기록.</p>
+            <p><strong>보유기간:</strong> 회원·서비스 운영 정보는 회원 탈퇴 또는 처리 목적 달성 시까지 보유 후 지체 없이 파기합니다. 다만 관계 법령에 따라 보존해야 하는 정보는 아래 제3항의 기간 동안 별도 보관합니다. 진행 중인 진단·매칭 또는 분쟁 처리에 필요한 자료는 해당 목적에 필요한 기간 동안 제한적으로 보관할 수 있습니다.</p>
+            <p><strong>거부권:</strong> 이용자는 동의를 거부할 수 있으나, 필수 항목에 동의하지 않으면 회원가입 또는 진단 서비스 제공이 제한됩니다.</p>
+          </Section>
+
+          <Section title="3. 개인정보 보유기간 및 법령상 보존">
+            <p>회사는 목적 달성 후 개인정보를 원칙적으로 지체 없이 파기합니다. 다음 정보는 관련 법령에 보존 의무가 있는 경우에 한해 해당 기간 동안 별도 보관합니다.</p>
+            <DataTable rows={[
+              ["계약 또는 청약철회 등에 관한 기록", "전자상거래 등에서의 소비자보호에 관한 법률 적용 대상인 경우 5년"],
+              ["대금결제 및 재화·서비스 공급에 관한 기록", "같은 법 적용 대상인 경우 5년"],
+              ["소비자 불만 또는 분쟁처리에 관한 기록", "같은 법 적용 대상인 경우 3년"],
+              ["접속 기록", "통신비밀보호법 등 관계 법령에서 보존을 요구하는 경우 해당 법정 기간"],
+              ["선택 동의 및 철회 기록", "동의 여부 및 철회 처리에 관한 분쟁 대응과 법령 준수에 필요한 기간 동안 최소한으로 보관"]
+            ]} />
+            <p>법정 보존 대상이 아닌 진단 자료는 진단·매칭 및 고객 지원 목적이 끝나 더 이상 필요하지 않으면 파기합니다. 실제 운영상 보관기간을 별도로 정하는 경우 서비스 화면에서 해당 기간을 안내합니다.</p>
+          </Section>
+
+          <Section title="4. 개인정보의 제3자 제공">
+            <p>회사는 원칙적으로 이용자의 개인정보를 외부에 판매하거나 제3자에게 제공하지 않습니다. 다만 이용자가 별도로 동의하거나, 법령에 특별한 규정이 있거나, 수사기관의 적법한 절차에 따른 요청 등 법적 근거가 있는 경우에는 해당 근거와 범위 내에서 제공할 수 있습니다.</p>
+            <p>지원사업 신청이나 외부 기관 제출을 위해 이용자의 자료를 기관 또는 제휴사에 전달할 필요가 있는 경우, 전달 대상·목적·항목을 사전에 안내하고 필요한 동의 또는 법적 근거를 확보합니다.</p>
+          </Section>
+
+          <Section title="5. 개인정보 처리업무의 위탁 및 클라우드 서비스">
+            <p>회사는 웹사이트 배포·호스팅, 회원 인증, 데이터베이스 및 제출 파일 저장을 위해 다음 기술 서비스를 이용합니다. 해당 서비스는 회사의 서비스 운영을 위한 기술적 처리에 사용되며, 서비스 설정과 계약에 따라 처리 범위가 달라질 수 있습니다.</p>
+            <DataTable rows={[
+              ["Vercel, Inc.", "웹사이트 배포·호스팅 및 서비스 제공 인프라 운영. 처리 가능 정보: 서비스 접속 시 생성되는 기술 로그 및 웹사이트 운영에 필요한 정보."],
+              ["Supabase, Inc.", "회원 인증, 데이터베이스 및 파일 저장 기능 제공. 처리 가능 정보: 이메일·계정 식별정보, 회원·기업정보, 동의 기록, 진단 관련 자료 및 서비스에 저장된 파일."]
+            ]} />
+            <p>회사는 위탁업체의 개인정보 보호 수준과 계약·설정 내용을 확인하고, 위탁 목적을 벗어난 처리가 발생하지 않도록 관리합니다. 위탁업체 또는 처리 범위가 변경되는 경우 본 방침을 갱신합니다.</p>
+          </Section>
+
+          <Section title="6. 개인정보의 국외 이전">
+            <p>회사는 해외 사업자가 제공하는 웹 호스팅 및 인증·데이터베이스 서비스를 이용하므로, 서비스 구성과 사업자의 처리 위치에 따라 개인정보가 대한민국 외 국가에서 처리되거나 저장될 수 있습니다.</p>
+            <p>국외 이전의 실제 국가, 이전 시점·방법, 이전 항목, 이전받는 자의 보유·이용기간은 Vercel 및 Supabase 계정의 배포·프로젝트 리전과 최신 계약·서비스 설정을 확인해 확정합니다. 해당 설정을 확인한 뒤 구체적인 국가 및 이전 관련 세부사항을 이 항목에 반영합니다. 이용자는 국외 이전 관련 문의를 아래 개인정보 보호 문의처로 할 수 있습니다.</p>
+          </Section>
+
+          <Section id="marketing" title="7. [선택] 개인정보 마케팅 활용 동의">
+            <p><strong>목적:</strong> 기업지원사업·정책자금 정보, 경영컨설팅, 세무·절세 관련 서비스, 기업 인증·연구개발 지원, 기업보험 및 기타 기업 대상 서비스의 안내와 맞춤형 제안.</p>
+            <p><strong>항목:</strong> 대표자명, 연락처, 이메일, 사업자명, 업종, 지역 및 서비스 이용 중 제공한 기업 기본정보 중 마케팅 목적에 필요한 항목.</p>
+            <p><strong>보유기간:</strong> 동의 철회 또는 회원 탈퇴 시까지. 다만 법령상 별도 보존 의무가 있는 경우 해당 기간을 따릅니다.</p>
+            <p><strong>거부권:</strong> 동의를 거부해도 회원가입 및 기본 진단 서비스 이용에 제한이 없습니다. 동의 후에도 언제든지 철회할 수 있습니다.</p>
+          </Section>
+
+          <Section id="advertising" title="8. [선택] 광고성 정보 수신 동의">
+            <p><strong>목적·내용:</strong> 기업지원사업·정책자금·컨설팅 등 회사 서비스의 프로모션, 이벤트 및 광고성 안내.</p>
+            <p><strong>수신 방법:</strong> 이용자가 제공한 연락처·이메일을 통한 문자메시지(SMS), 이메일, 카카오톡 등 전자적 전송매체. 실제 발송은 이용 가능한 채널에 한합니다.</p>
+            <p><strong>보유기간:</strong> 광고성 정보 수신 동의 철회 또는 회원 탈퇴 시까지.</p>
+            <p><strong>거부·철회:</strong> 동의를 거부하거나 철회해도 기본 서비스 이용에는 제한이 없습니다. 수신한 광고성 안내에 표시된 수신거부 방법 또는 아래 문의처를 통해 철회할 수 있습니다.</p>
+          </Section>
+
+          <Section title="9. 개인정보 파기 절차 및 방법">
+            <p>회사는 보유기간 경과 또는 처리 목적 달성으로 개인정보가 불필요해지면 지체 없이 파기합니다. 다른 법령에 따라 보존해야 하는 정보는 별도 분리하여 접근을 제한한 상태로 보관하고, 보존기간이 끝나면 파기합니다.</p>
+            <p>전자 파일은 복구 또는 재생이 어렵도록 삭제하는 방법으로 파기하고, 종이 문서는 분쇄 또는 소각 등으로 파기합니다. 백업본은 기술적으로 가능한 범위에서 정해진 백업 주기에 따라 삭제하며, 파기 전까지 접근을 제한합니다.</p>
+          </Section>
+
+          <Section title="10. 이용자 및 법정대리인의 권리">
+            <p>이용자는 언제든지 자신의 개인정보 열람, 정정, 삭제, 처리정지 및 선택 동의 철회를 요청할 수 있습니다. 회사는 본인 여부를 확인한 후 관계 법령에 따라 처리하며, 다른 법령에 따라 보존해야 하거나 법정 사유가 있는 경우에는 요청이 제한될 수 있습니다.</p>
+            <p>요청은 <a className="font-semibold text-blue-700 underline" href="http://pf.kakao.com/_QxnX/chat" target="_blank" rel="noreferrer">다온지원센터 카카오톡 채널 상담</a>을 통해 접수할 수 있습니다. 본인 확인이나 요청 범위 확인을 위해 추가 정보가 필요한 경우 회사가 별도로 안내합니다.</p>
+          </Section>
+
+          <Section title="11. 개인정보 보호를 위한 조치">
+            <p>회사는 개인정보 접근권한의 제한, 계정 접근 통제, 서비스 제공에 필요한 범위 내 자료 이용 등 기술적·관리적 보호조치를 적용하기 위해 노력합니다. 이용자는 타인의 개인정보가 포함된 자료를 제출할 경우 적법한 제출 권한을 확보해야 하며, 본인의 계정 정보를 안전하게 관리해야 합니다.</p>
+          </Section>
+
+          <Section title="12. 자동 수집 정보 및 쿠키">
+            <p>서비스 운영 과정에서 호스팅·보안·오류 분석을 위한 접속 로그 등 기술 정보가 생성될 수 있습니다. 현재 별도의 광고 추적 쿠키 또는 행동 기반 광고 도구를 사용하도록 명시적으로 구성되어 있지는 않습니다. 향후 쿠키·분석 도구를 추가하는 경우 수집 항목, 목적 및 이용자 설정 방법을 확인해 본 방침을 갱신합니다.</p>
+          </Section>
+
+          <Section title="13. 개인정보 보호책임자 및 문의처">
+            <DataTable rows={[
+              ["개인정보처리자", "주식회사 다온지원센터"],
+              ["개인정보 보호책임자", "주식회사 다온지원센터 대표자"],
+              ["개인정보 관련 문의", "다온지원센터 카카오톡 채널 상담"],
+              ["문의 링크", "http://pf.kakao.com/_QxnX/chat"]
+            ]} />
+            <p>개인정보 침해에 관한 신고나 상담이 필요한 경우 개인정보보호위원회 또는 한국인터넷진흥원 개인정보침해 신고센터 등 관계 기관에 문의할 수 있습니다.</p>
+          </Section>
+
+          <Section title="14. 방침 변경">
+            <p>법령, 서비스 내용 또는 개인정보 처리 방식이 변경되는 경우 본 방침을 개정하고, 이용자 권리·의무에 중요한 변경이 있는 경우 서비스 화면 등을 통해 안내합니다.</p>
+            <p><strong>시행일:</strong> 2026년 10월 26일</p>
+          </Section>
+        </div>
+
+        <div className="mt-10 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">
+          <strong>배포 전 최종 확인:</strong> 본문은 실제 코드에서 확인되는 Vercel·Supabase 사용 구조를 반영했습니다. 공개 운영 전에는 Supabase 프로젝트의 실제 리전, Vercel·Supabase의 국외 처리 조건, 회사의 공식 주소와 연락 가능한 전화·이메일, 실제 자료 보유기간을 확인해 확정해야 합니다. 확인되지 않은 정보를 임의로 기재하지 않았습니다.
+        </div>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link href="/terms" className="rounded-lg border border-gray-300 px-5 py-3 font-semibold text-gray-700 hover:bg-gray-50">서비스 이용약관</Link>
+          <Link href="/diagnosis" className="rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700">진단 신청으로 돌아가기</Link>
+        </div>
+      </article>
+    </main>
+  );
 }
