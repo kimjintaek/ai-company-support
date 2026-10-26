@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-function Section({id,title,children}:{id?:string;title:string;children:React.ReactNode}){return <section id={id} className="scroll-mt-6"><h2 className="text-xl font-semibold text-gray-900">{title}</h2><div className="mt-3 space-y-3 leading-7 text-gray-700">{children}</div></section>}
+import type { ReactNode } from "react";
+function Section({id,title,children}:{id?:string;title:string;children:ReactNode}){return <section id={id} className="scroll-mt-6"><h2 className="text-xl font-semibold text-gray-900">{title}</h2><div className="mt-3 space-y-3 leading-7 text-gray-700">{children}</div></section>}
 export default function PrivacyPage(){
 return <main className="min-h-screen bg-gray-50 px-6 py-12"><article className="mx-auto max-w-3xl rounded-2xl bg-white p-6 shadow-sm sm:p-10">
 <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p><h1 className="mt-2 text-3xl font-bold text-gray-900">개인정보 처리 및 동의 안내</h1><p className="mt-3 text-sm leading-6 text-gray-500">운영자: 주식회사 다온지원센터 · 적용 버전: 2026-10-26-v1</p>
