@@ -62,6 +62,7 @@ export default function PolicyFundLandingPage() {
               <span className="rounded-full border border-white/15 px-3 py-2">전문가 검토</span>
               <span className="rounded-full border border-white/15 px-3 py-2">보고서 제공</span>
               <span className="rounded-full border border-white/15 px-3 py-2">보고서 관련 후속 상담 포함</span>
+              <span className="rounded-full border border-blue-300/40 bg-blue-400/15 px-3 py-2 font-semibold text-blue-100">승인 후 추가 수수료 없음</span>
             </div>
             <a
               href="/"
@@ -99,6 +100,10 @@ export default function PolicyFundLandingPage() {
               <span className="pb-1 text-sm text-slate-300">/ 연간 이용료</span>
             </div>
             <p className="mt-2 text-sm text-slate-300">부가세 별도 · 이용기간 12개월 · 결제금액 53,900원</p>
+            <div className="mt-4 rounded-xl border border-blue-300/30 bg-blue-400/10 px-4 py-3">
+              <p className="text-sm font-bold text-blue-100">정책자금이 승인되어도 성공보수와 승인 후 추가 수수료는 없습니다.</p>
+              <p className="mt-1 text-xs leading-5 text-slate-300">본 연간 진단 이용권에 대한 안내이며, 별도 컨설팅은 진행 전 업무 범위와 비용을 따로 안내합니다.</p>
+            </div>
             <div className="my-6 h-px bg-white/10" />
             <ul className="space-y-4">
               {included.map((item) => (
