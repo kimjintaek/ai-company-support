@@ -9,7 +9,7 @@ const steps = [
   { number: "01", title: "신청 및 결제", description: "기업 기본정보를 등록하고 연간 이용료를 결제합니다." },
   { number: "02", title: "기업자료 제출", description: "사업자등록증과 보유 중인 재무·고용 관련 자료를 제출합니다." },
   { number: "03", title: "전문가 검토", description: "AI로 1차 정리한 내용을 전문가가 검토하고 보완합니다." },
-  { number: "04", title: "진단보고서 제공", description: "정책자금 검토 방향과 신청 전 확인할 사항을 보고서로 안내합니다." },
+  { number: "04", title: "진단보고서 제공", description: "운전자금 검토 방향과 신청 전 확인할 사항을 보고서로 안내합니다." },
 ];
 
 const included = [
@@ -45,7 +45,7 @@ export default function PolicyFundLandingPage() {
         <div className="relative mx-auto grid max-w-6xl gap-12 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
           <div>
             <p className="inline-flex rounded-full border border-blue-300/30 bg-blue-400/10 px-4 py-2 text-sm font-semibold text-blue-200">
-              정책자금 신청 전, 기업 상황부터 점검하세요
+              운전자금 신청 전, 기업 상황부터 점검하세요
             </p>
             <h1 className="mt-7 max-w-3xl text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-6xl">
               우리 회사에 맞는
@@ -55,7 +55,7 @@ export default function PolicyFundLandingPage() {
               먼저 확인하십시오.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-              기업 기본정보와 제출자료를 바탕으로 검토할 사항과 신청 전 보완할 부분을 분석합니다.
+              기업 기본정보와 제출자료를 바탕으로 운전자금 검토에 필요한 사항과 신청 전 보완할 부분을 분석합니다.
               AI가 정리한 초안을 전문가가 직접 검토·수정해 진단보고서로 제공합니다.
             </p>
             <div className="mt-8 flex flex-wrap gap-3 text-sm text-slate-200">
@@ -101,8 +101,7 @@ export default function PolicyFundLandingPage() {
             </div>
             <p className="mt-2 text-sm text-slate-300">부가세 별도 · 이용기간 12개월 · 결제금액 53,900원</p>
             <div className="mt-4 rounded-xl border border-blue-300/30 bg-blue-400/10 px-4 py-3">
-              <p className="text-sm font-bold text-blue-100">정책자금이 승인되어도 성공보수와 승인 후 추가 수수료는 없습니다.</p>
-              <p className="mt-1 text-xs leading-5 text-slate-300">본 연간 진단 이용권에 대한 안내이며, 별도 컨설팅은 진행 전 업무 범위와 비용을 따로 안내합니다.</p>
+              <p className="text-sm font-bold text-blue-100">운전자금이 승인되어도 성공보수와 승인 후 추가 수수료는 없습니다.</p>
             </div>
             <div className="my-6 h-px bg-white/10" />
             <ul className="space-y-4">
