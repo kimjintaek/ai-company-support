@@ -21,6 +21,9 @@ export default function Home() {
           <span className="rounded-full bg-gray-100 px-4 py-2">
             성공보수 없음
           </span>
+          <span className="rounded-full bg-blue-50 px-4 py-2 text-blue-700">
+            승인 후 추가 수수료 없음
+          </span>
           <span className="rounded-full bg-gray-100 px-4 py-2">
             승인 안 나도 추가 비용 0원
           </span>
