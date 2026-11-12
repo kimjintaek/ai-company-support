@@ -9,22 +9,23 @@ const steps = [
   { number: "01", title: "신청 및 결제", description: "기업 기본정보를 등록하고 연간 이용료를 결제합니다." },
   { number: "02", title: "기업자료 제출", description: "사업자등록증과 보유 중인 재무·고용 관련 자료를 제출합니다." },
   { number: "03", title: "전문가 검토", description: "AI로 1차 정리한 내용을 전문가가 검토하고 보완합니다." },
-  { number: "04", title: "진단보고서 제공", description: "운전자금 검토 방향과 신청 전 확인할 사항을 보고서로 안내합니다." },
+  { number: "04", title: "진단결과 제공", description: "운전자금 진단보고서와 사업계획서 초안을 제공하고, 보고서 관련 후속 상담을 진행합니다." },
 ];
 
 const included = [
   "기업 기본정보 및 제출자료 검토",
-  "정책자금 검토 방향과 확인사항 정리",
+  "운전자금 관련 정책자금·지원사업 진단 및 기업 상황에 맞는 매칭",
   "대표자 특성(청년 등) 및 여성·장애인기업 해당 여부에 따른 관련 지원사업 1차 확인",
-  "신청 전 보완할 부분에 대한 안내",
-  "진단보고서 작성 및 전문가 검토·수정",
-  "보고서 내용에 관한 후속 전화·카카오톡 상담",
+  "신청 전 확인사항 및 보완할 부분 안내",
+  "진단보고서 및 사업계획서 초안 작성",
+  "전문가 검토·수정 및 보고서 내용에 관한 후속 전화·카카오톡 상담",
+  "미선정 시 이용기간 내 추가 매칭",
 ];
 
 const notIncluded = [
-  "정책자금 승인 또는 대출 실행 보장",
-  "인증 취득 절차·요건 보완 및 별도 자금조달 전략 수립 등 추가 컨설팅",
-  "기관 제출 및 신청 업무의 대행",
+  "기업인증 취득을 위한 별도 실무 지원 및 자격요건 보완 업무",
+  "별도의 자금조달 전략 수립",
+  "세무·R&D·고용지원 등 추가 전문 컨설팅",
 ];
 
 export default function PolicyFundLandingPage() {
@@ -172,55 +173,16 @@ export default function PolicyFundLandingPage() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-2">
-        <div>
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-700">Included</p>
-          <h2 className="mt-3 text-2xl font-extrabold">연간 이용료에 포함되는 서비스</h2>
-          <ul className="mt-6 space-y-3">
-            {included.map((item) => (
-              <li key={item} className="flex gap-3 leading-7 text-slate-700">
-                <span className="font-bold text-blue-700">✓</span><span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="rounded-2xl border border-slate-200 p-6 sm:p-8">
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Scope</p>
-          <h2 className="mt-3 text-2xl font-extrabold">서비스 범위 안내</h2>
-          <ul className="mt-6 space-y-3">
-            {notIncluded.map((item) => (
-              <li key={item} className="flex gap-3 leading-7 text-slate-600">
-                <span className="font-bold text-slate-400">—</span><span>{item}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-5 text-sm leading-6 text-slate-500">
-            본 이용권은 운전자금 검토 방향과 신청 전 확인사항을 안내하는 진단 서비스입니다.
-            대표자 특성(청년 등)과 여성·장애인기업 해당 여부를 확인하고, 관련 지원사업을 1차 검토하는 업무는 기본 진단에 포함됩니다.
-            다만 인증 취득 절차 지원, 자격요건 보완, 별도 자금조달 전략 수립 등 추가 업무는 기본 이용권에 포함되지 않습니다.
-          </p>
-          <div className="mt-5 rounded-xl border border-blue-200 bg-blue-50 p-5">
-            <h3 className="font-bold text-slate-900">기본 진단과 별도 컨설팅의 차이</h3>
-            <p className="mt-2 text-sm leading-6 text-slate-700">
-              청년·여성·장애인기업 등 기업 특성에 따른 지원 가능성을 확인하고 관련 제도를 1차 검토하는 것은 49,000원 연간 이용권에 포함됩니다.
-              해당 자격을 새로 취득하기 위한 절차 지원이나 기업 상황에 맞춘 추가 자금조달 전략 수립 등 별도 업무가 필요한 경우에는
-              진행 범위와 비용을 먼저 안내하고, 고객 동의 및 별도 계약 후 진행합니다. 별도 컨설팅 비용은 고객 동의 없이 청구되지 않습니다.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section className="border-t border-slate-100 bg-white">
         <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-14">
           <div className="max-w-3xl">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-700">Additional support</p>
             <h2 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">
-              정책자금 진단 후, 기업에 필요한 지원도 함께 검토합니다.
+              49,000원 기본 진단과 별도로 진행하는 전문 컨설팅
             </h2>
             <p className="mt-4 leading-7 text-slate-600">
-              기본 진단에서 확인한 기업 특성이나 자료를 바탕으로 추가적인 인증 취득, 자격요건 보완, 세무·R&D·고용지원 및
-              별도 자금조달 전략 등이 필요한 경우 별도 컨설팅을 안내할 수 있습니다.
-              별도 업무는 기본 이용권과 구분되며, 구체적인 업무 범위와 비용을 먼저 안내하고 고객 동의 후 진행합니다.
+              아래 업무는 49,000원 연간 이용권에 포함되지 않습니다.
+              기업 상황에 따라 추가 업무가 필요한 경우 구체적인 업무 범위와 비용을 먼저 안내하고, 고객 동의 및 별도 계약 후 진행합니다.
             </p>
           </div>
           <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -239,9 +201,8 @@ export default function PolicyFundLandingPage() {
             ))}
           </div>
           <p className="mt-5 text-xs leading-6 text-slate-500">
-            ※ 위 분야 중 기업 특성 및 보유 자격의 확인과 관련 지원사업의 1차 검토는 기본 진단에 포함될 수 있습니다.
-            인증 취득 절차 지원, 자격요건 보완 등 실제 추가 업무는 별도 컨설팅이며, 업무 범위와 비용을 사전 안내하고 동의 후 진행합니다.
-            정책자금 승인이나 지원사업 선정 결과를 보장하지 않습니다.
+            ※ 정책자금 및 지원사업 신청과 최종 제출은 사업자가 해당 기관의 절차에 따라 직접 진행합니다.
+            진단 결과는 검토 의견이며, 정책자금 승인이나 지원사업 선정 결과를 보장하지 않습니다.
           </p>
         </div>
       </section>
