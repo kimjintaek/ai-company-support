@@ -170,6 +170,44 @@ export default function PolicyFundLandingPage() {
         </div>
       </section>
 
+      <section className="bg-white">
+        <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
+          <div className="max-w-3xl">
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-700">1 YEAR SERVICE</p>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">49,000원 연간 이용서비스</h2>
+            <p className="mt-4 leading-7 text-slate-600">
+              결제일부터 1년 동안 기업의 현재 상황에 맞는 정책자금 운전자금을 검토하고, 지역별 매칭부터 신청 준비에 필요한 안내까지 제공합니다.
+              AI 1차 분석과 전문가 검토를 거쳐 기업별 진단 결과를 제공합니다.
+            </p>
+          </div>
+          <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { n: "01", title: "기업 현황 확인", body: "사업자 기본정보와 제출자료를 바탕으로 업력·업종·매출 등 기업의 현재 상황을 확인합니다." },
+              { n: "02", title: "지역별 운전자금 매칭", body: "기업 상황과 지역 요건을 고려해 검토 가능한 정책자금 운전자금 정보를 매칭합니다." },
+              { n: "03", title: "신청 자격 및 조건 안내", body: "매칭된 자금의 주요 신청 자격과 조건, 확인해야 할 사항을 정리해 안내합니다." },
+              { n: "04", title: "신청 가이드 제공", body: "신청 절차와 준비서류, 유의사항 등 신청 준비에 필요한 내용을 안내합니다." },
+              { n: "05", title: "전문가 검토 진단보고서", body: "AI 1차 분석 결과를 전문가가 검토하고 운전자금 매칭 결과와 신청 가이드를 보고서로 제공합니다." },
+              { n: "06", title: "1년 내 추가 매칭", body: "매칭된 자금에 선정되지 않은 경우에도 남은 이용기간 동안 기업 상황에 맞는 운전자금을 추가로 검토·매칭합니다." },
+            ].map((item) => (
+              <article key={item.n} className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                <p className="text-sm font-bold text-blue-700">{item.n}</p>
+                <h3 className="mt-3 text-lg font-bold text-slate-900">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{item.body}</p>
+              </article>
+            ))}
+          </div>
+          <div className="mt-7 rounded-2xl border border-blue-100 bg-blue-50 p-5 sm:p-6">
+            <p className="font-bold text-slate-900">이용기간 및 비용</p>
+            <p className="mt-2 text-sm leading-6 text-slate-700">
+              49,000원(부가세 별도) · 결제일부터 12개월 · 성공보수 및 승인 후 추가 수수료 없음
+            </p>
+          </div>
+          <p className="mt-5 text-xs leading-6 text-slate-500">
+            ※ 진단 결과는 제출자료에 기반한 검토 의견이며, 정책자금 승인이나 지원을 보장하지 않습니다. 실제 신청과 최종 제출은 사업자가 해당 기관의 절차에 따라 진행하며, 최종 지원 여부와 조건은 기관의 심사에 따라 결정됩니다.
+          </p>
+        </div>
+      </section>
+
       <section className="border-t border-slate-100 bg-white">
         <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-18">
           <div className="max-w-3xl">
