@@ -1,3 +1,5 @@
+import InquiryForm from "./InquiryForm";
+
 const supportItems = [
   {
     number: "01",
@@ -192,7 +194,7 @@ export default function Home() {
           <div className="section-kicker light-kicker">DAON PARTNERS</div>
           <h2>기업영업 지원과 함께할<br /><span>파트너를 모집합니다.</span></h2>
           <p>보험영업 경험을 바탕으로 기업고객 발굴 활동까지 확장하고 싶은 분을 위한 파트너 모집 안내입니다.</p>
-          <div className="contact-status">모집 상담 접수 기능은 연결 준비 중입니다.</div>
+          <InquiryForm />
         </div>
       </section>
 
