@@ -1,32 +1,28 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "기업지원사업 진단 연간 이용권 | (주)다온지원센터",
-  description: "기업 기본정보와 제출자료를 바탕으로 기업지원사업을 1차 분석하고 전문가가 검토하는 12개월 이용 서비스입니다.",
+  title: "정책자금 운전자금 매칭 1년 이용권 | (주)다온지원센터",
+  description: "기업 상황에 맞는 지역별 정책자금 운전자금 매칭과 신청 가이드를 제공하는 1년 이용 서비스입니다.",
 };
 
 const steps = [
   { number: "01", title: "신청 및 결제", description: "기업 기본정보를 등록하고 연간 이용료를 결제합니다." },
   { number: "02", title: "기업자료 제출", description: "사업자등록증과 보유 중인 재무·고용 관련 자료를 제출합니다." },
   { number: "03", title: "전문가 검토", description: "AI로 1차 정리한 내용을 전문가가 검토하고 보완합니다." },
-  { number: "04", title: "진단결과 제공", description: "운전자금 진단보고서와 사업계획서 초안을 제공하고, 보고서 관련 후속 상담을 진행합니다." },
+  { number: "04", title: "진단결과 제공", description: "기업 상황에 맞는 운전자금 매칭 결과와 신청 가이드를 보고서로 제공합니다." },
 ];
 
 const included = [
-  "기업 기본정보 및 제출자료 검토",
-  "운전자금 관련 정책자금·지원사업 진단 및 기업 상황에 맞는 매칭",
-  "대표자 특성(청년 등) 및 여성·장애인기업 해당 여부에 따른 관련 지원사업 1차 확인",
-  "신청 전 확인사항 및 보완할 부분 안내",
-  "진단보고서 및 사업계획서 초안 작성",
-  "전문가 검토·수정 및 보고서 내용에 관한 후속 전화·카카오톡 상담",
-  "미선정 시 이용기간 내 추가 매칭",
+  "기업 기본정보 및 제출자료 확인",
+  "기업의 현재 상황을 기준으로 한 지역별 운전자금 정책자금 매칭",
+  "매칭된 운전자금의 신청 자격 및 주요 조건 안내",
+  "신청 절차·준비서류·유의사항을 정리한 신청 가이드 제공",
+  "운전자금 매칭 결과와 신청 가이드를 정리한 진단보고서 제공",
+  "전문가 검토를 거친 진단 결과 제공",
+  "미선정 시 1년 이용기간 내 운전자금 추가 매칭",
 ];
 
-const notIncluded = [
-  "기업인증 취득을 위한 별도 실무 지원 및 자격요건 보완 업무",
-  "별도의 자금조달 전략 수립",
-  "세무·R&D·고용지원 등 추가 전문 컨설팅",
-];
+
 
 export default function PolicyFundLandingPage() {
   return (
@@ -57,13 +53,14 @@ export default function PolicyFundLandingPage() {
               먼저 확인하십시오.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-              기업 기본정보와 제출자료를 바탕으로 운전자금 검토에 필요한 사항과 신청 전 보완할 부분을 분석합니다.
-              AI가 정리한 초안을 전문가가 직접 검토·수정해 진단보고서로 제공합니다.
+              기업의 현재 상황에 맞는 지역별 운전자금 정책자금을 매칭하고, 신청 자격과 절차 및 준비서류를 안내합니다.
+              AI 1차 분석 후 전문가가 검토한 결과를 진단보고서로 제공합니다.
             </p>
             <div className="mt-8 flex flex-wrap gap-3 text-sm text-slate-200">
               <span className="rounded-full border border-white/15 px-3 py-2">전문가 검토</span>
               <span className="rounded-full border border-white/15 px-3 py-2">보고서 제공</span>
-              <span className="rounded-full border border-white/15 px-3 py-2">보고서 관련 후속 상담 포함</span>
+              <span className="rounded-full border border-white/15 px-3 py-2">지역별 운전자금 매칭</span>
+              <span className="rounded-full border border-white/15 px-3 py-2">신청 가이드 제공</span>
               <span className="rounded-full border border-blue-300/40 bg-blue-400/15 px-3 py-2 font-semibold text-blue-100">승인 후 추가 수수료 없음</span>
             </div>
             <a
@@ -96,12 +93,12 @@ export default function PolicyFundLandingPage() {
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-2xl backdrop-blur sm:p-8">
-            <p className="text-sm font-semibold text-blue-200">기업지원사업 진단 연간 이용권</p>
+            <p className="text-sm font-semibold text-blue-200">정책자금 운전자금 매칭 1년 이용권</p>
             <div className="mt-4 flex items-end gap-2">
               <span className="text-5xl font-black tracking-tight">49,000원</span>
               <span className="pb-1 text-sm text-slate-300">/ 연간 이용료</span>
             </div>
-            <p className="mt-2 text-sm text-slate-300">부가세 별도 · 이용기간 12개월 · 결제금액 53,900원</p>
+            <p className="mt-2 text-sm text-slate-300">부가세 별도 · 결제일부터 12개월 이용</p>
             <div className="mt-4 rounded-xl border border-blue-300/30 bg-blue-400/10 px-4 py-3">
               <p className="text-sm font-bold text-blue-100">운전자금이 승인되어도 성공보수와 승인 후 추가 수수료는 없습니다.</p>
             </div>
@@ -173,36 +170,113 @@ export default function PolicyFundLandingPage() {
         </div>
       </section>
 
-      <section className="border-t border-slate-100 bg-white">
-        <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-14">
+      <section className="bg-white">
+        <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
           <div className="max-w-3xl">
-            <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-700">Additional support</p>
-            <h2 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">
-              49,000원 기본 진단과 별도로 진행하는 전문 컨설팅
-            </h2>
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-700">1 YEAR SERVICE</p>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">49,000원 연간 이용서비스</h2>
             <p className="mt-4 leading-7 text-slate-600">
-              아래 업무는 49,000원 연간 이용권에 포함되지 않습니다.
-              기업 상황에 따라 추가 업무가 필요한 경우 구체적인 업무 범위와 비용을 먼저 안내하고, 고객 동의 및 별도 계약 후 진행합니다.
+              결제일부터 1년 동안 기업의 현재 상황에 맞는 정책자금 운전자금을 검토하고, 지역별 매칭부터 신청 준비에 필요한 안내까지 제공합니다.
+              AI 1차 분석과 전문가 검토를 거쳐 기업별 진단 결과를 제공합니다.
             </p>
           </div>
-          <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { title: "세무·법인전환", body: "세무 검토, 절세 방안 검토, 법인전환 및 재무구조 개선" },
-              { title: "기업인증", body: "여성·장애인기업 등 인증 취득 절차 지원 및 벤처기업·기업부설연구소·이노비즈·메인비즈 관련 컨설팅" },
-              { title: "R&D·정부지원사업", body: "연구개발 과제, 사업화 지원 및 관련 지원사업 검토" },
-              { title: "고용지원", body: "고용지원금 및 인력 운영 관련 제도 검토" },
-              { title: "시설자금·투자", body: "시설투자 계획과 시설자금 검토 — 별도 컨설팅" },
-              { title: "기업 운영 서비스", body: "기업보험, 통신·인터넷 등 기업 운영에 필요한 서비스 안내" },
+              { n: "01", title: "기업 현황 확인", body: "사업자 기본정보와 제출자료를 바탕으로 업력·업종·매출 등 기업의 현재 상황을 확인합니다." },
+              { n: "02", title: "지역별 운전자금 매칭", body: "기업 상황과 지역 요건을 고려해 검토 가능한 정책자금 운전자금 정보를 매칭합니다." },
+              { n: "03", title: "신청 자격 및 조건 안내", body: "매칭된 자금의 주요 신청 자격과 조건, 확인해야 할 사항을 정리해 안내합니다." },
+              { n: "04", title: "신청 가이드 제공", body: "신청 절차와 준비서류, 유의사항 등 신청 준비에 필요한 내용을 안내합니다." },
+              { n: "05", title: "전문가 검토 진단보고서", body: "AI 1차 분석 결과를 전문가가 검토하고 운전자금 매칭 결과와 신청 가이드를 보고서로 제공합니다." },
+              { n: "06", title: "1년 내 추가 매칭", body: "매칭된 자금에 선정되지 않은 경우에도 남은 이용기간 동안 기업 상황에 맞는 운전자금을 추가로 검토·매칭합니다." },
             ].map((item) => (
-              <article key={item.title} className="rounded-xl border border-slate-200 p-5">
-                <h3 className="font-bold text-slate-900">{item.title}</h3>
+              <article key={item.n} className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                <p className="text-sm font-bold text-blue-700">{item.n}</p>
+                <h3 className="mt-3 text-lg font-bold text-slate-900">{item.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600">{item.body}</p>
               </article>
             ))}
           </div>
+          <div className="mt-7 rounded-2xl border border-blue-100 bg-blue-50 p-5 sm:p-6">
+            <p className="font-bold text-slate-900">이용기간 및 비용</p>
+            <p className="mt-2 text-sm leading-6 text-slate-700">
+              49,000원(부가세 별도) · 결제일부터 12개월 · 성공보수 및 승인 후 추가 수수료 없음
+            </p>
+          </div>
           <p className="mt-5 text-xs leading-6 text-slate-500">
-            ※ 정책자금 및 지원사업 신청과 최종 제출은 사업자가 해당 기관의 절차에 따라 직접 진행합니다.
-            진단 결과는 검토 의견이며, 정책자금 승인이나 지원사업 선정 결과를 보장하지 않습니다.
+            ※ 진단 결과는 제출자료에 기반한 검토 의견이며, 정책자금 승인이나 지원을 보장하지 않습니다. 실제 신청과 최종 제출은 사업자가 해당 기관의 절차에 따라 진행하며, 최종 지원 여부와 조건은 기관의 심사에 따라 결정됩니다.
+          </p>
+        </div>
+      </section>
+
+      <section className="border-t border-slate-100 bg-white">
+        <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-18">
+          <div className="max-w-3xl">
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-700">DAON BUSINESS CONSULTING</p>
+            <h2 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">
+              다온지원센터 전문 컨설팅 분야
+            </h2>
+            <p className="mt-4 leading-7 text-slate-600">
+              다온지원센터는 정책자금 운전자금 매칭 외에도 기업의 성장 단계와 경영 상황에 필요한 다양한 전문 컨설팅을 수행합니다.
+              아래 업무는 49,000원 운전자금 1년 이용권과 별도로 운영되며, 업무별 범위와 비용은 개별 협의 및 계약에 따라 진행됩니다.
+            </p>
+          </div>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                title: "기업 인증 및 연구소",
+                body: "여성기업·장애인기업·청년기업·사회적기업, 메인비즈·이노비즈 및 기업부설연구소 관련 인증 컨설팅",
+                image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=85",
+                alt: "기업 자료를 검토하는 사무실 회의",
+              },
+              {
+                title: "세무·절세 및 법인전환",
+                body: "법인세·종합소득세 관련 절세 검토, 법인전환 및 기업 재무구조 개선 컨설팅",
+                image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=900&q=85",
+                alt: "세무 및 재무자료와 계산기",
+              },
+              {
+                title: "고용지원금·홍보지원사업",
+                body: "기업의 고용 현황에 맞는 고용지원 제도와 기업 홍보·마케팅 관련 지원사업 검토",
+                image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=85",
+                alt: "기업 구성원들의 협업 회의",
+              },
+              {
+                title: "시설자금·공장 인수",
+                body: "공장 및 생산시설 인수·확장 계획, 시설투자에 필요한 자금조달 방안 검토",
+                image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=900&q=85",
+                alt: "산업 현장에서 설비를 점검하는 작업자",
+              },
+              {
+                title: "R&D·기술사업화",
+                body: "연구개발 과제 기획, 정부 R&D 및 기술사업화 지원사업 관련 컨설팅",
+                image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=900&q=85",
+                alt: "연구실에서 실험을 진행하는 연구원",
+              },
+              {
+                title: "기업 성장 및 경영 컨설팅",
+                body: "기업 상황과 성장 단계에 맞춘 경영 개선, 자금·인력·사업 운영 관련 전문 컨설팅",
+                image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=85",
+                alt: "현대적인 기업 사무공간",
+              },
+            ].map((item) => (
+              <article key={item.title} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div className="h-44 overflow-hidden bg-slate-100">
+                  <img
+                    src={item.image}
+                    alt={item.alt}
+                    className="h-full w-full object-cover transition duration-300 hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-5">
+                  <h3 className="text-lg font-bold text-slate-900">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{item.body}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+          <p className="mt-6 text-xs leading-6 text-slate-500">
+            ※ 위 전문 컨설팅은 기본 운전자금 이용권에 포함되지 않는 별도 업무입니다. 정책자금 및 지원사업의 적용 여부와 요건은 기관별 공고·평가기준에 따라 달라집니다.
           </p>
         </div>
       </section>
@@ -214,7 +288,7 @@ export default function PolicyFundLandingPage() {
             <br className="sm:hidden" /> 우리 회사 자료부터 점검하세요.
           </h2>
           <p className="mx-auto mt-4 max-w-2xl leading-7 text-blue-100">
-            진단보고서와 보고서 내용에 관한 후속 상담까지 한 번의 진단 서비스에 포함됩니다.
+            기업 상황에 맞는 지역별 운전자금 매칭과 신청 가이드를 제공합니다.
           </p>
           <a href="/" className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-white px-7 py-4 font-bold text-blue-800 transition hover:bg-blue-50 sm:w-auto">
             정책자금 진단 신청하기 →
