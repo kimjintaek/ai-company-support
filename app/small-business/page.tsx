@@ -121,15 +121,37 @@ export default function SmallBusinessMarketingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
-        <div className="max-w-3xl">
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-emerald-700">Business Check</p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
-            점포 운영에서 무엇이 막혀 있는지부터 확인합니다.
-          </h2>
-          <p className="mt-5 leading-7 text-slate-600">
-            모든 가게에 같은 마케팅 방법을 적용하지 않습니다. 업종과 상권, 고객층,
-            고용 상황과 현재 홍보 수준을 확인한 뒤 필요한 항목부터 검토합니다.
-          </p>
+        <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+          <div className="max-w-3xl">
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-emerald-700">Business Check</p>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              점포 운영에서 무엇이 막혀 있는지부터 확인합니다.
+            </h2>
+            <p className="mt-5 leading-7 text-slate-600">
+              모든 가게에 같은 마케팅 방법을 적용하지 않습니다. 업종과 상권, 고객층,
+              고용 상황과 현재 홍보 수준을 확인한 뒤 필요한 항목부터 검토합니다.
+            </p>
+          </div>
+          <figure className="overflow-hidden rounded-3xl bg-slate-100 shadow-lg">
+            <img
+              src="https://images.unsplash.com/photo-1773966071301-168b46e3410a?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1400"
+              alt="카페 매장에서 바리스타가 음료를 준비하며 점포를 운영하는 모습"
+              className="aspect-[4/3] w-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption className="flex items-center justify-between gap-3 bg-white px-4 py-3 text-xs text-slate-500">
+              <span>점포마다 다른 운영 환경부터 살펴봅니다.</span>
+              <a
+                href="https://unsplash.com/photos/barista-preparing-coffee-behind-counter-with-counter-in-cafe-ZTN12DE91Os"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 underline underline-offset-2"
+              >
+                사진 출처
+              </a>
+            </figcaption>
+          </figure>
         </div>
         <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {diagnosisAreas.map((item) => (
