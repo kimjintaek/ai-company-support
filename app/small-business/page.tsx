@@ -134,23 +134,13 @@ export default function SmallBusinessMarketingPage() {
           </div>
           <figure className="overflow-hidden rounded-3xl bg-slate-100 shadow-lg">
             <img
-              src="https://images.unsplash.com/photo-1773966071301-168b46e3410a?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1400"
-              alt="카페 매장에서 바리스타가 음료를 준비하며 점포를 운영하는 모습"
+              src="/images/small-business-owner.jpg"
+              alt="태블릿으로 매장 운영 현황을 확인하는 소상공인 점주"
               className="aspect-[4/3] w-full object-cover"
               loading="lazy"
               decoding="async"
             />
-            <figcaption className="flex items-center justify-between gap-3 bg-white px-4 py-3 text-xs text-slate-500">
-              <span>점포마다 다른 운영 환경부터 살펴봅니다.</span>
-              <a
-                href="https://unsplash.com/photos/barista-preparing-coffee-behind-counter-with-counter-in-cafe-ZTN12DE91Os"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="shrink-0 underline underline-offset-2"
-              >
-                사진 출처
-              </a>
-            </figcaption>
+            <figcaption className="bg-white px-4 py-3 text-xs text-slate-500">점포마다 다른 운영 환경부터 살펴봅니다.</figcaption>
           </figure>
         </div>
         <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
