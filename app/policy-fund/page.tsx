@@ -32,9 +32,14 @@ export default function PolicyFundLandingPage() {
           <a href="/policy-fund" className="text-lg font-extrabold tracking-tight">
             다온지원센터
           </a>
-          <a href="/login" className="text-sm font-semibold text-slate-600 hover:text-blue-700">
-            기존 고객 로그인
-          </a>
+          <nav className="flex items-center gap-4 text-sm font-semibold">
+            <a href="/small-business" className="text-slate-600 transition hover:text-emerald-700">
+              소상공인 경영·마케팅
+            </a>
+            <a href="/login" className="text-slate-600 hover:text-blue-700">
+              기존 고객 로그인
+            </a>
+          </nav>
         </div>
       </header>
 
@@ -115,6 +120,23 @@ export default function PolicyFundLandingPage() {
               신청 절차 시작하기
             </a>
           </div>
+        </div>
+      </section>
+
+      <section className="border-b border-emerald-100 bg-emerald-50/70">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div>
+            <p className="text-sm font-bold text-emerald-800">정책자금 외 소상공인 경영·마케팅 상담도 가능합니다.</p>
+            <p className="mt-1 text-sm leading-6 text-slate-600">
+              고용지원금, 절세 검토, 상권 분석, 온라인 홍보 등 우리 가게에 필요한 지원을 확인해 보세요.
+            </p>
+          </div>
+          <a
+            href="#small-business-service"
+            className="inline-flex shrink-0 items-center justify-center rounded-lg border border-emerald-700 px-5 py-3 text-sm font-bold text-emerald-800 transition hover:bg-emerald-100"
+          >
+            소상공인 경영·마케팅 서비스 확인하기 ↓
+          </a>
         </div>
       </section>
 
@@ -278,6 +300,27 @@ export default function PolicyFundLandingPage() {
           <p className="mt-6 text-xs leading-6 text-slate-500">
             ※ 위 전문 컨설팅은 기본 운전자금 이용권에 포함되지 않는 별도 업무입니다. 정책자금 및 지원사업의 적용 여부와 요건은 기관별 공고·평가기준에 따라 달라집니다.
           </p>
+        </div>
+      </section>
+
+      <section id="small-business-service" className="border-t border-slate-100 bg-emerald-50">
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-12 sm:px-8 md:flex-row md:items-center md:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-emerald-700">FOR SMALL BUSINESS</p>
+            <h2 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">
+              소상공인 경영·마케팅 진단도 상담할 수 있습니다.
+            </h2>
+            <p className="mt-3 leading-7 text-slate-600">
+              고용지원금, 절세 검토, 상권 분석과 온라인 홍보 등 점포 운영에 필요한 지원 방향을 별도로 안내합니다.
+              기존 정책자금 49,000원 이용권과는 다른 서비스입니다.
+            </p>
+          </div>
+          <a
+            href="/small-business"
+            className="inline-flex shrink-0 items-center justify-center rounded-xl bg-emerald-700 px-6 py-4 font-bold text-white transition hover:bg-emerald-800"
+          >
+            소상공인 서비스 확인하기 →
+          </a>
         </div>
       </section>
 
