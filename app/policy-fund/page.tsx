@@ -123,6 +123,23 @@ export default function PolicyFundLandingPage() {
         </div>
       </section>
 
+      <section className="border-b border-emerald-100 bg-emerald-50/70">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div>
+            <p className="text-sm font-bold text-emerald-800">정책자금 외 소상공인 경영·마케팅 상담도 가능합니다.</p>
+            <p className="mt-1 text-sm leading-6 text-slate-600">
+              고용지원금, 절세 검토, 상권 분석, 온라인 홍보 등 우리 가게에 필요한 지원을 확인해 보세요.
+            </p>
+          </div>
+          <a
+            href="#small-business-service"
+            className="inline-flex shrink-0 items-center justify-center rounded-lg border border-emerald-700 px-5 py-3 text-sm font-bold text-emerald-800 transition hover:bg-emerald-100"
+          >
+            소상공인 경영·마케팅 서비스 확인하기 ↓
+          </a>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
         <div className="max-w-2xl">
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-700">Why diagnosis first</p>
@@ -286,7 +303,7 @@ export default function PolicyFundLandingPage() {
         </div>
       </section>
 
-      <section className="border-t border-slate-100 bg-emerald-50">
+      <section id="small-business-service" className="border-t border-slate-100 bg-emerald-50">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-12 sm:px-8 md:flex-row md:items-center md:justify-between">
           <div className="max-w-3xl">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-emerald-700">FOR SMALL BUSINESS</p>
