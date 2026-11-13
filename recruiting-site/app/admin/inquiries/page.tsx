@@ -13,6 +13,8 @@ type Inquiry = {
   created_at: string;
 };
 
+const STATUS_OPTIONS = ["신규", "연락 완료", "상담 진행", "상담 완료"] as const;
+
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("ko-KR", {
     dateStyle: "medium",
@@ -24,6 +26,7 @@ function formatDate(value: string) {
 export default function AdminInquiriesPage() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [updatingId, setUpdatingId] = useState("");
   const [error, setError] = useState("");
 
   const loadInquiries = useCallback(async () => {
@@ -58,6 +61,43 @@ export default function AdminInquiriesPage() {
     void loadInquiries();
   }, [loadInquiries]);
 
+  async function updateStatus(inquiryId: string, status: string) {
+    setUpdatingId(inquiryId);
+    setError("");
+
+    try {
+      const response = await fetch("/api/admin/inquiries", {
+        method: "PATCH",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: inquiryId, status }),
+      });
+
+      if (response.status === 401) {
+        window.location.replace("/admin");
+        return;
+      }
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "상담 상태를 변경하지 못했습니다.");
+      }
+
+      setInquiries((current) =>
+        current.map((inquiry) =>
+          inquiry.id === inquiryId
+            ? { ...inquiry, status: result.inquiry.status }
+            : inquiry
+        )
+      );
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "상태 변경 중 오류가 발생했습니다.");
+      await loadInquiries();
+    } finally {
+      setUpdatingId("");
+    }
+  }
+
   async function logout() {
     await fetch("/api/admin/logout", {
       method: "POST",
@@ -83,7 +123,7 @@ export default function AdminInquiriesPage() {
             <h1>상담 신청 내역</h1>
             <p>접수된 파트너 모집 상담 신청을 최신순으로 표시합니다.</p>
           </div>
-          <button type="button" className="admin-refresh-button" onClick={loadInquiries} disabled={loading}>
+          <button type="button" className="admin-refresh-button" onClick={loadInquiries} disabled={loading || !!updatingId}>
             {loading ? "불러오는 중..." : "새로고침"}
           </button>
         </div>
@@ -110,21 +150,40 @@ export default function AdminInquiriesPage() {
                   <th>소속 보험회사·조직</th>
                   <th>영업 경력</th>
                   <th>희망 내용</th>
-                  <th>상태</th>
+                  <th>상담 상태</th>
                 </tr>
               </thead>
               <tbody>
-                {inquiries.map((inquiry) => (
-                  <tr key={inquiry.id}>
-                    <td className="admin-date-cell">{formatDate(inquiry.created_at)}</td>
-                    <td><strong>{inquiry.name}</strong></td>
-                    <td><a href={`tel:${inquiry.phone}`}>{inquiry.phone}</a></td>
-                    <td>{inquiry.insurance_company}</td>
-                    <td>{inquiry.experience || "미입력"}</td>
-                    <td className="admin-desired-cell">{inquiry.desired_support || "미입력"}</td>
-                    <td><span className="admin-status">{inquiry.status || "신규"}</span></td>
-                  </tr>
-                ))}
+                {inquiries.map((inquiry) => {
+                  const currentStatus = inquiry.status || "신규";
+                  return (
+                    <tr key={inquiry.id}>
+                      <td className="admin-date-cell">{formatDate(inquiry.created_at)}</td>
+                      <td><strong>{inquiry.name}</strong></td>
+                      <td><a href={`tel:${inquiry.phone}`}>{inquiry.phone}</a></td>
+                      <td>{inquiry.insurance_company}</td>
+                      <td>{inquiry.experience || "미입력"}</td>
+                      <td className="admin-desired-cell">{inquiry.desired_support || "미입력"}</td>
+                      <td>
+                        <select
+                          className="admin-status-select"
+                          aria-label={`${inquiry.name} 상담 상태`}
+                          value={currentStatus}
+                          disabled={updatingId === inquiry.id}
+                          onChange={(event) => void updateStatus(inquiry.id, event.target.value)}
+                        >
+                          {!STATUS_OPTIONS.includes(currentStatus as (typeof STATUS_OPTIONS)[number]) && (
+                            <option value={currentStatus}>{currentStatus}</option>
+                          )}
+                          {STATUS_OPTIONS.map((status) => (
+                            <option key={status} value={status}>{status}</option>
+                          ))}
+                        </select>
+                        {updatingId === inquiry.id && <small className="admin-status-saving">저장 중</small>}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
