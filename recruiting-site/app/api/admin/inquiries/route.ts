@@ -31,7 +31,6 @@ export async function GET(request: NextRequest) {
         method: "GET",
         headers: {
           apikey: supabaseSecretKey,
-          Authorization: `Bearer ${supabaseSecretKey}`,
           Accept: "application/json",
         },
         cache: "no-store",
