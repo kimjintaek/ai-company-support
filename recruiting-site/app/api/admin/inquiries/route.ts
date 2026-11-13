@@ -38,8 +38,15 @@ export async function GET(request: NextRequest) {
     );
 
     if (!response.ok) {
+      const errorBody = (await response.text()).slice(0, 600);
+      console.error("[admin/inquiries] Supabase response error", {
+        status: response.status,
+        body: errorBody,
+      });
       return NextResponse.json(
-        { error: "신청 내역을 불러오지 못했습니다. Supabase 관리자 키 설정을 확인해 주세요." },
+        {
+          error: `Supabase 조회 오류 (HTTP ${response.status}): ${errorBody || "상세 오류 내용 없음"}`,
+        },
         { status: 502 }
       );
     }
@@ -48,7 +55,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ inquiries }, {
       headers: { "Cache-Control": "private, no-store, max-age=0" },
     });
-  } catch {
-    return NextResponse.json({ error: "신청 내역 조회 중 오류가 발생했습니다." }, { status: 502 });
+  } catch (caught) {
+    console.error("[admin/inquiries] Request failed", caught);
+    return NextResponse.json({ error: "Supabase 요청 자체가 실패했습니다. Vercel 로그를 확인해야 합니다." }, { status: 502 });
   }
 }
