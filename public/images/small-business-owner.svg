@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+<title id="title">소상공인 점포 운영 진단 일러스트</title>
+<desc id="desc">따뜻한 카페 안에서 점주가 태블릿으로 매장 운영 현황을 확인하는 장면</desc>
+<defs>
+ <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#f7f4ec"/><stop offset="1" stop-color="#e7eee8"/></linearGradient>
+ <linearGradient id="window" x2="1" y2="1"><stop stop-color="#d9edf0"/><stop offset="1" stop-color="#f7fbf7"/></linearGradient>
+ <linearGradient id="apron" x2="1" y2="1"><stop stop-color="#315a55"/><stop offset="1" stop-color="#173c3b"/></linearGradient>
+ <linearGradient id="table" x2="0" y2="1"><stop stop-color="#c58d5c"/><stop offset="1" stop-color="#95613f"/></linearGradient>
+ <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#233b36" flood-opacity=".16"/></filter>
+</defs>
+<rect width="1200" height="900" fill="url(#wall)"/>
+<rect x="55" y="55" width="1090" height="570" rx="34" fill="#fff" opacity=".42"/>
+<rect x="92" y="90" width="330" height="420" rx="20" fill="url(#window)" stroke="#fff" stroke-width="18"/>
+<path d="M257 95v410M100 300h314" stroke="#fff" stroke-width="14"/>
+<circle cx="165" cy="165" r="48" fill="#f6d78c" opacity=".75"/>
+<path d="M110 485q65-125 130 0M270 485q60-105 120 0" fill="#91b7a0" opacity=".65"/>
+<rect x="470" y="110" width="650" height="270" rx="18" fill="#e8ddd0"/>
+<rect x="500" y="140" width="590" height="205" rx="12" fill="#fffaf2"/>
+<path d="M520 285h550" stroke="#d6c7b5" stroke-width="7"/>
+<rect x="545" y="185" width="130" height="92" rx="10" fill="#d8e8dc"/>
+<rect x="700" y="185" width="145" height="92" rx="10" fill="#f1dfbd"/>
+<rect x="870" y="185" width="165" height="92" rx="10" fill="#dce8ec"/>
+<path d="M570 245l26-26 20 16 31-37M725 247h92M895 245h110" fill="none" stroke="#648d79" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="530" y="405" width="590" height="25" rx="12" fill="#b9a28a"/>
+<path d="M555 430v110M1090 430v110" stroke="#8a6b51" stroke-width="20" stroke-linecap="round"/>
+<g filter="url(#shadow)">
+ <path d="M620 880c18-170 55-300 150-370 50-37 120-43 185-18 92 35 139 157 155 388" fill="url(#apron)"/>
+ <path d="M745 510c20-60 70-100 125-100s105 40 125 100l-50 78H790z" fill="#f3c6a4"/>
+ <path d="M768 330c0-104 58-170 137-170 90 0 147 67 147 171 0 92-58 161-143 161-82 0-141-70-141-162" fill="#e8b896"/>
+ <path d="M760 345c-25-125 34-216 151-216 94 0 159 63 156 177-27-38-53-63-88-78-49 36-112 55-194 49z" fill="#302b2a"/>
+ <path d="M786 310c22-78 89-120 161-119 47 1 83 19 111 55-42-15-73-10-111 13-48 29-93 44-161 51" fill="#302b2a"/>
+ <path d="M825 355q22-14 43 0M948 355q22-14 43 0" stroke="#5c4036" stroke-width="9" fill="none" stroke-linecap="round"/>
+ <path d="M872 400q35 28 69 0" stroke="#a95f58" stroke-width="9" fill="none" stroke-linecap="round"/>
+ <path d="M785 510l-50 270M1035 510l45 270" stroke="#d4a06f" stroke-width="22" fill="none"/>
+ <path d="M810 565l-55 185M1010 565l65 185" stroke="#e0b080" stroke-width="16" fill="none"/>
+</g>
+<path d="M0 650q280-45 600 0t600 0v250H0z" fill="url(#table)"/>
+<path d="M0 690q280-40 600 0t600 0" fill="none" stroke="#d8aa7d" stroke-width="10" opacity=".65"/>
+<g filter="url(#shadow)" transform="translate(250 520) rotate(-5 210 150)">
+ <rect x="0" y="0" width="440" height="290" rx="28" fill="#263b43"/>
+ <rect x="16" y="16" width="408" height="258" rx="18" fill="#f7faf8"/>
+ <rect x="42" y="45" width="150" height="18" rx="9" fill="#cad9d2"/>
+ <rect x="42" y="88" width="105" height="105" rx="14" fill="#e4f0e8"/>
+ <path d="M58 165l27-35 24 19 24-39" fill="none" stroke="#23866d" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+ <rect x="170" y="88" width="220" height="14" rx="7" fill="#d7e1dc"/>
+ <rect x="170" y="119" width="180" height="12" rx="6" fill="#e4eae7"/>
+ <rect x="170" y="149" width="195" height="12" rx="6" fill="#e4eae7"/>
+ <rect x="170" y="179" width="130" height="12" rx="6" fill="#e4eae7"/>
+ <rect x="42" y="215" width="348" height="34" rx="10" fill="#e8f3ed"/>
+ <path d="M62 232h100M185 232h90M298 232h70" stroke="#4e9b7f" stroke-width="8" stroke-linecap="round"/>
+</g>
+<g transform="translate(90 570)">
+ <path d="M35 120h100l-10 125H45z" fill="#fffaf0" stroke="#d7c8b8" stroke-width="6"/>
+ <path d="M130 145q65-5 38 55" fill="none" stroke="#d7c8b8" stroke-width="12"/>
+ <path d="M52 120q32-58 67 0" fill="#8eaa83"/>
+ <path d="M83 115q-42-60-62-20M90 115q40-75 66-35" stroke="#729875" stroke-width="16" fill="none" stroke-linecap="round"/>
+</g>
+<g transform="translate(1010 600)">
+ <rect x="0" y="70" width="125" height="160" rx="18" fill="#f5f0e8"/>
+ <path d="M18 70q44-80 90 0" fill="#86a17d"/>
+ <path d="M60 75q-60-85-70-20M65 75q55-95 85-35" stroke="#6e9574" stroke-width="18" fill="none" stroke-linecap="round"/>
+</g>
+<rect x="55" y="55" width="1090" height="790" rx="34" fill="none" stroke="#fff" stroke-width="10" opacity=".7"/>
+</svg>
