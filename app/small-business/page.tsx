@@ -134,8 +134,8 @@ export default function SmallBusinessMarketingPage() {
           </div>
           <figure className="overflow-hidden rounded-3xl bg-slate-100 shadow-lg">
             <img
-              src="/images/small-business-owner.svg"
-              alt="태블릿으로 매장 운영 현황을 확인하는 소상공인 일러스트"
+              src="/images/small-business-owner-640.jpg"
+              alt="태블릿으로 매장 운영 현황을 확인하는 소상공인 점주"
               className="aspect-[4/3] w-full object-cover"
               loading="lazy"
               decoding="async"
