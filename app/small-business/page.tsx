@@ -164,9 +164,12 @@ export default function SmallBusinessMarketingPage() {
                 aria-label={item.imageAlt}
                 className="mt-3 h-36 w-full rounded-xl bg-slate-100 bg-cover bg-no-repeat"
                 style={{
-                  backgroundImage: "url('/images/diagnosis-areas.webp')",
-                  backgroundSize: "300% 200%",
-                  backgroundPosition: item.imagePosition,
+                  backgroundImage:
+                    item.number === "05"
+                      ? "url('/images/online-promotion.webp')"
+                      : "url('/images/diagnosis-areas.webp')",
+                  backgroundSize: item.number === "05" ? "cover" : "300% 200%",
+                  backgroundPosition: item.number === "05" ? "center" : item.imagePosition,
                 }}
               />
               <h3 className="mt-4 text-xl font-bold">{item.title}</h3>
