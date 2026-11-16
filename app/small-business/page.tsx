@@ -11,31 +11,43 @@ const diagnosisAreas = [
     number: "01",
     title: "점포·경영 현황",
     description: "업종, 매장 운영 형태, 주요 고객, 현재 고민과 목표를 정리합니다.",
+    imagePosition: "0% 0%",
+    imageAlt: "매장 운영 현황과 매출 자료를 확인하는 모습",
   },
   {
     number: "02",
     title: "고용지원 제도",
     description: "직원 고용 현황과 채용 계획을 바탕으로 검토할 수 있는 지원제도를 살펴봅니다.",
+    imagePosition: "50% 0%",
+    imageAlt: "직원 채용과 인력 현황을 검토하는 모습",
   },
   {
     number: "03",
     title: "절세·경영관리",
     description: "사업 운영과 관련해 확인할 세무·비용 관리 항목을 정리하고 필요한 경우 전문 자격자와 연계합니다.",
+    imagePosition: "100% 0%",
+    imageAlt: "계산기와 재무 자료를 활용한 비용 관리",
   },
   {
     number: "04",
     title: "상권·경쟁 환경",
     description: "주변 경쟁 점포, 고객층, 점포의 강점과 개선할 부분을 검토합니다.",
+    imagePosition: "0% 100%",
+    imageAlt: "지도에서 주변 상권과 점포 위치를 분석하는 모습",
   },
   {
     number: "05",
     title: "온라인 홍보 진단",
     description: "네이버 플레이스, 블로그, SNS 등 현재 온라인 노출과 홍보 상태를 살펴봅니다.",
+    imagePosition: "50% 100%",
+    imageAlt: "스마트폰으로 온라인 홍보 채널을 확인하는 모습",
   },
   {
     number: "06",
     title: "마케팅 실행 방향",
     description: "콘텐츠 주제, 숏폼·블로그 활용, 이벤트와 홍보 실행 우선순위를 제안합니다.",
+    imagePosition: "100% 100%",
+    imageAlt: "마케팅 성과 그래프와 홍보 실행 도구",
   },
 ];
 
@@ -145,9 +157,19 @@ export default function SmallBusinessMarketingPage() {
         </div>
         <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {diagnosisAreas.map((item) => (
-            <article key={item.number} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <article key={item.number} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <p className="text-sm font-bold text-emerald-700">{item.number}</p>
-              <h3 className="mt-3 text-xl font-bold">{item.title}</h3>
+              <div
+                role="img"
+                aria-label={item.imageAlt}
+                className="mt-3 h-36 w-full rounded-xl bg-slate-100 bg-cover bg-no-repeat"
+                style={{
+                  backgroundImage: "url('/images/diagnosis-areas.webp')",
+                  backgroundSize: "300% 200%",
+                  backgroundPosition: item.imagePosition,
+                }}
+              />
+              <h3 className="mt-4 text-xl font-bold">{item.title}</h3>
               <p className="mt-3 text-sm leading-7 text-slate-600">{item.description}</p>
             </article>
           ))}
