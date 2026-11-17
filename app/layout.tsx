@@ -14,10 +14,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "다온지원센터 | AI 정책자금·기업지원사업 진단 및 매칭",
-  description: "기업 상황에 맞는 정책자금과 정부지원사업을 AI로 분석하고 전문가가 검토합니다. 49,000원으로 1년간 지원사업 진단·매칭 서비스를 이용할 수 있습니다.",
+  description: "다온지원센터는 AI 분석과 전문가 검토로 기업별 정책자금·지원사업을 진단하고 매칭합니다. 49,000원으로 1년간 이용할 수 있습니다.",
   openGraph: {
     title: "다온지원센터 | AI 정책자금·기업지원사업 진단 및 매칭",
-    description: "기업 상황에 맞는 정책자금과 정부지원사업을 AI로 분석하고 전문가가 검토합니다. 49,000원으로 1년간 지원사업 진단·매칭 서비스를 이용할 수 있습니다.",
+    description: "다온지원센터는 AI 분석과 전문가 검토로 기업별 정책자금·지원사업을 진단하고 매칭합니다. 49,000원으로 1년간 이용할 수 있습니다.",
     url: "https://ai-company-support.vercel.app",
     siteName: "다온지원센터",
     locale: "ko_KR",
