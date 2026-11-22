@@ -57,7 +57,7 @@ export default function LoginPage() {
           try {
             memberData = JSON.parse(pending);
           } catch {
-            alert("임시 기업정보를 읽을 수 없습니다. 진단 신청을 다시 진행해 주세요.");
+            alert("임시 기업정보를 읽을 수 없습니다. 무료 기업정보 등록을 다시 진행해 주세요.");
             return;
           }
 
@@ -79,7 +79,7 @@ export default function LoginPage() {
       if (!memberId) {
         await supabase.auth.signOut();
         setLoading(false);
-        alert("고객 회원정보가 없습니다. 먼저 무료 진단 신청을 진행해주세요.");
+        alert("고객 회원정보가 없습니다. 먼저 무료 기업정보 등록을 진행해주세요.");
         return;
       }
 
@@ -87,7 +87,7 @@ export default function LoginPage() {
 
       if (pendingConsentText) {
         if (!memberId) {
-          alert("동의 내역을 연결할 회원정보를 찾지 못했습니다. 진단 신청을 다시 진행해 주세요.");
+          alert("동의 내역을 연결할 회원정보를 찾지 못했습니다. 무료 기업정보 등록을 다시 진행해 주세요.");
           return;
         }
 
@@ -96,7 +96,7 @@ export default function LoginPage() {
         try {
           pendingConsents = JSON.parse(pendingConsentText);
         } catch {
-          alert("임시 동의 내역을 읽을 수 없습니다. 진단 신청을 다시 진행해 주세요.");
+          alert("임시 동의 내역을 읽을 수 없습니다. 무료 기업정보 등록을 다시 진행해 주세요.");
           return;
         }
 
@@ -148,7 +148,7 @@ export default function LoginPage() {
           <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p>
           <h1 className="mt-2 text-3xl font-bold text-gray-900">고객 로그인</h1>
           <p className="mt-3 text-gray-600">
-            진단 신청 시 등록한 이메일과 비밀번호로 로그인해 주세요.
+            무료 기업정보 등록 시 사용한 이메일과 비밀번호로 로그인해 주세요.
           </p>
         </div>
 
@@ -221,7 +221,7 @@ export default function LoginPage() {
               onClick={() => router.push("/diagnosis")}
               className="w-full rounded-xl border border-gray-300 py-3 font-medium text-gray-700 hover:bg-gray-50"
             >
-              아직 신청하지 않았다면 진단 신청하기
+              아직 등록하지 않았다면 무료 기업정보 등록 및 문의
             </button>
           </div>
         </form>
