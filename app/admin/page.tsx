@@ -14,6 +14,7 @@ type Member = {
   region: string;
   business_type: string;
   created_at: string;
+  utm_source: string | null;
 };
 
 type License = {
@@ -95,7 +96,7 @@ export default function AdminPage() {
       const { data: memberData, error: memberError } = await supabase
         .from("members")
         .select(
-          "id, name, business_name, phone, email, industry, region, business_type, created_at"
+          "id, name, business_name, phone, email, industry, region, business_type, created_at, utm_source"
         )
         .order("created_at", { ascending: false });
 
@@ -164,6 +165,30 @@ export default function AdminPage() {
   const conversionRate = totalApplications > 0
     ? ((activeCustomers / totalApplications) * 100).toFixed(1)
     : "0.0";
+
+  const marketingChannels = [
+    { source: "naver", label: "네이버" },
+    { source: "youtube", label: "유튜브" },
+    { source: "instagram", label: "인스타그램" },
+    { source: "daangn", label: "당근" },
+    { source: null, label: "유입 경로 미확인" },
+  ];
+  const knownChannelSources = new Set(["naver", "youtube", "instagram", "daangn"]);
+  const channelStats = marketingChannels.map((channel) => {
+    const channelMembers = members.filter((member) =>
+      channel.source === null
+        ? !member.utm_source || !knownChannelSources.has(member.utm_source)
+        : member.utm_source === channel.source
+    );
+    const applications = channelMembers.length;
+    const active = channelMembers.filter((member) => activeMemberIds.has(member.id)).length;
+    return {
+      ...channel,
+      applications,
+      active,
+      rate: applications > 0 ? ((active / applications) * 100).toFixed(1) : "0.0",
+    };
+  });
 
   const handleCopyAiPrompt = async () => {
     try {
@@ -475,6 +500,37 @@ export default function AdminPage() {
             ))}
             <p className="text-xs text-gray-500 sm:col-span-2 lg:col-span-4">
               활성 이용권 고객은 상태가 ‘활성’인 이용권을 보유한 중복 제외 회원 수입니다. 실제 결제 건수와 다를 수 있습니다.
+            </p>
+          </section>
+        )}
+        {!loading && !errorMessage && (
+          <section aria-label="마케팅 채널별 신청 및 활성화 현황" className="mb-8 rounded-2xl bg-white p-5 shadow-sm">
+            <h2 className="mb-4 text-lg font-bold text-gray-900">마케팅 채널별 신청 및 활성화 현황</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[520px] text-sm">
+                <thead className="border-b bg-gray-50 text-gray-700">
+                  <tr>
+                    <th scope="col" className="px-4 py-3 text-left">유입 채널</th>
+                    <th scope="col" className="px-4 py-3 text-right">무료 진단 신청</th>
+                    <th scope="col" className="px-4 py-3 text-right">활성 이용권 고객</th>
+                    <th scope="col" className="px-4 py-3 text-right">활성화율</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {channelStats.map((channel) => (
+                    <tr key={channel.label} className="border-b last:border-0">
+                      <th scope="row" className="px-4 py-3 text-left font-medium text-gray-800">{channel.label}</th>
+                      <td className="px-4 py-3 text-right">{channel.applications.toLocaleString("ko-KR")}명</td>
+                      <td className="px-4 py-3 text-right">{channel.active.toLocaleString("ko-KR")}명</td>
+                      <td className="px-4 py-3 text-right">{channel.rate}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-3 text-xs text-gray-500">
+              회원가입 시 기록된 최초 유입 채널 기준입니다. 미확인에는 기존 회원 및 기록되지 않은 채널이 포함됩니다.
+              활성 고객은 상태가 ‘활성’인 이용권을 보유한 중복 제외 회원 수이며 실제 결제 건수와 다를 수 있습니다.
             </p>
           </section>
         )}
