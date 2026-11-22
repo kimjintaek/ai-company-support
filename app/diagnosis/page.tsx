@@ -103,6 +103,7 @@ export default function DiagnosisPage() {
       region: String(formData.get("region") || ""),
       business_type: businessType,
       utm_source: utmSource,
+      inquiry_text: String(formData.get("inquiry_text") || "").trim(),
     };
 
     let authenticatedUser = signUpData.user;
@@ -209,12 +210,12 @@ export default function DiagnosisPage() {
       <main className="min-h-screen bg-gray-50 px-6 py-12">
         <div className="mx-auto max-w-2xl">
           <div className="rounded-2xl bg-white p-8 shadow-sm">
-            <p className="text-sm font-semibold text-blue-600">진단 신청 접수완료</p>
+            <p className="text-sm font-semibold text-blue-600">무료 기업정보 등록 완료</p>
             <h1 className="mt-2 text-3xl font-bold text-gray-900">
               기본정보 접수가 완료되었습니다.
             </h1>
             <p className="mt-4 leading-7 text-gray-600">
-              유료 진단 서비스를 이용하시려면 아래 계좌로 결제해주세요.
+              기업정보와 문의가 접수되었습니다. 유료 AI 진단이 필요한 경우에만 아래 이용권을 결제하시면 됩니다.
             </p>
             <div className="mt-8 rounded-xl bg-blue-50 p-6">
               <p className="text-sm font-medium text-gray-600">기업지원 AI 진단 서비스</p>
@@ -242,8 +243,8 @@ export default function DiagnosisPage() {
       <div className="mx-auto max-w-2xl">
         <div className="mb-8">
           <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p>
-          <h1 className="mt-2 text-3xl font-bold text-gray-900">우리 회사 정보를 입력해주세요</h1>
-          <p className="mt-3 text-gray-600">회사 기본정보를 등록하고 진단 서비스를 신청하세요. 자료 제출 후 전문가가 검토하여 진단 결과를 제공합니다.</p>
+          <h1 className="mt-2 text-3xl font-bold text-gray-900">무료 기업정보 등록 및 문의</h1>
+          <p className="mt-3 text-gray-600">기업 기본정보와 궁금한 내용을 무료로 등록하세요. 결제 없이 문의할 수 있습니다. AI 진단보고서와 자료 제출은 유료 이용권 활성화 후 제공됩니다.</p>
         </div>
         <form onSubmit={handleSubmit} className="rounded-2xl bg-white p-8 shadow-sm">
           <div className="space-y-6">
@@ -292,6 +293,11 @@ export default function DiagnosisPage() {
                 <button type="button" onClick={() => setBusinessType("법인사업자")} className={`rounded-lg border px-4 py-3 ${businessType === "법인사업자" ? "border-blue-600 bg-blue-50 text-blue-700" : "border-gray-300 hover:border-blue-500 hover:bg-blue-50"}`}>법인사업자</button>
               </div>
             </div>
+            <div>
+              <label htmlFor="inquiry_text" className="mb-2 block text-sm font-medium text-gray-700">무료 문의 내용</label>
+              <textarea id="inquiry_text" name="inquiry_text" required maxLength={2000} rows={5} placeholder="궁금한 정책자금·지원사업 또는 기업의 상황을 간단히 작성해주세요." className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500" />
+              <p className="mt-2 text-xs text-gray-500">무료 문의 접수이며, 지원사업 선정 가능성 판단이나 AI 진단보고서 제공은 포함되지 않습니다.</p>
+            </div>
             <div className="rounded-xl border border-gray-200 p-5">
               <p className="mb-4 text-base font-semibold text-gray-900">약관 동의</p>
               <label className="mb-4 flex items-start gap-3 text-sm text-gray-700">
@@ -332,7 +338,7 @@ export default function DiagnosisPage() {
               </p>
             </div>
             <button type="submit" disabled={!businessType || loading} className="w-full rounded-xl bg-blue-600 py-4 text-lg font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300">
-              {loading ? "접수 중..." : "진단 신청하기"}
+              {loading ? "등록 중..." : "무료 기업정보 등록 및 문의 접수"}
             </button>
           </div>
         </form>
