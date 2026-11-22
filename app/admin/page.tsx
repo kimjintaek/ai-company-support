@@ -15,6 +15,7 @@ type Member = {
   business_type: string;
   created_at: string;
   utm_source: string | null;
+  inquiry_text: string | null;
 };
 
 type License = {
@@ -96,7 +97,7 @@ export default function AdminPage() {
       const { data: memberData, error: memberError } = await supabase
         .from("members")
         .select(
-          "id, name, business_name, phone, email, industry, region, business_type, created_at, utm_source"
+          "id, name, business_name, phone, email, industry, region, business_type, created_at, utm_source, inquiry_text"
         )
         .order("created_at", { ascending: false });
 
@@ -486,8 +487,8 @@ export default function AdminPage() {
         {!loading && !errorMessage && (
           <section aria-label="신청 및 이용권 현황" className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { label: "전체 무료 진단 신청", value: totalApplications.toLocaleString("ko-KR"), unit: "명" },
-              { label: "오늘 무료 진단 신청", value: todayApplications.toLocaleString("ko-KR"), unit: "명" },
+              { label: "전체 무료 등록·문의", value: totalApplications.toLocaleString("ko-KR"), unit: "명" },
+              { label: "오늘 무료 등록·문의", value: todayApplications.toLocaleString("ko-KR"), unit: "명" },
               { label: "활성 이용권 고객", value: activeCustomers.toLocaleString("ko-KR"), unit: "명" },
               { label: "신청 대비 활성화율", value: conversionRate, unit: "%" },
             ].map((metric) => (
@@ -511,7 +512,7 @@ export default function AdminPage() {
                 <thead className="border-b bg-gray-50 text-gray-700">
                   <tr>
                     <th scope="col" className="px-4 py-3 text-left">유입 채널</th>
-                    <th scope="col" className="px-4 py-3 text-right">무료 진단 신청</th>
+                    <th scope="col" className="px-4 py-3 text-right">무료 등록·문의</th>
                     <th scope="col" className="px-4 py-3 text-right">활성 이용권 고객</th>
                     <th scope="col" className="px-4 py-3 text-right">활성화율</th>
                   </tr>
@@ -536,7 +537,7 @@ export default function AdminPage() {
         )}
         <div className="mb-6">
           <h2 className="text-xl font-bold text-gray-900">
-            진단 신청 기업
+            등록·문의 기업
           </h2>
 
           <p className="mt-1 text-sm text-gray-500">
@@ -652,7 +653,7 @@ export default function AdminPage() {
                             </span>
                           ) : (
                             <span className="text-orange-600">
-                              입금대기
+                              무료 등록
                             </span>
                           )}
                         </td>
@@ -777,6 +778,12 @@ export default function AdminPage() {
                 </p>
               </div>
 
+              <div className="rounded-lg bg-gray-50 p-4 sm:col-span-2">
+                <p className="text-xs text-gray-500">무료 문의 내용</p>
+                <p className="mt-1 whitespace-pre-wrap break-words font-medium text-gray-900">
+                  {selectedMember.inquiry_text || "기존 회원 · 문의 내용 없음"}
+                </p>
+              </div>
               <div className="rounded-lg bg-gray-50 p-4">
                 <p className="text-xs text-gray-500">신청일</p>
                 <p className="mt-1 font-medium text-gray-900">
