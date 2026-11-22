@@ -280,7 +280,7 @@ export default function DocumentsPage() {
         <div className="mb-6 rounded-2xl bg-white p-6 shadow-sm">
           <p className="text-sm text-gray-500">이용권 상태</p>
           <p className={"mt-1 text-lg font-bold " + (licenseStatus === "활성" ? "text-green-600" : "text-orange-600")}>
-            {licenseStatus === "활성" ? "이용권 활성" : "입금 확인 대기"}
+            {licenseStatus === "활성" ? "이용권 활성" : "무료 등록 · 유료 진단 미이용"}
           </p>
         </div>
 
