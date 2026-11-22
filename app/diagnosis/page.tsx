@@ -84,6 +84,16 @@ export default function DiagnosisPage() {
       return;
     }
 
+    let utmSource: string | null = null;
+    try {
+      const savedSource = window.localStorage.getItem("marketing_utm_source");
+      if (savedSource && ["naver", "youtube", "instagram", "daangn"].includes(savedSource)) {
+        utmSource = savedSource;
+      }
+    } catch {
+      // Continue registration when browser storage is unavailable.
+    }
+
     const memberData = {
       name: String(formData.get("name") || ""),
       business_name: String(formData.get("business_name") || ""),
@@ -92,6 +102,7 @@ export default function DiagnosisPage() {
       industry: String(formData.get("industry") || ""),
       region: String(formData.get("region") || ""),
       business_type: businessType,
+      utm_source: utmSource,
     };
 
     let authenticatedUser = signUpData.user;
