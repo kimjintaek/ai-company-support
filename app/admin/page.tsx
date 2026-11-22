@@ -142,6 +142,29 @@ export default function AdminPage() {
     loadData();
   }, [router]);
 
+  const todayKst = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Seoul",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  const totalApplications = members.length;
+  const todayApplications = members.filter((member) =>
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date(member.created_at)) === todayKst
+  ).length;
+  const activeMemberIds = new Set(
+    licenses.filter((license) => license.status === "활성").map((license) => license.member_id)
+  );
+  const activeCustomers = members.filter((member) => activeMemberIds.has(member.id)).length;
+  const conversionRate = totalApplications > 0
+    ? ((activeCustomers / totalApplications) * 100).toFixed(1)
+    : "0.0";
+
   const handleCopyAiPrompt = async () => {
     try {
       await navigator.clipboard.writeText(AI_DIAGNOSIS_PROMPT);
@@ -435,6 +458,26 @@ export default function AdminPage() {
       </header>
 
       <div className="mx-auto max-w-7xl px-6 py-8">
+        {!loading && !errorMessage && (
+          <section aria-label="신청 및 이용권 현황" className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { label: "전체 무료 진단 신청", value: totalApplications.toLocaleString("ko-KR"), unit: "명" },
+              { label: "오늘 무료 진단 신청", value: todayApplications.toLocaleString("ko-KR"), unit: "명" },
+              { label: "활성 이용권 고객", value: activeCustomers.toLocaleString("ko-KR"), unit: "명" },
+              { label: "신청 대비 활성화율", value: conversionRate, unit: "%" },
+            ].map((metric) => (
+              <div key={metric.label} className="rounded-2xl bg-white p-5 shadow-sm">
+                <p className="text-sm text-gray-500">{metric.label}</p>
+                <p className="mt-2 text-2xl font-bold text-gray-900">
+                  {metric.value}<span className="ml-1 text-base font-medium text-gray-500">{metric.unit}</span>
+                </p>
+              </div>
+            ))}
+            <p className="text-xs text-gray-500 sm:col-span-2 lg:col-span-4">
+              활성 이용권 고객은 상태가 ‘활성’인 이용권을 보유한 중복 제외 회원 수입니다. 실제 결제 건수와 다를 수 있습니다.
+            </p>
+          </section>
+        )}
         <div className="mb-6">
           <h2 className="text-xl font-bold text-gray-900">
             진단 신청 기업
