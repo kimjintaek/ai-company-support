@@ -261,6 +261,36 @@ export default function DiagnosisPage() {
               확인 가능한 운전자금 공고 일정과 기업별 요건에 맞춰 신청 준비사항과 신청 가이드를 안내합니다.
               공고 일정과 지원조건은 기관 사정에 따라 변경될 수 있으며, 신청 및 최종 제출은 사업자가 직접 진행합니다.
             </p>
+            <div className="mt-6 overflow-hidden rounded-2xl border border-blue-100 bg-gradient-to-br from-slate-50 via-white to-blue-50 p-5 sm:p-7">
+              <p className="text-center text-sm font-bold text-blue-700">기업별 맞춤 검토 · 신청 시기별 준비 안내</p>
+              <p className="mt-2 text-center text-xs leading-6 text-gray-600">기업의 조건과 공고 일정을 함께 살펴 신청 준비 방향을 안내합니다.</p>
+              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <div className="rounded-xl border border-blue-100 bg-white p-4 text-center shadow-sm">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-700" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-7 w-7"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 10h2m2 0h2M9 14h2m2 0h2M10 21v-4h4v4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </div>
+                  <p className="mt-3 font-bold text-gray-900">01. 기업별 조건</p>
+                  <p className="mt-2 text-xs leading-5 text-gray-600">업종·지역·보유 인증<br />매출 및 고용 변화</p>
+                </div>
+                <div className="rounded-xl border border-blue-100 bg-white p-4 text-center shadow-sm">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-700" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-7 w-7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-13 5h3m3 0h3" strokeLinecap="round"/></svg>
+                  </div>
+                  <p className="mt-3 font-bold text-gray-900">02. 공고 시기 검토</p>
+                  <p className="mt-2 text-xs leading-5 text-gray-600">사전 제출자료 확인<br />신청요건·우대조건 비교</p>
+                </div>
+                <div className="rounded-xl border border-blue-100 bg-white p-4 text-center shadow-sm">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-700" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-7 w-7"><path d="M8 4h8l3 3v14H5V4h3m8 0v4h3M9 12l2 2 4-4M9 18h6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </div>
+                  <p className="mt-3 font-bold text-gray-900">03. 신청 가이드</p>
+                  <p className="mt-2 text-xs leading-5 text-gray-600">준비서류·신청 절차<br />기업별 준비사항 안내</p>
+                </div>
+              </div>
+              <div className="mt-5 rounded-xl bg-blue-900 px-4 py-4 text-center text-sm font-semibold leading-6 text-white">
+                결제일부터 1년 · 운전자금 추가 매칭 및 신청 준비 안내
+              </div>
+            </div>
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
               <div className="rounded-xl bg-blue-50 p-4">
                 <h3 className="font-semibold text-gray-900">기업별 조건 검토</h3>
