@@ -55,6 +55,7 @@ export default function ResultPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [draft, setDraft] = useState("");
+  const [expertMemo, setExpertMemo] = useState("");
   const [hasResult, setHasResult] = useState(false);
   const [publishedAt, setPublishedAt] = useState<string | null>(null);
   const [message, setMessage] = useState("");
@@ -82,7 +83,7 @@ export default function ResultPage() {
 
       const { data: diagnosis, error: diagnosisError } = await supabase
         .from("diagnoses")
-        .select("ai_draft, sent_at")
+        .select("ai_draft, expert_memo, sent_at")
         .eq("member_id", member.id)
         .order("created_at", { ascending: false })
         .limit(1)
@@ -97,6 +98,7 @@ export default function ResultPage() {
       const result = diagnosis?.ai_draft?.trim() ?? "";
       const isPublished = Boolean(diagnosis?.sent_at);
       setDraft(result);
+      setExpertMemo(diagnosis?.expert_memo?.trim() ?? "");
       setPublishedAt(diagnosis?.sent_at ?? null);
       setHasResult(Boolean(result) && isPublished);
       setLoading(false);
@@ -132,6 +134,14 @@ export default function ResultPage() {
             <div className="whitespace-pre-wrap leading-8 text-gray-800">
               {renderDraftContent(draft)}
             </div>
+            {expertMemo && (
+              <div className="mt-8 border-t border-gray-200 pt-6">
+                <h2 className="mb-4 text-xl font-bold text-blue-900">전문가 최종 검토 의견</h2>
+                <div className="whitespace-pre-wrap leading-8 text-gray-800">
+                  {renderDraftContent(expertMemo)}
+                </div>
+              </div>
+            )}
             <div className="mt-8 rounded-xl bg-gray-50 p-4 text-sm leading-6 text-gray-600">
               본 결과는 제출자료를 바탕으로 한 1차 검토 내용이며, 최종 지원 가능 여부는
               관련 기관의 심사 및 추가 확인자료에 따라 달라질 수 있습니다.

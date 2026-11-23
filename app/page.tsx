@@ -12,7 +12,7 @@ export default function Home() {
         </h1>
 
         <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-600">
-          기업정보와 제출자료를 바탕으로 지원사업 검토 방향을 분석하고
+          먼저 기업정보와 문의를 무료로 등록하세요. 유료 이용권 결제 후 제출자료를 바탕으로
           <br />
           전문가가 직접 검토한 진단결과를 확인하세요.
         </p>
@@ -34,7 +34,7 @@ export default function Home() {
             href="/diagnosis"
             className="rounded-xl bg-blue-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:bg-blue-700"
           >
-            무료 진단 시작하기
+            무료 기업정보 등록 및 문의
           </a>
           <a
             href="/login"
@@ -45,7 +45,7 @@ export default function Home() {
         </div>
 
         <p className="mt-4 text-sm text-gray-500">
-          자료 제출 → 전문가 검토 → 진단결과 확인
+          무료 정보 등록·문의 → 필요 시 유료 이용권 결제 → 자료 제출·전문가 검토
         </p>
 
         <footer className="mt-16 w-full text-center">

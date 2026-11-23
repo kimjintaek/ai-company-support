@@ -10,6 +10,10 @@ export default function DocumentsPage() {
   const [uploading, setUploading] = useState(false);
   const [memberId, setMemberId] = useState("");
   const [licenseStatus, setLicenseStatus] = useState("");
+  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+  const [depositorName, setDepositorName] = useState("");
+  const [paymentRequestStatus, setPaymentRequestStatus] = useState("");
+  const [requestingPayment, setRequestingPayment] = useState(false);
   const [businessRegistrationFile, setBusinessRegistrationFile] = useState<File | null>(null);
   const [financialFile, setFinancialFile] = useState<File | null>(null);
   const [insuranceFile, setInsuranceFile] = useState<File | null>(null);
@@ -56,6 +60,17 @@ export default function DocumentsPage() {
       }
 
       setMemberId(member.id);
+      const { data: paymentRequest, error: paymentRequestError } = await supabase
+        .from("payment_requests")
+        .select("status, depositor_name")
+        .eq("member_id", member.id)
+        .maybeSingle();
+      if (paymentRequestError) {
+        setMessage("입금 확인 요청 조회 오류: " + paymentRequestError.message);
+      } else if (paymentRequest) {
+        setPaymentRequestStatus(paymentRequest.status);
+        setDepositorName(paymentRequest.depositor_name);
+      }
 
       const { data: latestDiagnosis, error: diagnosisError } = await supabase
         .from("diagnoses")
@@ -98,6 +113,29 @@ export default function DocumentsPage() {
 
     loadMember();
   }, [router]);
+
+  const handlePaymentRequest = async () => {
+    const name = depositorName.trim();
+    if (!memberId || name.length < 2 || name.length > 80) {
+      setMessage("실제 입금자명을 2~80자로 입력해주세요.");
+      return;
+    }
+    if (paymentRequestStatus) return;
+    setRequestingPayment(true);
+    setMessage("");
+    const { error } = await supabase.from("payment_requests").insert({
+      member_id: memberId,
+      depositor_name: name,
+      status: "입금확인요청",
+    });
+    setRequestingPayment(false);
+    if (error) {
+      setMessage("입금 확인 요청에 실패했습니다. " + error.message);
+      return;
+    }
+    setPaymentRequestStatus("입금확인요청");
+    setMessage("입금 확인 요청이 접수되었습니다. 실제 입금 확인 후 이용권이 활성화됩니다.");
+  };
 
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -270,28 +308,39 @@ export default function DocumentsPage() {
         <div className="mb-8">
           <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p>
           <h1 className="mt-2 text-3xl font-bold text-gray-900">
-            진단 자료 제출
+            {licenseStatus === "활성" ? "진단 자료 제출" : "무료 기업정보 등록"}
           </h1>
           <p className="mt-3 text-gray-600">
-            이용권 활성화 후 사업자등록증, 재무제표, 4대보험 관련 자료를 제출해주세요.
+            {licenseStatus === "활성"
+              ? "이용권 활성화 후 사업자등록증, 재무제표, 4대보험 관련 자료를 제출해주세요."
+              : "기업정보 등록이 완료되었습니다. 운전자금 AI 진단 및 전문가 검토는 선택형 유료 서비스입니다."}
           </p>
         </div>
 
         <div className="mb-6 rounded-2xl bg-white p-6 shadow-sm">
           <p className="text-sm text-gray-500">이용권 상태</p>
           <p className={"mt-1 text-lg font-bold " + (licenseStatus === "활성" ? "text-green-600" : "text-orange-600")}>
-            {licenseStatus === "활성" ? "이용권 활성" : "입금 확인 대기"}
+            {licenseStatus === "활성" ? "이용권 활성" : "무료 등록 · 유료 진단 미이용"}
           </p>
         </div>
 
         {licenseStatus !== "활성" ? (
           <div className="rounded-2xl bg-white p-8 shadow-sm">
             <h2 className="text-xl font-bold text-gray-900">
-              이용권 활성화가 필요합니다.
+              기업정보가 등록되었습니다.
             </h2>
             <p className="mt-3 leading-7 text-gray-600">
-              아래 계좌로 이용권 금액을 입금한 뒤, 입금자명을 확인해 주세요. 관리자가 입금을 확인하고 이용권을 활성화하면 자료를 제출할 수 있습니다.
+              운전자금 지원사업의 기업별 요건·신청 시기·우대조건 검토와 AI 진단보고서 및 전문가 검토가 필요한 경우 이용권을 선택해 주세요. 이용권 활성화 후 진단자료를 제출할 수 있습니다. 인증 취득·시설자금·R&D 등 전문 컨설팅은 별도 서비스입니다.
             </p>
+            <button
+              type="button"
+              onClick={() => setShowPaymentDetails((visible) => !visible)}
+              aria-expanded={showPaymentDetails}
+              className="mt-6 w-full rounded-xl bg-blue-600 px-5 py-4 font-semibold text-white hover:bg-blue-700"
+            >
+              {showPaymentDetails ? "유료 AI 진단 이용 안내 닫기" : "유료 AI 진단 이용 안내"}
+            </button>
+            {showPaymentDetails && (
             <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50 p-5">
               <p className="text-sm font-semibold text-blue-800">이용권 결제 안내</p>
               <div className="mt-3 flex items-center justify-between gap-4">
@@ -340,7 +389,20 @@ export default function DocumentsPage() {
               <p className="mt-4 text-sm leading-6 text-gray-700">
                 입금 후 관리자 확인이 완료되면 이용권이 활성화됩니다. 입금자명은 실제 송금자명과 동일하게 입력해 주세요.
               </p>
+              <div className="mt-5 border-t border-blue-200 pt-5">
+                <label htmlFor="depositor-name" className="mb-2 block text-sm font-semibold text-gray-800">실제 입금자명</label>
+                <input id="depositor-name" type="text" maxLength={80} value={depositorName} onChange={(e) => setDepositorName(e.target.value)} disabled={Boolean(paymentRequestStatus)} placeholder="통장에 표시되는 입금자명" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 disabled:bg-gray-100" />
+                {paymentRequestStatus ? (
+                  <p className="mt-3 rounded-lg bg-white p-3 text-sm font-semibold text-blue-800">입금 확인 요청 접수됨 · 관리자 확인 대기</p>
+                ) : (
+                  <button type="button" onClick={handlePaymentRequest} disabled={requestingPayment || !memberId} className="mt-3 w-full rounded-xl bg-blue-700 px-5 py-4 font-semibold text-white disabled:opacity-50">
+                    {requestingPayment ? "요청 접수 중..." : "입금완료 · 관리자 확인 요청"}
+                  </button>
+                )}
+                <p className="mt-2 text-xs text-gray-600">실제 계좌이체를 마친 후 눌러주세요. 버튼만 눌러서는 이용권이 활성화되지 않습니다.</p>
+              </div>
             </div>
+            )}
           </div>
         ) : (
           <>

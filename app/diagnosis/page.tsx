@@ -94,6 +94,31 @@ export default function DiagnosisPage() {
       // Continue registration when browser storage is unavailable.
     }
 
+    // Store the checklist in the existing inquiry field to avoid a database migration.
+    const checklistFields = [
+      ["사업장 상세주소", "business_address"],
+      ["사업 운영기간", "business_age"],
+      ["최근 연매출", "annual_sales"],
+      ["현재 직원 수", "employee_count"],
+      ["필요 자금 종류", "fund_type"],
+      ["필요 자금 규모", "fund_amount"],
+      ["기존 대출 이용", "existing_loans"],
+      ["자금 필요 시기", "fund_timing"],
+      ["필요한 안내", "help_topic"],
+    ] as const;
+    const checklistText = checklistFields
+      .map(([label, key]) => `${label}: ${String(formData.get(key) || "").trim()}`)
+      .join("\n");
+    const additionalInquiry = String(formData.get("inquiry_text") || "").trim();
+    const combinedInquiry = [checklistText, additionalInquiry ? `추가 문의: ${additionalInquiry}` : ""]
+      .filter(Boolean)
+      .join("\n");
+    if (combinedInquiry.length > 2000) {
+      setLoading(false);
+      alert("입력 내용이 너무 깁니다. 추가 문의 내용을 줄여주세요.");
+      return;
+    }
+
     const memberData = {
       name: String(formData.get("name") || ""),
       business_name: String(formData.get("business_name") || ""),
@@ -103,6 +128,7 @@ export default function DiagnosisPage() {
       region: String(formData.get("region") || ""),
       business_type: businessType,
       utm_source: utmSource,
+      inquiry_text: combinedInquiry,
     };
 
     let authenticatedUser = signUpData.user;
@@ -207,31 +233,76 @@ export default function DiagnosisPage() {
   if (submitted) {
     return (
       <main className="min-h-screen bg-gray-50 px-6 py-12">
-        <div className="mx-auto max-w-2xl">
-          <div className="rounded-2xl bg-white p-8 shadow-sm">
-            <p className="text-sm font-semibold text-blue-600">진단 신청 접수완료</p>
-            <h1 className="mt-2 text-3xl font-bold text-gray-900">
-              기본정보 접수가 완료되었습니다.
-            </h1>
+        <div className="mx-auto max-w-2xl space-y-6">
+          <section className="rounded-2xl bg-white p-8 shadow-sm">
+            <p className="text-sm font-semibold text-blue-600">무료 기업정보 등록 완료</p>
+            <h1 className="mt-2 text-3xl font-bold text-gray-900">무료 기업등록이 완료되었습니다.</h1>
             <p className="mt-4 leading-7 text-gray-600">
-              유료 진단 서비스를 이용하시려면 아래 계좌로 결제해주세요.
+              등록하신 기업정보와 문의 내용이 정상적으로 접수되었습니다.
+              고객 로그인 후 등록된 계정을 이용하실 수 있습니다.
             </p>
-            <div className="mt-8 rounded-xl bg-blue-50 p-6">
-              <p className="text-sm font-medium text-gray-600">기업지원 AI 진단 서비스</p>
-              <p className="mt-2 text-2xl font-bold text-gray-900">49,000원 + 부가세</p>
-              <p className="mt-1 text-sm text-gray-600">실제 입금금액: 53,900원</p>
+            <Link href="/login" className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-6 py-4 text-base font-semibold text-white transition hover:bg-blue-700">
+              고객 로그인
+            </Link>
+          </section>
+
+          <section className="rounded-2xl bg-white p-8 shadow-sm">
+            <p className="text-sm font-semibold text-blue-600">다온지원센터의 차별점</p>
+            <h2 className="mt-2 text-2xl font-bold leading-snug text-gray-900">
+              정책자금, 우리 기업에 맞는 신청 시기가 중요합니다.
+            </h2>
+            <p className="mt-4 leading-7 text-gray-600">
+              정책자금은 업종, 매출, 고용현황, 지역, 기존 자금 이용 이력과 보유 인증 등에 따라
+              검토할 수 있는 제도와 우대조건이 달라질 수 있습니다.
+              다온지원센터는 기업 상황과 운전자금 공고별 요건을 함께 검토합니다.
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-xl bg-blue-50 p-4">
+                <h3 className="font-semibold text-gray-900">기업별 조건 검토</h3>
+                <p className="mt-2 text-sm leading-6 text-gray-600">기업자료를 바탕으로 업종·재무상태·지역 등 주요 조건을 확인합니다.</p>
+              </div>
+              <div className="rounded-xl bg-blue-50 p-4">
+                <h3 className="font-semibold text-gray-900">신청 시기·우대조건</h3>
+                <p className="mt-2 text-sm leading-6 text-gray-600">공고별 신청요건과 우대사항, 준비할 내용을 검토합니다.</p>
+              </div>
+              <div className="rounded-xl bg-blue-50 p-4">
+                <h3 className="font-semibold text-gray-900">AI 분석 + 전문가 검토</h3>
+                <p className="mt-2 text-sm leading-6 text-gray-600">유료 진단에서 AI 분석 결과를 전문가가 확인합니다.</p>
+              </div>
             </div>
-            <div className="mt-6 rounded-xl border border-gray-200 p-6">
-              <p className="text-sm font-medium text-gray-500">입금계좌</p>
-              <p className="mt-2 text-xl font-bold text-gray-900">신한은행 100-037-330541</p>
-              <p className="mt-2 text-gray-700">예금주: (주)다온지원센터</p>
+          </section>
+
+          <section className="rounded-2xl bg-white p-8 shadow-sm">
+            <p className="text-sm font-semibold text-blue-600">선택형 유료 서비스</p>
+            <h2 className="mt-2 text-2xl font-bold text-gray-900">운전자금 AI 진단 · 1년 이용권</h2>
+            <p className="mt-3 text-3xl font-bold text-gray-900">49,000원</p>
+            <p className="mt-2 font-semibold text-blue-700">선정 후 추가 성공보수 없음</p>
+            <p className="mt-3 text-sm text-gray-600">이용기간은 결제일부터 1년입니다.</p>
+            <ul className="mt-5 list-disc space-y-2 pl-5 text-sm leading-7 text-gray-700">
+              <li>기업별 운전자금 진단 및 매칭</li>
+              <li>공고별 신청요건과 우대조건 안내</li>
+              <li>AI 분석 및 전문가 검토</li>
+              <li>신청 준비자료와 절차 안내</li>
+              <li>이용기간 내 추가 운전자금 매칭</li>
+            </ul>
+            <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-5">
+              <h3 className="font-semibold text-gray-900">전문 컨설팅은 별도로 제공합니다.</h3>
+              <p className="mt-2 text-sm leading-7 text-gray-600">
+                여성기업·장애인기업·벤처기업 등 기업 인증 취득 지원,
+                시설자금, R&amp;D 및 기타 경영컨설팅은 기본 이용권에 포함되지 않습니다.
+              </p>
             </div>
-            <div className="mt-6 rounded-xl bg-gray-50 p-5 text-sm leading-6 text-gray-600">
-              <p>입금 확인 후 유료 진단 이용권이 활성화됩니다.</p>
-              <p>이용권 활성화 후 로그인하여 재무제표 및 4대보험 관련 자료를 제출할 수 있습니다.</p>
-              <p>결제 확인은 영업일 기준으로 순차 처리됩니다.</p>
-            </div>
-          </div>
+            <p className="mt-5 text-xs leading-6 text-gray-500">
+              정책자금 선정이나 대출 실행을 보장하지 않으며, 실제 신청과 최종 제출은 사업자가 직접 진행합니다.
+              유료 서비스 결제 안내는 고객 로그인 후 확인할 수 있습니다.
+            </p>
+            <Link href="/login" className="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-blue-600 px-6 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-50">
+              운전자금 진단 이용 안내 · 고객 로그인
+            </Link>
+            <Link href="/policy-fund" className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">
+              전문 컨설팅 상세 보기
+            </Link>
+          </section>
         </div>
       </main>
     );
@@ -242,8 +313,8 @@ export default function DiagnosisPage() {
       <div className="mx-auto max-w-2xl">
         <div className="mb-8">
           <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p>
-          <h1 className="mt-2 text-3xl font-bold text-gray-900">우리 회사 정보를 입력해주세요</h1>
-          <p className="mt-3 text-gray-600">회사 기본정보를 등록하고 진단 서비스를 신청하세요. 자료 제출 후 전문가가 검토하여 진단 결과를 제공합니다.</p>
+          <h1 className="mt-2 text-3xl font-bold text-gray-900">무료 기업정보 등록</h1>
+          <p className="mt-3 text-gray-600">기업정보와 자금 수요를 체크리스트로 등록하세요. 상세 운전자금 진단과 자료 제출은 유료 이용권 활성화 후 제공됩니다.</p>
         </div>
         <form onSubmit={handleSubmit} className="rounded-2xl bg-white p-8 shadow-sm">
           <div className="space-y-6">
@@ -292,6 +363,109 @@ export default function DiagnosisPage() {
                 <button type="button" onClick={() => setBusinessType("법인사업자")} className={`rounded-lg border px-4 py-3 ${businessType === "법인사업자" ? "border-blue-600 bg-blue-50 text-blue-700" : "border-gray-300 hover:border-blue-500 hover:bg-blue-50"}`}>법인사업자</button>
               </div>
             </div>
+            <div>
+              <label htmlFor="business_address" className="mb-2 block text-sm font-medium text-gray-700">사업장 상세주소</label>
+              <input id="business_address" name="business_address" type="text" required maxLength={150} placeholder="도로명 주소 및 상세주소" className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500" />
+              <p className="mt-2 text-xs text-gray-500">위 지역 항목에는 시·군·구를, 이 항목에는 실제 사업장 주소를 입력해주세요.</p>
+            </div>
+            <section className="space-y-5 rounded-xl border border-blue-100 bg-blue-50/40 p-5">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">기업 자금 수요 체크리스트</h2>
+                <p className="mt-2 text-sm leading-6 text-gray-600">해당 항목을 선택하면 문의 내용 대신 기업의 자금 수요가 접수됩니다. 지원 가능 여부를 확정하는 진단은 아닙니다.</p>
+              </div>
+              <div>
+                <label htmlFor="business_age" className="mb-2 block text-sm font-medium text-gray-700">사업 운영기간</label>
+                <select id="business_age" name="business_age" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="1년 미만">1년 미만</option>
+                  <option value="1~3년">1~3년</option>
+                  <option value="3~7년">3~7년</option>
+                  <option value="7년 이상">7년 이상</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="annual_sales" className="mb-2 block text-sm font-medium text-gray-700">최근 연매출</label>
+                <select id="annual_sales" name="annual_sales" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="5천만원 미만">5천만원 미만</option>
+                  <option value="5천만~1억원 미만">5천만~1억원 미만</option>
+                  <option value="1억~5억원 미만">1억~5억원 미만</option>
+                  <option value="5억~10억원 미만">5억~10억원 미만</option>
+                  <option value="10억원 이상">10억원 이상</option>
+                  <option value="잘 모르겠습니다">잘 모르겠습니다</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="employee_count" className="mb-2 block text-sm font-medium text-gray-700">현재 직원 수</label>
+                <select id="employee_count" name="employee_count" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="0명">0명</option>
+                  <option value="1~4명">1~4명</option>
+                  <option value="5~9명">5~9명</option>
+                  <option value="10~49명">10~49명</option>
+                  <option value="50명 이상">50명 이상</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="fund_type" className="mb-2 block text-sm font-medium text-gray-700">필요한 자금 종류</label>
+                <select id="fund_type" name="fund_type" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="운전자금">운전자금</option>
+                  <option value="시설자금">시설자금</option>
+                  <option value="운전자금과 시설자금">운전자금과 시설자금</option>
+                  <option value="잘 모르겠습니다">잘 모르겠습니다</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="fund_amount" className="mb-2 block text-sm font-medium text-gray-700">필요한 자금 규모</label>
+                <select id="fund_amount" name="fund_amount" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="3천만원 미만">3천만원 미만</option>
+                  <option value="3천만~5천만원 미만">3천만~5천만원 미만</option>
+                  <option value="5천만~1억원 미만">5천만~1억원 미만</option>
+                  <option value="1억~3억원 미만">1억~3억원 미만</option>
+                  <option value="3억원 이상">3억원 이상</option>
+                  <option value="미정">미정</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="existing_loans" className="mb-2 block text-sm font-medium text-gray-700">기존 대출 이용 여부</label>
+                <select id="existing_loans" name="existing_loans" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="정책자금·보증부 대출 이용 중">정책자금·보증부 대출 이용 중</option>
+                  <option value="일반 사업자대출 이용 중">일반 사업자대출 이용 중</option>
+                  <option value="두 종류 모두 이용 중">두 종류 모두 이용 중</option>
+                  <option value="현재 이용 중인 대출 없음">현재 이용 중인 대출 없음</option>
+                  <option value="잘 모르겠습니다">잘 모르겠습니다</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="fund_timing" className="mb-2 block text-sm font-medium text-gray-700">자금이 필요한 시기</label>
+                <select id="fund_timing" name="fund_timing" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="즉시">즉시</option>
+                  <option value="1~3개월 이내">1~3개월 이내</option>
+                  <option value="3~6개월 이내">3~6개월 이내</option>
+                  <option value="적합한 공고 시기에 맞춰 신청 가능">적합한 공고 시기에 맞춰 신청 가능</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="help_topic" className="mb-2 block text-sm font-medium text-gray-700">가장 필요한 안내</label>
+                <select id="help_topic" name="help_topic" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="신청 가능한 자금 확인">신청 가능한 자금 확인</option>
+                  <option value="신청 시기 확인">신청 시기 확인</option>
+                  <option value="신청 절차 및 서류">신청 절차 및 서류</option>
+                  <option value="기존 대출 이용 후 추가 신청">기존 대출 이용 후 추가 신청</option>
+                  <option value="기타">기타</option>
+                </select>
+              </div>
+            </section>
+            <div>
+              <label htmlFor="inquiry_text" className="mb-2 block text-sm font-medium text-gray-700">추가로 궁금한 사항 (선택)</label>
+              <textarea id="inquiry_text" name="inquiry_text" maxLength={500} rows={3} placeholder="체크리스트 외에 전달할 내용이 있다면 입력해주세요." className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500" />
+              <p className="mt-2 text-xs text-gray-500">체크리스트만 선택해도 무료 등록이 가능합니다. 상세 진단과 공고 매칭은 유료 이용권에서 제공됩니다.</p>
+            </div>
             <div className="rounded-xl border border-gray-200 p-5">
               <p className="mb-4 text-base font-semibold text-gray-900">약관 동의</p>
               <label className="mb-4 flex items-start gap-3 text-sm text-gray-700">
@@ -332,7 +506,7 @@ export default function DiagnosisPage() {
               </p>
             </div>
             <button type="submit" disabled={!businessType || loading} className="w-full rounded-xl bg-blue-600 py-4 text-lg font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300">
-              {loading ? "접수 중..." : "진단 신청하기"}
+              {loading ? "등록 중..." : "무료 기업정보 등록 완료"}
             </button>
           </div>
         </form>

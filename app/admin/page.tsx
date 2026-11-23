@@ -15,6 +15,15 @@ type Member = {
   business_type: string;
   created_at: string;
   utm_source: string | null;
+  inquiry_text: string | null;
+};
+
+type PaymentRequest = {
+  id: string;
+  member_id: string;
+  depositor_name: string;
+  status: string;
+  requested_at: string;
 };
 
 type License = {
@@ -52,6 +61,7 @@ export default function AdminPage() {
 
   const [members, setMembers] = useState<Member[]>([]);
   const [licenses, setLicenses] = useState<License[]>([]);
+  const [paymentRequests, setPaymentRequests] = useState<PaymentRequest[]>([]);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [openingFile, setOpeningFile] = useState("");
@@ -96,7 +106,7 @@ export default function AdminPage() {
       const { data: memberData, error: memberError } = await supabase
         .from("members")
         .select(
-          "id, name, business_name, phone, email, industry, region, business_type, created_at, utm_source"
+          "id, name, business_name, phone, email, industry, region, business_type, created_at, utm_source, inquiry_text"
         )
         .order("created_at", { ascending: false });
 
@@ -134,6 +144,15 @@ export default function AdminPage() {
         return;
       }
 
+      const { data: paymentRequestData, error: paymentRequestError } = await supabase
+        .from("payment_requests")
+        .select("id, member_id, depositor_name, status, requested_at");
+      if (paymentRequestError) {
+        setErrorMessage("입금 확인 요청 조회 오류: " + paymentRequestError.message);
+        setLoading(false);
+        return;
+      }
+      setPaymentRequests(paymentRequestData ?? []);
       setMembers(memberData ?? []);
       setLicenses(licenseData ?? []);
       setDiagnoses(diagnosisData ?? []);
@@ -385,8 +404,13 @@ export default function AdminPage() {
   };
 
   const handleConfirmPayment = async (member: Member) => {
+    const request = paymentRequests.find((item) => item.member_id === member.id && item.status === "입금확인요청");
+    if (!request) {
+      alert("고객의 입금 확인 요청이 없습니다.");
+      return;
+    }
     const confirmed = window.confirm(
-      `${member.business_name}의 입금 53,900원을 확인하고 이용권을 활성화하시겠습니까?`
+      `${member.business_name} (입금자명: ${request.depositor_name})의 실제 은행 입금 53,900원을 확인하고 이용권을 활성화하시겠습니까?`
     );
 
     if (!confirmed) {
@@ -455,6 +479,14 @@ export default function AdminPage() {
       setLicenses((current) => [...current, data]);
     }
 
+    const { error: requestUpdateError } = await supabase.from("payment_requests")
+      .update({ status: "확인완료", confirmed_at: new Date().toISOString() })
+      .eq("id", request.id);
+    if (requestUpdateError) {
+      setErrorMessage("이용권은 활성화되었지만 입금 요청 상태 변경에 실패했습니다: " + requestUpdateError.message);
+    } else {
+      setPaymentRequests((current) => current.map((item) => item.id === request.id ? { ...item, status: "확인완료" } : item));
+    }
     setProcessingId("");
     alert("입금 확인 및 이용권 활성화가 완료되었습니다.");
   };
@@ -486,8 +518,8 @@ export default function AdminPage() {
         {!loading && !errorMessage && (
           <section aria-label="신청 및 이용권 현황" className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { label: "전체 무료 진단 신청", value: totalApplications.toLocaleString("ko-KR"), unit: "명" },
-              { label: "오늘 무료 진단 신청", value: todayApplications.toLocaleString("ko-KR"), unit: "명" },
+              { label: "전체 무료 등록·문의", value: totalApplications.toLocaleString("ko-KR"), unit: "명" },
+              { label: "오늘 무료 등록·문의", value: todayApplications.toLocaleString("ko-KR"), unit: "명" },
               { label: "활성 이용권 고객", value: activeCustomers.toLocaleString("ko-KR"), unit: "명" },
               { label: "신청 대비 활성화율", value: conversionRate, unit: "%" },
             ].map((metric) => (
@@ -511,7 +543,7 @@ export default function AdminPage() {
                 <thead className="border-b bg-gray-50 text-gray-700">
                   <tr>
                     <th scope="col" className="px-4 py-3 text-left">유입 채널</th>
-                    <th scope="col" className="px-4 py-3 text-right">무료 진단 신청</th>
+                    <th scope="col" className="px-4 py-3 text-right">무료 등록·문의</th>
                     <th scope="col" className="px-4 py-3 text-right">활성 이용권 고객</th>
                     <th scope="col" className="px-4 py-3 text-right">활성화율</th>
                   </tr>
@@ -536,7 +568,7 @@ export default function AdminPage() {
         )}
         <div className="mb-6">
           <h2 className="text-xl font-bold text-gray-900">
-            진단 신청 기업
+            등록·문의 기업
           </h2>
 
           <p className="mt-1 text-sm text-gray-500">
@@ -614,6 +646,7 @@ export default function AdminPage() {
                   {members.map((member) => {
                     const license = getLicense(member.id);
                     const diagnosis = getDiagnosis(member.id);
+                    const paymentRequest = paymentRequests.find((item) => item.member_id === member.id);
 
                     return (
                       <tr
@@ -650,10 +683,10 @@ export default function AdminPage() {
                             <span className="font-semibold text-green-600">
                               결제완료
                             </span>
+                          ) : paymentRequest?.status === "입금확인요청" ? (
+                            <span className="font-semibold text-blue-700">입금확인 요청 · {paymentRequest.depositor_name}</span>
                           ) : (
-                            <span className="text-orange-600">
-                              입금대기
-                            </span>
+                            <span className="text-orange-600">무료 등록</span>
                           )}
                         </td>
 
@@ -683,7 +716,7 @@ export default function AdminPage() {
                             <span className="text-sm text-green-600">
                               이용권 활성
                             </span>
-                          ) : (
+                          ) : paymentRequest?.status === "입금확인요청" ? (
                             <button
                               onClick={() =>
                                 handleConfirmPayment(member)
@@ -695,6 +728,8 @@ export default function AdminPage() {
                                 ? "처리 중..."
                                 : "입금확인"}
                             </button>
+                          ) : (
+                            <span className="text-sm text-gray-400">요청 대기</span>
                           )}
                         </td>
                       </tr>
@@ -777,6 +812,12 @@ export default function AdminPage() {
                 </p>
               </div>
 
+              <div className="rounded-lg bg-gray-50 p-4 sm:col-span-2">
+                <p className="text-xs text-gray-500">무료 문의 내용</p>
+                <p className="mt-1 whitespace-pre-wrap break-words font-medium text-gray-900">
+                  {selectedMember.inquiry_text || "기존 회원 · 문의 내용 없음"}
+                </p>
+              </div>
               <div className="rounded-lg bg-gray-50 p-4">
                 <p className="text-xs text-gray-500">신청일</p>
                 <p className="mt-1 font-medium text-gray-900">
