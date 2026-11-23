@@ -212,25 +212,28 @@ export default function DiagnosisPage() {
           <div className="rounded-2xl bg-white p-8 shadow-sm">
             <p className="text-sm font-semibold text-blue-600">무료 기업정보 등록 완료</p>
             <h1 className="mt-2 text-3xl font-bold text-gray-900">
-              기본정보 접수가 완료되었습니다.
+              무료 문의 접수가 완료되었습니다.
             </h1>
             <p className="mt-4 leading-7 text-gray-600">
-              기업정보와 문의가 접수되었습니다. 유료 AI 진단이 필요한 경우에만 아래 이용권을 결제하시면 됩니다.
+              등록하신 기업정보와 문의 내용이 정상적으로 접수되었습니다.
+              고객 로그인 후 등록된 계정을 이용하실 수 있습니다.
             </p>
-            <div className="mt-8 rounded-xl bg-blue-50 p-6">
-              <p className="text-sm font-medium text-gray-600">기업지원 AI 진단 서비스</p>
-              <p className="mt-2 text-2xl font-bold text-gray-900">49,000원 + 부가세</p>
-              <p className="mt-1 text-sm text-gray-600">실제 입금금액: 53,900원</p>
-            </div>
-            <div className="mt-6 rounded-xl border border-gray-200 p-6">
-              <p className="text-sm font-medium text-gray-500">입금계좌</p>
-              <p className="mt-2 text-xl font-bold text-gray-900">신한은행 100-037-330541</p>
-              <p className="mt-2 text-gray-700">예금주: (주)다온지원센터</p>
-            </div>
-            <div className="mt-6 rounded-xl bg-gray-50 p-5 text-sm leading-6 text-gray-600">
-              <p>입금 확인 후 유료 진단 이용권이 활성화됩니다.</p>
-              <p>이용권 활성화 후 로그인하여 재무제표 및 4대보험 관련 자료를 제출할 수 있습니다.</p>
-              <p>결제 확인은 영업일 기준으로 순차 처리됩니다.</p>
+            <Link
+              href="/login"
+              className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-6 py-4 text-base font-semibold text-white transition hover:bg-blue-700"
+            >
+              고객 로그인
+            </Link>
+            <div className="mt-8 rounded-xl bg-gray-50 p-5 text-sm leading-7 text-gray-600">
+              <p className="font-semibold text-gray-900">유료 AI 진단은 선택사항입니다.</p>
+              <p className="mt-2">
+                기업별 AI 진단보고서 및 전문가 검토가 필요한 경우
+                49,000원 유료 이용권을 선택할 수 있습니다.
+                유료 이용권 활성화 후 진단자료를 제출하실 수 있습니다.
+              </p>
+              <p className="mt-2">
+                유료 서비스의 상세 결제 안내는 고객 로그인 후 확인할 수 있습니다.
+              </p>
             </div>
           </div>
         </div>
