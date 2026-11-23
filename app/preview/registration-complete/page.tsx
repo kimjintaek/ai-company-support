@@ -9,7 +9,13 @@ export default function RegistrationCompletePreviewPage() {
             <p className="text-sm font-semibold text-blue-700">무료 기업정보 등록 완료</p>
             <h1 className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl">무료 기업등록이 완료되었습니다.</h1>
             <p className="mt-3 leading-7 text-gray-600">기업정보와 문의 내용이 접수되었습니다. 고객 로그인 후 등록한 계정을 이용하실 수 있습니다.</p>
-            <Link href="/login" className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800">고객 로그인</Link>
+            <div className="mt-6 rounded-xl border border-blue-100 bg-blue-50 p-5">
+              <h2 className="text-lg font-bold text-gray-900">이제 우리 기업에 맞는 운전자금을 검토해 보세요.</h2>
+              <p className="mt-2 text-sm leading-7 text-gray-700">고객 로그인 후 운전자금 AI 진단 이용권을 신청하실 수 있습니다. 이용권 활성화 후 기업자료를 제출하면 AI 분석과 전문가 검토가 진행됩니다.</p>
+              <p className="mt-3 text-sm font-semibold text-blue-900">고객 로그인 → 이용권 결제 → 기업자료 제출 → AI 분석·전문가 검토 → 진단결과 확인</p>
+            </div>
+            <Link href="/login" className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800">운전자금 AI 진단 이용 안내</Link>
+            <p className="mt-3 text-center text-xs leading-5 text-gray-500">유료 이용권은 선택사항이며, 무료 등록만으로 결제가 발생하지 않습니다.</p>
           </section>
 
           <section className="rounded-2xl bg-white p-6 shadow-sm sm:p-8">
@@ -79,7 +85,8 @@ export default function RegistrationCompletePreviewPage() {
               <p className="mt-2 text-sm leading-7 text-gray-600">기존 여성기업·장애인기업·벤처기업 인증의 보유 여부는 운전자금 매칭 시 검토할 수 있지만, 인증 신규 취득 지원과 시설자금·R&amp;D·기타 경영컨설팅은 기본 이용권에 포함되지 않습니다.</p>
             </div>
             <p className="mt-5 text-xs leading-6 text-gray-500">정책자금 선정이나 대출 실행을 보장하지 않습니다. 기관에 대한 신청과 최종 제출은 사업자가 직접 진행하며, 유료 서비스 결제 안내는 고객 로그인 후 확인할 수 있습니다.</p>
-            <Link href="/login" className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-blue-700 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-800">운전자금 진단 이용 안내 · 고객 로그인</Link>
+            <Link href="/login" className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-blue-700 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-800">53,900원으로 1년 운전자금 진단 시작하기</Link>
+            <p className="mt-2 text-center text-xs text-gray-500">결제일부터 1년 · 추가 성공보수 없음 · 클릭 시 고객 로그인으로 이동</p>
             <Link href="/policy-fund" className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50">전문 컨설팅 상세 보기</Link>
           </section>
         </div>
