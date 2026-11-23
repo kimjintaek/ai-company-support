@@ -10,6 +10,7 @@ export default function DocumentsPage() {
   const [uploading, setUploading] = useState(false);
   const [memberId, setMemberId] = useState("");
   const [licenseStatus, setLicenseStatus] = useState("");
+  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
   const [businessRegistrationFile, setBusinessRegistrationFile] = useState<File | null>(null);
   const [financialFile, setFinancialFile] = useState<File | null>(null);
   const [insuranceFile, setInsuranceFile] = useState<File | null>(null);
@@ -270,10 +271,12 @@ export default function DocumentsPage() {
         <div className="mb-8">
           <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p>
           <h1 className="mt-2 text-3xl font-bold text-gray-900">
-            진단 자료 제출
+            {licenseStatus === "활성" ? "진단 자료 제출" : "무료 기업정보 등록 및 문의"}
           </h1>
           <p className="mt-3 text-gray-600">
-            이용권 활성화 후 사업자등록증, 재무제표, 4대보험 관련 자료를 제출해주세요.
+            {licenseStatus === "활성"
+              ? "이용권 활성화 후 사업자등록증, 재무제표, 4대보험 관련 자료를 제출해주세요."
+              : "기업정보와 무료 문의가 접수되었습니다. 유료 AI 진단은 선택사항입니다."}
           </p>
         </div>
 
@@ -287,11 +290,20 @@ export default function DocumentsPage() {
         {licenseStatus !== "활성" ? (
           <div className="rounded-2xl bg-white p-8 shadow-sm">
             <h2 className="text-xl font-bold text-gray-900">
-              이용권 활성화가 필요합니다.
+              무료 문의가 접수되었습니다.
             </h2>
             <p className="mt-3 leading-7 text-gray-600">
-              아래 계좌로 이용권 금액을 입금한 뒤, 입금자명을 확인해 주세요. 관리자가 입금을 확인하고 이용권을 활성화하면 자료를 제출할 수 있습니다.
+              유료 AI 진단보고서 및 전문가 검토가 필요한 경우에만 이용권을 선택해 주세요. 이용권 활성화 후 진단자료를 제출할 수 있습니다.
             </p>
+            <button
+              type="button"
+              onClick={() => setShowPaymentDetails((visible) => !visible)}
+              aria-expanded={showPaymentDetails}
+              className="mt-6 w-full rounded-xl bg-blue-600 px-5 py-4 font-semibold text-white hover:bg-blue-700"
+            >
+              {showPaymentDetails ? "유료 AI 진단 이용 안내 닫기" : "유료 AI 진단 이용 안내"}
+            </button>
+            {showPaymentDetails && (
             <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50 p-5">
               <p className="text-sm font-semibold text-blue-800">이용권 결제 안내</p>
               <div className="mt-3 flex items-center justify-between gap-4">
@@ -341,6 +353,7 @@ export default function DocumentsPage() {
                 입금 후 관리자 확인이 완료되면 이용권이 활성화됩니다. 입금자명은 실제 송금자명과 동일하게 입력해 주세요.
               </p>
             </div>
+            )}
           </div>
         ) : (
           <>
