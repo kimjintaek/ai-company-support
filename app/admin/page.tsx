@@ -18,6 +18,14 @@ type Member = {
   inquiry_text: string | null;
 };
 
+type PaymentRequest = {
+  id: string;
+  member_id: string;
+  depositor_name: string;
+  status: string;
+  requested_at: string;
+};
+
 type License = {
   id: string;
   member_id: string;
@@ -53,6 +61,7 @@ export default function AdminPage() {
 
   const [members, setMembers] = useState<Member[]>([]);
   const [licenses, setLicenses] = useState<License[]>([]);
+  const [paymentRequests, setPaymentRequests] = useState<PaymentRequest[]>([]);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [openingFile, setOpeningFile] = useState("");
@@ -135,6 +144,15 @@ export default function AdminPage() {
         return;
       }
 
+      const { data: paymentRequestData, error: paymentRequestError } = await supabase
+        .from("payment_requests")
+        .select("id, member_id, depositor_name, status, requested_at");
+      if (paymentRequestError) {
+        setErrorMessage("입금 확인 요청 조회 오류: " + paymentRequestError.message);
+        setLoading(false);
+        return;
+      }
+      setPaymentRequests(paymentRequestData ?? []);
       setMembers(memberData ?? []);
       setLicenses(licenseData ?? []);
       setDiagnoses(diagnosisData ?? []);
@@ -386,8 +404,13 @@ export default function AdminPage() {
   };
 
   const handleConfirmPayment = async (member: Member) => {
+    const request = paymentRequests.find((item) => item.member_id === member.id && item.status === "입금확인요청");
+    if (!request) {
+      alert("고객의 입금 확인 요청이 없습니다.");
+      return;
+    }
     const confirmed = window.confirm(
-      `${member.business_name}의 입금 53,900원을 확인하고 이용권을 활성화하시겠습니까?`
+      `${member.business_name} (입금자명: ${request.depositor_name})의 실제 은행 입금 53,900원을 확인하고 이용권을 활성화하시겠습니까?`
     );
 
     if (!confirmed) {
@@ -456,6 +479,14 @@ export default function AdminPage() {
       setLicenses((current) => [...current, data]);
     }
 
+    const { error: requestUpdateError } = await supabase.from("payment_requests")
+      .update({ status: "확인완료", confirmed_at: new Date().toISOString() })
+      .eq("id", request.id);
+    if (requestUpdateError) {
+      setErrorMessage("이용권은 활성화되었지만 입금 요청 상태 변경에 실패했습니다: " + requestUpdateError.message);
+    } else {
+      setPaymentRequests((current) => current.map((item) => item.id === request.id ? { ...item, status: "확인완료" } : item));
+    }
     setProcessingId("");
     alert("입금 확인 및 이용권 활성화가 완료되었습니다.");
   };
@@ -615,6 +646,7 @@ export default function AdminPage() {
                   {members.map((member) => {
                     const license = getLicense(member.id);
                     const diagnosis = getDiagnosis(member.id);
+                    const paymentRequest = paymentRequests.find((item) => item.member_id === member.id);
 
                     return (
                       <tr
@@ -651,10 +683,10 @@ export default function AdminPage() {
                             <span className="font-semibold text-green-600">
                               결제완료
                             </span>
+                          ) : paymentRequest?.status === "입금확인요청" ? (
+                            <span className="font-semibold text-blue-700">입금확인 요청 · {paymentRequest.depositor_name}</span>
                           ) : (
-                            <span className="text-orange-600">
-                              무료 등록
-                            </span>
+                            <span className="text-orange-600">무료 등록</span>
                           )}
                         </td>
 
@@ -684,7 +716,7 @@ export default function AdminPage() {
                             <span className="text-sm text-green-600">
                               이용권 활성
                             </span>
-                          ) : (
+                          ) : paymentRequest?.status === "입금확인요청" ? (
                             <button
                               onClick={() =>
                                 handleConfirmPayment(member)
@@ -696,6 +728,8 @@ export default function AdminPage() {
                                 ? "처리 중..."
                                 : "입금확인"}
                             </button>
+                          ) : (
+                            <span className="text-sm text-gray-400">요청 대기</span>
                           )}
                         </td>
                       </tr>
