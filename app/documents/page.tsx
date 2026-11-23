@@ -271,12 +271,12 @@ export default function DocumentsPage() {
         <div className="mb-8">
           <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p>
           <h1 className="mt-2 text-3xl font-bold text-gray-900">
-            {licenseStatus === "활성" ? "진단 자료 제출" : "무료 기업정보 등록 및 문의"}
+            {licenseStatus === "활성" ? "진단 자료 제출" : "무료 기업정보 등록"}
           </h1>
           <p className="mt-3 text-gray-600">
             {licenseStatus === "활성"
               ? "이용권 활성화 후 사업자등록증, 재무제표, 4대보험 관련 자료를 제출해주세요."
-              : "기업정보와 무료 문의가 접수되었습니다. 유료 AI 진단은 선택사항입니다."}
+              : "기업정보 등록이 완료되었습니다. 운전자금 AI 진단 및 전문가 검토는 선택형 유료 서비스입니다."}
           </p>
         </div>
 
@@ -290,10 +290,10 @@ export default function DocumentsPage() {
         {licenseStatus !== "활성" ? (
           <div className="rounded-2xl bg-white p-8 shadow-sm">
             <h2 className="text-xl font-bold text-gray-900">
-              무료 문의가 접수되었습니다.
+              기업정보가 등록되었습니다.
             </h2>
             <p className="mt-3 leading-7 text-gray-600">
-              유료 AI 진단보고서 및 전문가 검토가 필요한 경우에만 이용권을 선택해 주세요. 이용권 활성화 후 진단자료를 제출할 수 있습니다.
+              운전자금 지원사업의 기업별 요건·신청 시기·우대조건 검토와 AI 진단보고서 및 전문가 검토가 필요한 경우 이용권을 선택해 주세요. 이용권 활성화 후 진단자료를 제출할 수 있습니다. 인증 취득·시설자금·R&D 등 전문 컨설팅은 별도 서비스입니다.
             </p>
             <button
               type="button"
