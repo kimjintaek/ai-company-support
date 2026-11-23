@@ -94,6 +94,31 @@ export default function DiagnosisPage() {
       // Continue registration when browser storage is unavailable.
     }
 
+    // Store the checklist in the existing inquiry field to avoid a database migration.
+    const checklistFields = [
+      ["사업장 상세주소", "business_address"],
+      ["사업 운영기간", "business_age"],
+      ["최근 연매출", "annual_sales"],
+      ["현재 직원 수", "employee_count"],
+      ["필요 자금 종류", "fund_type"],
+      ["필요 자금 규모", "fund_amount"],
+      ["기존 대출 이용", "existing_loans"],
+      ["자금 필요 시기", "fund_timing"],
+      ["필요한 안내", "help_topic"],
+    ] as const;
+    const checklistText = checklistFields
+      .map(([label, key]) => `${label}: ${String(formData.get(key) || "").trim()}`)
+      .join("\\n");
+    const additionalInquiry = String(formData.get("inquiry_text") || "").trim();
+    const combinedInquiry = [checklistText, additionalInquiry ? `추가 문의: ${additionalInquiry}` : ""]
+      .filter(Boolean)
+      .join("\\n");
+    if (combinedInquiry.length > 2000) {
+      setLoading(false);
+      alert("입력 내용이 너무 깁니다. 추가 문의 내용을 줄여주세요.");
+      return;
+    }
+
     const memberData = {
       name: String(formData.get("name") || ""),
       business_name: String(formData.get("business_name") || ""),
@@ -103,7 +128,7 @@ export default function DiagnosisPage() {
       region: String(formData.get("region") || ""),
       business_type: businessType,
       utm_source: utmSource,
-      inquiry_text: String(formData.get("inquiry_text") || "").trim(),
+      inquiry_text: combinedInquiry,
     };
 
     let authenticatedUser = signUpData.user;
@@ -288,8 +313,8 @@ export default function DiagnosisPage() {
       <div className="mx-auto max-w-2xl">
         <div className="mb-8">
           <p className="text-sm font-semibold text-blue-600">기업지원사업 AI 진단</p>
-          <h1 className="mt-2 text-3xl font-bold text-gray-900">무료 기업정보 등록 및 문의</h1>
-          <p className="mt-3 text-gray-600">기업 기본정보와 궁금한 내용을 무료로 등록하세요. 결제 없이 문의할 수 있습니다. AI 진단보고서와 자료 제출은 유료 이용권 활성화 후 제공됩니다.</p>
+          <h1 className="mt-2 text-3xl font-bold text-gray-900">무료 기업정보 등록</h1>
+          <p className="mt-3 text-gray-600">기업정보와 자금 수요를 체크리스트로 등록하세요. 상세 운전자금 진단과 자료 제출은 유료 이용권 활성화 후 제공됩니다.</p>
         </div>
         <form onSubmit={handleSubmit} className="rounded-2xl bg-white p-8 shadow-sm">
           <div className="space-y-6">
@@ -339,9 +364,107 @@ export default function DiagnosisPage() {
               </div>
             </div>
             <div>
-              <label htmlFor="inquiry_text" className="mb-2 block text-sm font-medium text-gray-700">무료 문의 내용</label>
-              <textarea id="inquiry_text" name="inquiry_text" required maxLength={2000} rows={5} placeholder="궁금한 정책자금·지원사업 또는 기업의 상황을 간단히 작성해주세요." className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500" />
-              <p className="mt-2 text-xs text-gray-500">무료 문의 접수이며, 지원사업 선정 가능성 판단이나 AI 진단보고서 제공은 포함되지 않습니다.</p>
+              <label htmlFor="business_address" className="mb-2 block text-sm font-medium text-gray-700">사업장 상세주소</label>
+              <input id="business_address" name="business_address" type="text" required maxLength={150} placeholder="도로명 주소 및 상세주소" className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500" />
+              <p className="mt-2 text-xs text-gray-500">위 지역 항목에는 시·군·구를, 이 항목에는 실제 사업장 주소를 입력해주세요.</p>
+            </div>
+            <section className="space-y-5 rounded-xl border border-blue-100 bg-blue-50/40 p-5">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">기업 자금 수요 체크리스트</h2>
+                <p className="mt-2 text-sm leading-6 text-gray-600">해당 항목을 선택하면 문의 내용 대신 기업의 자금 수요가 접수됩니다. 지원 가능 여부를 확정하는 진단은 아닙니다.</p>
+              </div>
+              <div>
+                <label htmlFor="business_age" className="mb-2 block text-sm font-medium text-gray-700">사업 운영기간</label>
+                <select id="business_age" name="business_age" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="1년 미만">1년 미만</option>
+                  <option value="1~3년">1~3년</option>
+                  <option value="3~7년">3~7년</option>
+                  <option value="7년 이상">7년 이상</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="annual_sales" className="mb-2 block text-sm font-medium text-gray-700">최근 연매출</label>
+                <select id="annual_sales" name="annual_sales" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="5천만원 미만">5천만원 미만</option>
+                  <option value="5천만~1억원 미만">5천만~1억원 미만</option>
+                  <option value="1억~5억원 미만">1억~5억원 미만</option>
+                  <option value="5억~10억원 미만">5억~10억원 미만</option>
+                  <option value="10억원 이상">10억원 이상</option>
+                  <option value="잘 모르겠습니다">잘 모르겠습니다</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="employee_count" className="mb-2 block text-sm font-medium text-gray-700">현재 직원 수</label>
+                <select id="employee_count" name="employee_count" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="0명">0명</option>
+                  <option value="1~4명">1~4명</option>
+                  <option value="5~9명">5~9명</option>
+                  <option value="10~49명">10~49명</option>
+                  <option value="50명 이상">50명 이상</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="fund_type" className="mb-2 block text-sm font-medium text-gray-700">필요한 자금 종류</label>
+                <select id="fund_type" name="fund_type" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="운전자금">운전자금</option>
+                  <option value="시설자금">시설자금</option>
+                  <option value="운전자금과 시설자금">운전자금과 시설자금</option>
+                  <option value="잘 모르겠습니다">잘 모르겠습니다</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="fund_amount" className="mb-2 block text-sm font-medium text-gray-700">필요한 자금 규모</label>
+                <select id="fund_amount" name="fund_amount" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="3천만원 미만">3천만원 미만</option>
+                  <option value="3천만~5천만원 미만">3천만~5천만원 미만</option>
+                  <option value="5천만~1억원 미만">5천만~1억원 미만</option>
+                  <option value="1억~3억원 미만">1억~3억원 미만</option>
+                  <option value="3억원 이상">3억원 이상</option>
+                  <option value="미정">미정</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="existing_loans" className="mb-2 block text-sm font-medium text-gray-700">기존 대출 이용 여부</label>
+                <select id="existing_loans" name="existing_loans" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="정책자금·보증부 대출 이용 중">정책자금·보증부 대출 이용 중</option>
+                  <option value="일반 사업자대출 이용 중">일반 사업자대출 이용 중</option>
+                  <option value="두 종류 모두 이용 중">두 종류 모두 이용 중</option>
+                  <option value="현재 이용 중인 대출 없음">현재 이용 중인 대출 없음</option>
+                  <option value="잘 모르겠습니다">잘 모르겠습니다</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="fund_timing" className="mb-2 block text-sm font-medium text-gray-700">자금이 필요한 시기</label>
+                <select id="fund_timing" name="fund_timing" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="즉시">즉시</option>
+                  <option value="1~3개월 이내">1~3개월 이내</option>
+                  <option value="3~6개월 이내">3~6개월 이내</option>
+                  <option value="적합한 공고 시기에 맞춰 신청 가능">적합한 공고 시기에 맞춰 신청 가능</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="help_topic" className="mb-2 block text-sm font-medium text-gray-700">가장 필요한 안내</label>
+                <select id="help_topic" name="help_topic" required defaultValue="" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500">
+                  <option value="" disabled>선택해주세요</option>
+                  <option value="신청 가능한 자금 확인">신청 가능한 자금 확인</option>
+                  <option value="신청 시기 확인">신청 시기 확인</option>
+                  <option value="신청 절차 및 서류">신청 절차 및 서류</option>
+                  <option value="기존 대출 이용 후 추가 신청">기존 대출 이용 후 추가 신청</option>
+                  <option value="기타">기타</option>
+                </select>
+              </div>
+            </section>
+            <div>
+              <label htmlFor="inquiry_text" className="mb-2 block text-sm font-medium text-gray-700">추가로 궁금한 사항 (선택)</label>
+              <textarea id="inquiry_text" name="inquiry_text" maxLength={500} rows={3} placeholder="체크리스트 외에 전달할 내용이 있다면 입력해주세요." className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500" />
+              <p className="mt-2 text-xs text-gray-500">체크리스트만 선택해도 무료 등록이 가능합니다. 상세 진단과 공고 매칭은 유료 이용권에서 제공됩니다.</p>
             </div>
             <div className="rounded-xl border border-gray-200 p-5">
               <p className="mb-4 text-base font-semibold text-gray-900">약관 동의</p>
@@ -383,7 +506,7 @@ export default function DiagnosisPage() {
               </p>
             </div>
             <button type="submit" disabled={!businessType || loading} className="w-full rounded-xl bg-blue-600 py-4 text-lg font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300">
-              {loading ? "등록 중..." : "무료 기업정보 등록 및 문의 접수"}
+              {loading ? "등록 중..." : "무료 기업정보 등록 완료"}
             </button>
           </div>
         </form>
