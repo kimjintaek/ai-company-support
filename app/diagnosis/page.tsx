@@ -208,34 +208,76 @@ export default function DiagnosisPage() {
   if (submitted) {
     return (
       <main className="min-h-screen bg-gray-50 px-6 py-12">
-        <div className="mx-auto max-w-2xl">
-          <div className="rounded-2xl bg-white p-8 shadow-sm">
+        <div className="mx-auto max-w-2xl space-y-6">
+          <section className="rounded-2xl bg-white p-8 shadow-sm">
             <p className="text-sm font-semibold text-blue-600">무료 기업정보 등록 완료</p>
-            <h1 className="mt-2 text-3xl font-bold text-gray-900">
-              무료 문의 접수가 완료되었습니다.
-            </h1>
+            <h1 className="mt-2 text-3xl font-bold text-gray-900">무료 기업등록이 완료되었습니다.</h1>
             <p className="mt-4 leading-7 text-gray-600">
               등록하신 기업정보와 문의 내용이 정상적으로 접수되었습니다.
               고객 로그인 후 등록된 계정을 이용하실 수 있습니다.
             </p>
-            <Link
-              href="/login"
-              className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-6 py-4 text-base font-semibold text-white transition hover:bg-blue-700"
-            >
+            <Link href="/login" className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-6 py-4 text-base font-semibold text-white transition hover:bg-blue-700">
               고객 로그인
             </Link>
-            <div className="mt-8 rounded-xl bg-gray-50 p-5 text-sm leading-7 text-gray-600">
-              <p className="font-semibold text-gray-900">유료 AI 진단은 선택사항입니다.</p>
-              <p className="mt-2">
-                기업별 AI 진단보고서 및 전문가 검토가 필요한 경우
-                49,000원 유료 이용권을 선택할 수 있습니다.
-                유료 이용권 활성화 후 진단자료를 제출하실 수 있습니다.
-              </p>
-              <p className="mt-2">
-                유료 서비스의 상세 결제 안내는 고객 로그인 후 확인할 수 있습니다.
+          </section>
+
+          <section className="rounded-2xl bg-white p-8 shadow-sm">
+            <p className="text-sm font-semibold text-blue-600">다온지원센터의 차별점</p>
+            <h2 className="mt-2 text-2xl font-bold leading-snug text-gray-900">
+              정책자금, 우리 기업에 맞는 신청 시기가 중요합니다.
+            </h2>
+            <p className="mt-4 leading-7 text-gray-600">
+              정책자금은 업종, 매출, 고용현황, 지역, 기존 자금 이용 이력과 보유 인증 등에 따라
+              검토할 수 있는 제도와 우대조건이 달라질 수 있습니다.
+              다온지원센터는 기업 상황과 운전자금 공고별 요건을 함께 검토합니다.
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-xl bg-blue-50 p-4">
+                <h3 className="font-semibold text-gray-900">기업별 조건 검토</h3>
+                <p className="mt-2 text-sm leading-6 text-gray-600">기업자료를 바탕으로 업종·재무상태·지역 등 주요 조건을 확인합니다.</p>
+              </div>
+              <div className="rounded-xl bg-blue-50 p-4">
+                <h3 className="font-semibold text-gray-900">신청 시기·우대조건</h3>
+                <p className="mt-2 text-sm leading-6 text-gray-600">공고별 신청요건과 우대사항, 준비할 내용을 검토합니다.</p>
+              </div>
+              <div className="rounded-xl bg-blue-50 p-4">
+                <h3 className="font-semibold text-gray-900">AI 분석 + 전문가 검토</h3>
+                <p className="mt-2 text-sm leading-6 text-gray-600">유료 진단에서 AI 분석 결과를 전문가가 확인합니다.</p>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-2xl bg-white p-8 shadow-sm">
+            <p className="text-sm font-semibold text-blue-600">선택형 유료 서비스</p>
+            <h2 className="mt-2 text-2xl font-bold text-gray-900">운전자금 AI 진단 · 1년 이용권</h2>
+            <p className="mt-3 text-3xl font-bold text-gray-900">49,000원</p>
+            <p className="mt-2 font-semibold text-blue-700">선정 후 추가 성공보수 없음</p>
+            <p className="mt-3 text-sm text-gray-600">이용기간은 결제일부터 1년입니다.</p>
+            <ul className="mt-5 list-disc space-y-2 pl-5 text-sm leading-7 text-gray-700">
+              <li>기업별 운전자금 진단 및 매칭</li>
+              <li>공고별 신청요건과 우대조건 안내</li>
+              <li>AI 분석 및 전문가 검토</li>
+              <li>신청 준비자료와 절차 안내</li>
+              <li>이용기간 내 추가 운전자금 매칭</li>
+            </ul>
+            <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-5">
+              <h3 className="font-semibold text-gray-900">전문 컨설팅은 별도로 제공합니다.</h3>
+              <p className="mt-2 text-sm leading-7 text-gray-600">
+                여성기업·장애인기업·벤처기업 등 기업 인증 취득 지원,
+                시설자금, R&amp;D 및 기타 경영컨설팅은 기본 이용권에 포함되지 않습니다.
               </p>
             </div>
-          </div>
+            <p className="mt-5 text-xs leading-6 text-gray-500">
+              정책자금 선정이나 대출 실행을 보장하지 않으며, 실제 신청과 최종 제출은 사업자가 직접 진행합니다.
+              유료 서비스 결제 안내는 고객 로그인 후 확인할 수 있습니다.
+            </p>
+            <Link href="/login" className="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-blue-600 px-6 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-50">
+              운전자금 진단 이용 안내 · 고객 로그인
+            </Link>
+            <Link href="/policy-fund" className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">
+              전문 컨설팅 상세 보기
+            </Link>
+          </section>
         </div>
       </main>
     );
