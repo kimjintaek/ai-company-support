@@ -108,11 +108,11 @@ export default function DiagnosisPage() {
     ] as const;
     const checklistText = checklistFields
       .map(([label, key]) => `${label}: ${String(formData.get(key) || "").trim()}`)
-      .join("\\n");
+      .join("\n");
     const additionalInquiry = String(formData.get("inquiry_text") || "").trim();
     const combinedInquiry = [checklistText, additionalInquiry ? `추가 문의: ${additionalInquiry}` : ""]
       .filter(Boolean)
-      .join("\\n");
+      .join("\n");
     if (combinedInquiry.length > 2000) {
       setLoading(false);
       alert("입력 내용이 너무 깁니다. 추가 문의 내용을 줄여주세요.");
