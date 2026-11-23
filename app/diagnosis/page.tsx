@@ -252,18 +252,23 @@ export default function DiagnosisPage() {
               정책자금, 우리 기업에 맞는 신청 시기가 중요합니다.
             </h2>
             <p className="mt-4 leading-7 text-gray-600">
-              정책자금은 업종, 매출, 고용현황, 지역, 기존 자금 이용 이력과 보유 인증 등에 따라
-              검토할 수 있는 제도와 우대조건이 달라질 수 있습니다.
-              다온지원센터는 기업 상황과 운전자금 공고별 요건을 함께 검토합니다.
+              정책자금은 업종·지역뿐 아니라 청년기업 여부, 여성기업·장애인기업·벤처기업 등 보유 인증,
+              인력 증가, 매출 감소와 같은 기업별 상황에 따라 신청요건과 우대조건이 달라질 수 있습니다.
+              다온지원센터는 이러한 조건을 공고별로 비교해 기업에 맞는 운전자금 검토 방향을 안내합니다.
+            </p>
+            <p className="mt-4 text-sm leading-7 text-gray-600">
+              유료 이용권 활성화 후 필요한 기업자료를 미리 제출하시면, 결제일부터 1년의 이용기간 동안
+              확인 가능한 운전자금 공고 일정과 기업별 요건에 맞춰 신청 준비사항과 신청 가이드를 안내합니다.
+              공고 일정과 지원조건은 기관 사정에 따라 변경될 수 있으며, 신청 및 최종 제출은 사업자가 직접 진행합니다.
             </p>
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
               <div className="rounded-xl bg-blue-50 p-4">
                 <h3 className="font-semibold text-gray-900">기업별 조건 검토</h3>
-                <p className="mt-2 text-sm leading-6 text-gray-600">기업자료를 바탕으로 업종·재무상태·지역 등 주요 조건을 확인합니다.</p>
+                <p className="mt-2 text-sm leading-6 text-gray-600">기업자료와 보유 인증, 매출·고용 변동 등을 함께 확인해 해당 공고의 요건과 우대조건을 검토합니다.</p>
               </div>
               <div className="rounded-xl bg-blue-50 p-4">
                 <h3 className="font-semibold text-gray-900">신청 시기·우대조건</h3>
-                <p className="mt-2 text-sm leading-6 text-gray-600">공고별 신청요건과 우대사항, 준비할 내용을 검토합니다.</p>
+                <p className="mt-2 text-sm leading-6 text-gray-600">자료를 미리 제출해 주시면 제공된 정보와 공고 일정에 맞춰 신청 시기, 준비서류 및 신청 가이드를 안내합니다.</p>
               </div>
               <div className="rounded-xl bg-blue-50 p-4">
                 <h3 className="font-semibold text-gray-900">AI 분석 + 전문가 검토</h3>
@@ -275,7 +280,7 @@ export default function DiagnosisPage() {
           <section className="rounded-2xl bg-white p-8 shadow-sm">
             <p className="text-sm font-semibold text-blue-600">선택형 유료 서비스</p>
             <h2 className="mt-2 text-2xl font-bold text-gray-900">운전자금 AI 진단 · 1년 이용권</h2>
-            <p className="mt-3 text-3xl font-bold text-gray-900">49,000원</p>
+            <p className="mt-3 text-3xl font-bold text-gray-900">49,000원 <span className="text-base font-normal text-gray-600">+ 부가세 4,900원 (총 53,900원)</span></p>
             <p className="mt-2 font-semibold text-blue-700">선정 후 추가 성공보수 없음</p>
             <p className="mt-3 text-sm text-gray-600">이용기간은 결제일부터 1년입니다.</p>
             <ul className="mt-5 list-disc space-y-2 pl-5 text-sm leading-7 text-gray-700">
@@ -283,6 +288,7 @@ export default function DiagnosisPage() {
               <li>공고별 신청요건과 우대조건 안내</li>
               <li>AI 분석 및 전문가 검토</li>
               <li>신청 준비자료와 절차 안내</li>
+              <li>자료 사전 제출 시 공고 시기에 맞춘 준비사항 및 신청 가이드 안내</li>
               <li>이용기간 내 추가 운전자금 매칭</li>
             </ul>
             <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-5">
