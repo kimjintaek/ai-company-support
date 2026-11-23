@@ -11,6 +11,9 @@ export default function DocumentsPage() {
   const [memberId, setMemberId] = useState("");
   const [licenseStatus, setLicenseStatus] = useState("");
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+  const [depositorName, setDepositorName] = useState("");
+  const [paymentRequestStatus, setPaymentRequestStatus] = useState("");
+  const [requestingPayment, setRequestingPayment] = useState(false);
   const [businessRegistrationFile, setBusinessRegistrationFile] = useState<File | null>(null);
   const [financialFile, setFinancialFile] = useState<File | null>(null);
   const [insuranceFile, setInsuranceFile] = useState<File | null>(null);
@@ -57,6 +60,17 @@ export default function DocumentsPage() {
       }
 
       setMemberId(member.id);
+      const { data: paymentRequest, error: paymentRequestError } = await supabase
+        .from("payment_requests")
+        .select("status, depositor_name")
+        .eq("member_id", member.id)
+        .maybeSingle();
+      if (paymentRequestError) {
+        setMessage("입금 확인 요청 조회 오류: " + paymentRequestError.message);
+      } else if (paymentRequest) {
+        setPaymentRequestStatus(paymentRequest.status);
+        setDepositorName(paymentRequest.depositor_name);
+      }
 
       const { data: latestDiagnosis, error: diagnosisError } = await supabase
         .from("diagnoses")
@@ -99,6 +113,29 @@ export default function DocumentsPage() {
 
     loadMember();
   }, [router]);
+
+  const handlePaymentRequest = async () => {
+    const name = depositorName.trim();
+    if (!memberId || name.length < 2 || name.length > 80) {
+      setMessage("실제 입금자명을 2~80자로 입력해주세요.");
+      return;
+    }
+    if (paymentRequestStatus) return;
+    setRequestingPayment(true);
+    setMessage("");
+    const { error } = await supabase.from("payment_requests").insert({
+      member_id: memberId,
+      depositor_name: name,
+      status: "입금확인요청",
+    });
+    setRequestingPayment(false);
+    if (error) {
+      setMessage("입금 확인 요청에 실패했습니다. " + error.message);
+      return;
+    }
+    setPaymentRequestStatus("입금확인요청");
+    setMessage("입금 확인 요청이 접수되었습니다. 실제 입금 확인 후 이용권이 활성화됩니다.");
+  };
 
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -352,6 +389,18 @@ export default function DocumentsPage() {
               <p className="mt-4 text-sm leading-6 text-gray-700">
                 입금 후 관리자 확인이 완료되면 이용권이 활성화됩니다. 입금자명은 실제 송금자명과 동일하게 입력해 주세요.
               </p>
+              <div className="mt-5 border-t border-blue-200 pt-5">
+                <label htmlFor="depositor-name" className="mb-2 block text-sm font-semibold text-gray-800">실제 입금자명</label>
+                <input id="depositor-name" type="text" maxLength={80} value={depositorName} onChange={(e) => setDepositorName(e.target.value)} disabled={Boolean(paymentRequestStatus)} placeholder="통장에 표시되는 입금자명" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 disabled:bg-gray-100" />
+                {paymentRequestStatus ? (
+                  <p className="mt-3 rounded-lg bg-white p-3 text-sm font-semibold text-blue-800">입금 확인 요청 접수됨 · 관리자 확인 대기</p>
+                ) : (
+                  <button type="button" onClick={handlePaymentRequest} disabled={requestingPayment || !memberId} className="mt-3 w-full rounded-xl bg-blue-700 px-5 py-4 font-semibold text-white disabled:opacity-50">
+                    {requestingPayment ? "요청 접수 중..." : "입금완료 · 관리자 확인 요청"}
+                  </button>
+                )}
+                <p className="mt-2 text-xs text-gray-600">실제 계좌이체를 마친 후 눌러주세요. 버튼만 눌러서는 이용권이 활성화되지 않습니다.</p>
+              </div>
             </div>
             )}
           </div>
